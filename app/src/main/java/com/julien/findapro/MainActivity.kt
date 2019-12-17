@@ -1,11 +1,14 @@
 package com.julien.findapro
 
 import android.content.Intent
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -15,7 +18,9 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.main_activity_nav_header.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
 
@@ -27,6 +32,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
 
         if(FirebaseAuth.getInstance().currentUser == null){
             val intent = Intent(this,FirebaseUIActivity::class.java)
@@ -106,5 +113,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun configureNavigationView() {
         navigationView = findViewById(R.id.main_activity_nav_view)
         navigationView.setNavigationItemSelectedListener(this)
+        val hview = navigationView.inflateHeaderView(R.layout.main_activity_nav_header)
+
+        val fullName = hview.findViewById<TextView>(R.id.main_activity_name_header)
+        val image = hview.findViewById<ImageView>(R.id.main_activity_photo_header)
+        val email = hview.findViewById<TextView>(R.id.main_activity_email_header)
+
+        fullName.text = FirebaseAuth.getInstance().currentUser?.displayName
+        email.text = FirebaseAuth.getInstance().currentUser?.email
+
+        Picasso.get().load(FirebaseAuth.getInstance().currentUser?.photoUrl).into(image)
+
     }
 }

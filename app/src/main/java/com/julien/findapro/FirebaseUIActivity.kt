@@ -79,7 +79,7 @@ class FirebaseUIActivity : AppCompatActivity() {
         // [END auth_fui_delete]
     }
 
-    
+
     companion object {
 
         private const val RC_SIGN_IN = 123
