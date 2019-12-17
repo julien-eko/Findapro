@@ -2,4 +2,19 @@
     <string name="app_name">Findapro</string>
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
+    <string name="field_cannot_be_blank">ne peut pas étre vide</string>
+
+
+    <string-array name="statut_arrays">
+        <item>Particulier </item>
+        <item>Professionnel</item>
+    </string-array>
+
+    <string-array name="job_arrays">
+        <item>Plombier</item>
+        <item>Electricien</item>
+        <item>Peintre</item>
+        <item>Coiffeur</item>
+    </string-array>
+
 </resources>

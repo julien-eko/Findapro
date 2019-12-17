@@ -13,6 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -39,6 +40,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
 
     //authentification
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
+    implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
+
+    implementation 'com.google.firebase:firebase-firestore:21.3.1'
+
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.3.1'
+
+    implementation 'com.android.support:multidex:1.0.3'
 }
 apply plugin: 'com.google.gms.google-services'

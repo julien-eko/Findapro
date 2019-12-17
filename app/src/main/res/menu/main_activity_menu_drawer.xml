@@ -17,6 +17,13 @@
             android:id="@+id/activity_main_drawer_settings"
             android:title="trois"
             android:icon="@drawable/baseline_calendar_today_white_24"/>
+
+        <item
+            android:id="@+id/activity_main_drawer_signout"
+            android:title="Sign out"
+            android:icon="@drawable/baseline_power_settings_new_white_24"/>
+
+
     </group>
 
 

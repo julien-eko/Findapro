@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_firebase_ui.*
 
 class FirebaseUIActivity : AppCompatActivity() {
@@ -16,7 +17,7 @@ class FirebaseUIActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_firebase_ui)
 
-        auth_google_button.setOnClickListener(){
+        auth_google_button.setOnClickListener{
             createSignInIntent()
         }
     }
@@ -32,6 +33,7 @@ class FirebaseUIActivity : AppCompatActivity() {
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
+                .setIsSmartLockEnabled(false,true)
                 .build(),
             RC_SIGN_IN)
         // [END auth_fui_create_intent]
@@ -46,7 +48,8 @@ class FirebaseUIActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
                 val user = FirebaseAuth.getInstance().currentUser
-                // ...
+                val intent = Intent(this,MainActivity::class.java)
+                startActivity(intent)
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
@@ -76,6 +79,7 @@ class FirebaseUIActivity : AppCompatActivity() {
         // [END auth_fui_delete]
     }
 
+    
     companion object {
 
         private const val RC_SIGN_IN = 123
