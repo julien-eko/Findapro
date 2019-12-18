@@ -14,8 +14,8 @@
             android:title="deux"
             android:icon="@drawable/baseline_calendar_today_white_24"/>
         <item
-            android:id="@+id/activity_main_drawer_settings"
-            android:title="trois"
+            android:id="@+id/activity_main_drawer_information"
+            android:title="Information personnelle"
             android:icon="@drawable/baseline_calendar_today_white_24"/>
 
         <item

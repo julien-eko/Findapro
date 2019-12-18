@@ -67,11 +67,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         var itemid = p0?.itemId
 
-        if (itemid == R.id.activity_main_drawer_map){
+       
 
+        if (itemid == R.id.activity_main_drawer_information){
             val intent = Intent(this,InformationForm::class.java)
+            intent.putExtra("edit",true)
             startActivity(intent)
-              }
+        }
 
         if (itemid == R.id.activity_main_drawer_signout){
             AuthUI.getInstance().signOut(this)

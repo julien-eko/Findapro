@@ -1,10 +1,12 @@
 package com.julien.findapro
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_information_form.*
@@ -38,11 +40,25 @@ class InformationForm : AppCompatActivity() {
 
         }
 
-        information_form_save_button.setOnClickListener{
-            if(validateForm()){
-                addInDatabase()
+        if (intent.getBooleanExtra("edit",false)){
+            information_form_linear_layout_statut.visibility = View.GONE
+            loadDatabase()
+
+            information_form_save_button.setOnClickListener{
+                if(validateForm()){
+                    editDatabase()
+                }
+            }
+        }else{
+            information_form_save_button.setOnClickListener{
+                if(validateForm()){
+                    addInDatabase()
+                }
             }
         }
+
+
+
 
     }
 
@@ -78,7 +94,10 @@ class InformationForm : AppCompatActivity() {
     private fun addInDatabase(){
         val db = FirebaseFirestore.getInstance()
 
+
         if(spinner_status.selectedItemPosition == 1){
+
+
             val user = hashMapOf(
                 "nom complet" to information_form_full_name.text.toString(),
                 "adresse" to information_form_adress.text.toString(),
@@ -119,8 +138,102 @@ class InformationForm : AppCompatActivity() {
                 }
         }
 
+        val intent = Intent(this,MainActivity::class.java)
+        startActivity(intent)
+
+
+    }
+
+    private fun loadDatabase(){
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("Utilisateurs").document("Particulier").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+           if (document.data != null){
+               information_form_full_name.setText(document["nom complet"].toString())
+               information_postal_code.setText(document["code postal"].toString())
+               information_form_phone_number.setText(document["num"].toString())
+               information_form_city.setText(document["ville"].toString())
+               information_form_adress.setText(document["adresse"].toString())
+           }else{
+               db.collection("Utilisateurs").document("Professionnel").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+                   if (document.data != null){
+                       information_form_full_name.setText(document["nom complet"].toString())
+                       information_postal_code.setText(document["code postal"].toString())
+                       information_form_phone_number.setText(document["num"].toString())
+                       information_form_city.setText(document["ville"].toString())
+                       information_form_adress.setText(document["adresse"].toString())
+                   }else{
+                       Log.e("db", "no document")
+                   }
+               }.addOnFailureListener{exeption ->
+                   Log.e("db","get fail with",exeption)
+               }
+           }
+        }.addOnFailureListener{exeption ->
+            Log.e("db","get fail with",exeption)
+        }
+
+
+
+    }
+
+    private fun editDatabase(){
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("Utilisateurs").document("Particulier").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+            if (document.data != null){
+                val user = hashMapOf(
+                    "nom complet" to information_form_full_name.text.toString(),
+                    "adresse" to information_form_adress.text.toString(),
+                    "code postal" to information_postal_code.text.toString(),
+                    "ville" to information_form_city.text.toString(),
+                    "num" to information_form_phone_number.text.toString()
+
+                )
+
+                db.collection("Utilisateurs").document("Particulier").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!)
+                    .set(user)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d("addDB", "DocumentSnapshot added ")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("addDB", "Error adding document", e)
+                    }
+            }else{
+                db.collection("Utilisateurs").document("Professionnel").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+                    if (document.data != null){
+                        val user = hashMapOf(
+                            "nom complet" to information_form_full_name.text.toString(),
+                            "adresse" to information_form_adress.text.toString(),
+                            "code postal" to information_postal_code.text.toString(),
+                            "ville" to information_form_city.text.toString(),
+                            "num" to information_form_phone_number.text.toString(),
+                            "profession" to spinner_job.selectedItem.toString()
+
+                        )
+
+                        db.collection("Utilisateurs").document("Professionnel").collection("Utilisateurs").document(
+                            FirebaseAuth.getInstance().currentUser?.uid!!
+                        )
+                            .set(user)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d("addDB", "DocumentSnapshot added ")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("addDB", "Error adding document", e)
+                            }
+
+                    }else{
+                        Log.e("db", "no document")
+                    }
+                }.addOnFailureListener{exeption ->
+                    Log.e("db","get fail with",exeption)
+                }
+            }
+        }.addOnFailureListener{exeption ->
+            Log.e("db","get fail with",exeption)
+        }
+
         finish()
-
-
     }
 }
