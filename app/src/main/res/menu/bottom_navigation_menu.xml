@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_list"
+        android:enabled="true"
+        android:icon="@drawable/baseline_format_list_bulleted_white_24"
+        app:showAsAction="ifRoom"
+        android:title="test" />
+    <item
+        android:id="@+id/action_planning"
+        android:enabled="true"
+        android:icon="@drawable/baseline_calendar_today_white_24"
+        app:showAsAction="ifRoom"
+        android:title="test" />
+    <item
+        android:id="@+id/action_message"
+        android:enabled="true"
+        android:icon="@drawable/baseline_mail_white_24"
+        app:showAsAction="ifRoom"
+        android:title="test" />
+</menu>
