@@ -55,12 +55,12 @@ class FirebaseUIActivity : AppCompatActivity() {
 
                 val db = FirebaseFirestore.getInstance()
 
-                db.collection("Utilisateurs").document("Particulier").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+                db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
                     if (document.data != null){
                         val intent = Intent(this,MainActivity::class.java)
                         startActivity(intent)
                     }else{
-                        db.collection("Utilisateurs").document("Professionnel").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+                        db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
                             if (document.data != null){
                                 val intent = Intent(this,MainActivity::class.java)
                                 startActivity(intent)

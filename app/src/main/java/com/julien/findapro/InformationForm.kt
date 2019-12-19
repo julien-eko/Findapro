@@ -108,9 +108,7 @@ class InformationForm : AppCompatActivity() {
 
             )
 
-            db.collection("Utilisateurs").document("Professionnel").collection("Utilisateurs").document(
-                FirebaseAuth.getInstance().currentUser?.uid!!
-            )
+            db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
                 .set(user)
                 .addOnSuccessListener { documentReference ->
                     Log.d("addDB", "DocumentSnapshot added ")
@@ -128,7 +126,7 @@ class InformationForm : AppCompatActivity() {
 
             )
 
-            db.collection("Utilisateurs").document("Particulier").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!)
+            db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
                 .set(user)
                 .addOnSuccessListener { documentReference ->
                     Log.d("addDB", "DocumentSnapshot added ")
@@ -147,7 +145,7 @@ class InformationForm : AppCompatActivity() {
     private fun loadDatabase(){
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("Utilisateurs").document("Particulier").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+        db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
            if (document.data != null){
                information_form_full_name.setText(document["nom complet"].toString())
                information_postal_code.setText(document["code postal"].toString())
@@ -155,7 +153,7 @@ class InformationForm : AppCompatActivity() {
                information_form_city.setText(document["ville"].toString())
                information_form_adress.setText(document["adresse"].toString())
            }else{
-               db.collection("Utilisateurs").document("Professionnel").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+               db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
                    if (document.data != null){
                        information_form_full_name.setText(document["nom complet"].toString())
                        information_postal_code.setText(document["code postal"].toString())
@@ -180,7 +178,7 @@ class InformationForm : AppCompatActivity() {
     private fun editDatabase(){
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("Utilisateurs").document("Particulier").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+        db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
             if (document.data != null){
                 val user = hashMapOf(
                     "nom complet" to information_form_full_name.text.toString(),
@@ -191,7 +189,7 @@ class InformationForm : AppCompatActivity() {
 
                 )
 
-                db.collection("Utilisateurs").document("Particulier").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!)
+                db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
                     .set(user)
                     .addOnSuccessListener { documentReference ->
                         Log.d("addDB", "DocumentSnapshot added ")
@@ -200,7 +198,7 @@ class InformationForm : AppCompatActivity() {
                         Log.w("addDB", "Error adding document", e)
                     }
             }else{
-                db.collection("Utilisateurs").document("Professionnel").collection("Utilisateurs").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+                db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
                     if (document.data != null){
                         val user = hashMapOf(
                             "nom complet" to information_form_full_name.text.toString(),
@@ -212,9 +210,7 @@ class InformationForm : AppCompatActivity() {
 
                         )
 
-                        db.collection("Utilisateurs").document("Professionnel").collection("Utilisateurs").document(
-                            FirebaseAuth.getInstance().currentUser?.uid!!
-                        )
+                        db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
                             .set(user)
                             .addOnSuccessListener { documentReference ->
                                 Log.d("addDB", "DocumentSnapshot added ")
