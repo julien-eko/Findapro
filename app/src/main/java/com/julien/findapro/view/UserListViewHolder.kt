@@ -14,13 +14,15 @@ class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
 
-    fun update(user:HashMap<String,String>) {
+    fun update(user:HashMap<String,String>,clickListener: (HashMap<String,String>) -> Unit) {
 
 
         itemView.fragment_users_list_item_job_textview.text = user["full name"]
         itemView.fragment_users_list_item_name_textview.text = user["job"]
 
         Picasso.get().load(user["photo"]).into(itemView.fragment_users_list_item_photo_imageview)
+
+        itemView.setOnClickListener{clickListener(user)}
 
     }
 }

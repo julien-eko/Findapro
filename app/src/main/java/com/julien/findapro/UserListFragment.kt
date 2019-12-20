@@ -62,7 +62,7 @@ class UserListFragment : Fragment() {
                             userList.add(user)
                         }
                         recycler_view_users_list_fragment.layoutManager = LinearLayoutManager(context)
-                        recycler_view_users_list_fragment.adapter = UserListAdapater(userList,context!!)
+                        recycler_view_users_list_fragment.adapter = UserListAdapater(userList,context!!,{ userItem : HashMap<String,String> -> userItemClicked(userItem) })
                     }
                     .addOnFailureListener {exception ->
                         Log.w("access db","Error getting data", exception)
@@ -74,5 +74,9 @@ class UserListFragment : Fragment() {
 
     }
 
+
+    private fun userItemClicked(userItem : HashMap<String,String>) {
+        Toast.makeText(context, "Clicked: ${userItem["uid"]}", Toast.LENGTH_LONG).show()
+    }
 
 }
