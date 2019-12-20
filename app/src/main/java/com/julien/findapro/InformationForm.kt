@@ -99,12 +99,13 @@ class InformationForm : AppCompatActivity() {
 
 
             val user = hashMapOf(
-                "nom complet" to information_form_full_name.text.toString(),
-                "adresse" to information_form_adress.text.toString(),
-                "code postal" to information_postal_code.text.toString(),
-                "ville" to information_form_city.text.toString(),
+                "full name" to information_form_full_name.text.toString(),
+                "adress" to information_form_adress.text.toString(),
+                "postal code" to information_postal_code.text.toString(),
+                "city" to information_form_city.text.toString(),
                 "num" to information_form_phone_number.text.toString(),
-                "profession" to spinner_job.selectedItem.toString()
+                "job" to spinner_job.selectedItem.toString(),
+                "photo" to FirebaseAuth.getInstance().currentUser?.photoUrl.toString()
 
             )
 
@@ -118,11 +119,12 @@ class InformationForm : AppCompatActivity() {
                 }
         }else{
             val user = hashMapOf(
-                "nom complet" to information_form_full_name.text.toString(),
-                "adresse" to information_form_adress.text.toString(),
-                "code postal" to information_postal_code.text.toString(),
-                "ville" to information_form_city.text.toString(),
-                "num" to information_form_phone_number.text.toString()
+                "full name" to information_form_full_name.text.toString(),
+                "adress" to information_form_adress.text.toString(),
+                "postal code" to information_postal_code.text.toString(),
+                "city" to information_form_city.text.toString(),
+                "num" to information_form_phone_number.text.toString(),
+                "photo" to FirebaseAuth.getInstance().currentUser?.photoUrl.toString()
 
             )
 
@@ -147,19 +149,19 @@ class InformationForm : AppCompatActivity() {
 
         db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
            if (document.data != null){
-               information_form_full_name.setText(document["nom complet"].toString())
-               information_postal_code.setText(document["code postal"].toString())
+               information_form_full_name.setText(document["full name"].toString())
+               information_postal_code.setText(document["postal code"].toString())
                information_form_phone_number.setText(document["num"].toString())
-               information_form_city.setText(document["ville"].toString())
-               information_form_adress.setText(document["adresse"].toString())
+               information_form_city.setText(document["city"].toString())
+               information_form_adress.setText(document["adress"].toString())
            }else{
                db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
                    if (document.data != null){
-                       information_form_full_name.setText(document["nom complet"].toString())
-                       information_postal_code.setText(document["code postal"].toString())
+                       information_form_full_name.setText(document["full name"].toString())
+                       information_postal_code.setText(document["postal code"].toString())
                        information_form_phone_number.setText(document["num"].toString())
-                       information_form_city.setText(document["ville"].toString())
-                       information_form_adress.setText(document["adresse"].toString())
+                       information_form_city.setText(document["city"].toString())
+                       information_form_adress.setText(document["adress"].toString())
                    }else{
                        Log.e("db", "no document")
                    }
@@ -181,10 +183,10 @@ class InformationForm : AppCompatActivity() {
         db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
             if (document.data != null){
                 val user = hashMapOf(
-                    "nom complet" to information_form_full_name.text.toString(),
-                    "adresse" to information_form_adress.text.toString(),
-                    "code postal" to information_postal_code.text.toString(),
-                    "ville" to information_form_city.text.toString(),
+                    "full name" to information_form_full_name.text.toString(),
+                    "adress" to information_form_adress.text.toString(),
+                    "postal code" to information_postal_code.text.toString(),
+                    "city" to information_form_city.text.toString(),
                     "num" to information_form_phone_number.text.toString()
 
                 )
@@ -201,12 +203,12 @@ class InformationForm : AppCompatActivity() {
                 db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
                     if (document.data != null){
                         val user = hashMapOf(
-                            "nom complet" to information_form_full_name.text.toString(),
-                            "adresse" to information_form_adress.text.toString(),
-                            "code postal" to information_postal_code.text.toString(),
-                            "ville" to information_form_city.text.toString(),
+                            "full name" to information_form_full_name.text.toString(),
+                            "adress" to information_form_adress.text.toString(),
+                            "postal code" to information_postal_code.text.toString(),
+                            "city" to information_form_city.text.toString(),
                             "num" to information_form_phone_number.text.toString(),
-                            "profession" to spinner_job.selectedItem.toString()
+                            "job" to spinner_job.selectedItem.toString()
 
                         )
 
