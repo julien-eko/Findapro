@@ -60,7 +60,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
             if(sharedPreferences.getBoolean("isPro",false)){
-                Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
+                //Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
+                add(R.id.main_activity_frame_layout,AssignmentsListFragment())
             }else{
 
                 add(R.id.main_activity_frame_layout,UserListFragment())
