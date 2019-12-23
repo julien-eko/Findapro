@@ -1,6 +1,7 @@
 package com.julien.findapro
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -76,7 +77,9 @@ class UserListFragment : Fragment() {
 
 
     private fun userItemClicked(userItem : HashMap<String,String>) {
-        Toast.makeText(context, "Clicked: ${userItem["uid"]}", Toast.LENGTH_LONG).show()
+        val intent = Intent(context,AssignmentsActivity::class.java)
+        intent.putExtra("proId",userItem["uid"])
+        startActivity(intent)
     }
 
 }

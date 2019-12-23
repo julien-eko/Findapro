@@ -2,8 +2,10 @@ package com.julien.findapro
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
@@ -56,12 +58,21 @@ class FirebaseUIActivity : AppCompatActivity() {
                 val db = FirebaseFirestore.getInstance()
 
                 db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+
                     if (document.data != null){
+                        val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
+                        val editor = sharedPref.edit()
+                        editor.putBoolean("isPro",false)
+                        editor.apply()
                         val intent = Intent(this,MainActivity::class.java)
                         startActivity(intent)
                     }else{
                         db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
                             if (document.data != null){
+                                val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
+                                val editor = sharedPref.edit()
+                                editor.putBoolean("isPro",true)
+                                editor.apply()
                                 val intent = Intent(this,MainActivity::class.java)
                                 startActivity(intent)
                             }else{

@@ -1,6 +1,7 @@
 package com.julien.findapro
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -97,6 +98,10 @@ class InformationForm : AppCompatActivity() {
 
         if(spinner_status.selectedItemPosition == 1){
 
+            val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
+            val editor = sharedPref.edit()
+            editor.putBoolean("isPro",true)
+            editor.apply()
 
             val user = hashMapOf(
                 "full name" to information_form_full_name.text.toString(),
@@ -118,6 +123,12 @@ class InformationForm : AppCompatActivity() {
                     Log.w("addDB", "Error adding document", e)
                 }
         }else{
+
+            val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
+            val editor = sharedPref.edit()
+            editor.putBoolean("isPro",true)
+            editor.apply()
+
             val user = hashMapOf(
                 "full name" to information_form_full_name.text.toString(),
                 "adress" to information_form_adress.text.toString(),

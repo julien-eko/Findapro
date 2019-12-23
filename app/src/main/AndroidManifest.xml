@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".InformationForm"></activity>
+        <activity android:name=".AssignmentsActivity"></activity>
+        <activity android:name=".InformationForm" />
         <activity android:name=".FirebaseUIActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

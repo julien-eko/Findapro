@@ -53,8 +53,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         this.configureBottomNavigationView()
 
+        val sharedPreferences = getSharedPreferences("isPro",0)
+        //Toast.makeText(baseContext,sharedPreferences.getBoolean("isPro",false).toString(),Toast.LENGTH_SHORT).show()
+
         supportFragmentManager.inTransaction {
-            add(R.id.main_activity_frame_layout,UserListFragment())
+
+
+            if(sharedPreferences.getBoolean("isPro",false)){
+                Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
+            }else{
+
+                add(R.id.main_activity_frame_layout,UserListFragment())
+            }
+
         }
 
     }
