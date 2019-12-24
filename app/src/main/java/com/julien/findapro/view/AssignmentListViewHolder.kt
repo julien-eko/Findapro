@@ -8,6 +8,8 @@ import kotlinx.android.synthetic.main.fragment_users_list_item.view.*
 
 class AssignmentListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+
+
     fun update(assignment:HashMap<String,String>,clickListener: (HashMap<String,String>) -> Unit) {
 
 

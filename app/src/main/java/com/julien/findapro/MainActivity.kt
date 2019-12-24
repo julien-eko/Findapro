@@ -162,7 +162,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Toast.makeText(this,"2",Toast.LENGTH_SHORT).show()
         }
         if(item == R.id.action_message){
-            Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()
+            val intent = Intent(this,ChatActivity::class.java)
+            intent.putExtra("assignment","B5hGtfVrvSpDZRMYpKcU")
+            startActivity(intent)
+
         }
         return true
     }

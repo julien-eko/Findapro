@@ -8,7 +8,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.julien.findapro"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -42,6 +42,8 @@ dependencies {
 
     //authentification
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
+    implementation 'com.firebaseui:firebase-ui-storage:6.2.0'
+    implementation 'com.firebaseui:firebase-ui-firestore:6.2.0'
 
     implementation 'com.google.firebase:firebase-firestore:21.3.1'
 

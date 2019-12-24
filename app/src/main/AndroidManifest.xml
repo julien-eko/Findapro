@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AssignmentsActivity"></activity>
+        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".AssignmentsChoiceActivity" />
+        <activity android:name=".AssignmentsActivity" />
         <activity android:name=".InformationForm" />
         <activity android:name=".FirebaseUIActivity" />
         <activity android:name=".MainActivity">

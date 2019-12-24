@@ -55,7 +55,7 @@ class AssignmentsListFragment : Fragment() {
                                 "full name" to data["full name"].toString(),
                                 "photo" to data["photo"].toString(),
                                 "status" to document["status"].toString(),
-                                "uid" to document["user id"].toString()
+                                "id" to document.id
                             )
                             assigmentsList.add(assignment)
 
@@ -80,9 +80,9 @@ class AssignmentsListFragment : Fragment() {
     }
 
     private fun assignmentItemClicked(assignmentItem : HashMap<String,String>) {
-        //val intent = Intent(context,AssignmentsActivity::class.java)
-        //intent.putExtra("proId",assignmentItem["uid"])
-        //startActivity(intent)
+        val intent = Intent(context,AssignmentsChoiceActivity::class.java)
+        intent.putExtra("id",assignmentItem["id"])
+        startActivity(intent)
     }
 
 }
