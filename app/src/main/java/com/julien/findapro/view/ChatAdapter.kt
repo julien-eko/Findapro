@@ -17,7 +17,7 @@ class ChatAdapter(options: FirestoreRecyclerOptions<Message>,val currentUserId:S
         return MessageViewHolder(view)
     }
 
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int, model: Message) {
         holder.updateWithMessage(model,currentUserId)
     }

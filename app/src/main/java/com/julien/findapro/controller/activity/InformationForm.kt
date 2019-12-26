@@ -1,4 +1,4 @@
-package com.julien.findapro
+package com.julien.findapro.controller.activity
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,9 +7,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.julien.findapro.R
 import kotlinx.android.synthetic.main.activity_information_form.*
 
 class InformationForm : AppCompatActivity() {
@@ -149,7 +149,7 @@ class InformationForm : AppCompatActivity() {
                 }
         }
 
-        val intent = Intent(this,MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
 
 

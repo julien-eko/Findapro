@@ -1,10 +1,9 @@
-package com.julien.findapro
+package com.julien.findapro.controller.activity
 
 import android.content.Intent
-import android.media.Image
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -20,10 +19,12 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.julien.findapro.R
+import com.julien.findapro.controller.fragment.UserListFragment
+import com.julien.findapro.controller.fragment.AssignmentsListFragment
+import com.julien.findapro.controller.fragment.ChatListFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.main_activity_nav_header.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
 
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var sharedPreferences:SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +42,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         if(FirebaseAuth.getInstance().currentUser == null){
-            val intent = Intent(this,FirebaseUIActivity::class.java)
+            val intent = Intent(this,
+                FirebaseUIActivity::class.java)
             startActivity(intent)
 
         }
@@ -53,7 +56,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         this.configureBottomNavigationView()
 
-        val sharedPreferences = getSharedPreferences("isPro",0)
+        sharedPreferences = getSharedPreferences("isPro",0)
         //Toast.makeText(baseContext,sharedPreferences.getBoolean("isPro",false).toString(),Toast.LENGTH_SHORT).show()
 
         supportFragmentManager.inTransaction {
@@ -61,10 +64,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             if(sharedPreferences.getBoolean("isPro",false)){
                 //Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
-                add(R.id.main_activity_frame_layout,AssignmentsListFragment())
+                add(
+                    R.id.main_activity_frame_layout,
+                    AssignmentsListFragment()
+                )
             }else{
 
-                add(R.id.main_activity_frame_layout,UserListFragment())
+                add(
+                    R.id.main_activity_frame_layout,
+                    UserListFragment()
+                )
             }
 
         }
@@ -90,14 +99,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         if (itemid == R.id.activity_main_drawer_information){
-            val intent = Intent(this,InformationForm::class.java)
+            val intent = Intent(this,
+                InformationForm::class.java)
             intent.putExtra("edit",true)
             startActivity(intent)
         }
 
         if (itemid == R.id.activity_main_drawer_signout){
             AuthUI.getInstance().signOut(this)
-            val intent = Intent(this,FirebaseUIActivity::class.java)
+            val intent = Intent(this,
+                FirebaseUIActivity::class.java)
             startActivity(intent)
         }
 
@@ -155,17 +166,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun updateFragment(item: Int):Boolean{
-        if(item == R.id.action_list ){
-            Toast.makeText(this,"1",Toast.LENGTH_SHORT).show()
+        if(item == R.id.action_list){
+            supportFragmentManager.inTransaction {
+
+
+                if(sharedPreferences.getBoolean("isPro",false)){
+                    //Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
+                    replace(
+                        R.id.main_activity_frame_layout,
+                        AssignmentsListFragment()
+                    )
+                }else{
+
+                    replace(
+                        R.id.main_activity_frame_layout,
+                        UserListFragment()
+                    )
+                }
+
+            }
         }
         if (item == R.id.action_planning){
-            Toast.makeText(this,"2",Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this,"2",Toast.LENGTH_SHORT).show()
+
         }
         if(item == R.id.action_message){
             //Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()
-            val intent = Intent(this,ChatActivity::class.java)
-            intent.putExtra("assignment","B5hGtfVrvSpDZRMYpKcU")
-            startActivity(intent)
+            var user=""
+            user = if(sharedPreferences.getBoolean("isPro",false)){
+                "pro user id"
+            }else{
+                "user id"
+            }
+            supportFragmentManager.inTransaction {
+                    replace(
+                        R.id.main_activity_frame_layout,
+                        ChatListFragment(),user)
+
+            }
 
         }
         return true

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AssignmentsChoiceActivity">
+    tools:context=".controller.activity.AssignmentsChoiceActivity">
 
     <TextView
         android:id="@+id/assignments_choice_activity_describe_textview"

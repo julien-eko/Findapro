@@ -1,12 +1,12 @@
-package com.julien.findapro
+package com.julien.findapro.controller.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.julien.findapro.R
+import com.julien.findapro.Utils.Message
 import kotlinx.android.synthetic.main.activity_assignments_choice.*
-import kotlinx.android.synthetic.main.activity_information_form.*
 
 class AssignmentsChoiceActivity : AppCompatActivity() {
 
@@ -32,6 +32,10 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                     Log.w("update status", "Error updating document", e)
                 }
 
+            val message = Message("debut","bot")
+            db.collection("assignments").document(intent.getStringExtra("id")).collection("chat").add(message)
+        }
+
             assignments_choice_activity_decline_button.setOnClickListener {
                 db.collection("assignments").document(intent.getStringExtra("id"))
                     .update("status", "decline")
@@ -46,7 +50,7 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                     }
 
             }
-        }
+
     }
 
     private fun loadData(db:FirebaseFirestore){

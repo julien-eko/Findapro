@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.fragment.AssignmentsListFragment"
+    tools:context=".controller.fragment.ChatListFragment"
     android:orientation="vertical">
 
 
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_assignments_list_fragment"
+        android:id="@+id/recycler_view_chat_list_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

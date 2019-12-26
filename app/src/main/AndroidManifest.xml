@@ -9,12 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChatActivity"></activity>
-        <activity android:name=".AssignmentsChoiceActivity" />
-        <activity android:name=".AssignmentsActivity" />
-        <activity android:name=".InformationForm" />
-        <activity android:name=".FirebaseUIActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".controller.activity.ChatActivity"></activity>
+        <activity android:name=".controller.activity.AssignmentsChoiceActivity" />
+        <activity android:name=".controller.activity.AssignmentsActivity" />
+        <activity android:name=".controller.activity.InformationForm" />
+        <activity android:name=".controller.activity.FirebaseUIActivity" />
+        <activity android:name=".controller.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

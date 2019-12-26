@@ -1,12 +1,12 @@
-package com.julien.findapro
+package com.julien.findapro.controller.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.julien.findapro.R
 import kotlinx.android.synthetic.main.activity_assignments.*
-import kotlinx.android.synthetic.main.activity_information_form.*
 
 class AssignmentsActivity : AppCompatActivity() {
 

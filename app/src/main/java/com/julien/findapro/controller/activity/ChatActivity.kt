@@ -1,4 +1,4 @@
-package com.julien.findapro
+package com.julien.findapro.controller.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,12 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
+import com.julien.findapro.R
 import com.julien.findapro.Utils.Message
 import com.julien.findapro.api.MessageHelper
 import com.julien.findapro.view.ChatAdapter
-import com.julien.findapro.view.UserListAdapater
 import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.android.synthetic.main.fragment_users_list.*
 
 class ChatActivity : AppCompatActivity() {
 

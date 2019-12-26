@@ -1,4 +1,4 @@
-package com.julien.findapro
+package com.julien.findapro.controller.fragment
 
 
 import android.content.Intent
@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.julien.findapro.R
+import com.julien.findapro.controller.activity.AssignmentsActivity
 import com.julien.findapro.view.UserListAdapater
 import kotlinx.android.synthetic.main.fragment_users_list.*
 
@@ -77,7 +77,8 @@ class UserListFragment : Fragment() {
 
 
     private fun userItemClicked(userItem : HashMap<String,String>) {
-        val intent = Intent(context,AssignmentsActivity::class.java)
+        val intent = Intent(context,
+            AssignmentsActivity::class.java)
         intent.putExtra("proId",userItem["uid"])
         startActivity(intent)
     }

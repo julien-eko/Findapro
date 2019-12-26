@@ -1,4 +1,4 @@
-package com.julien.findapro
+package com.julien.findapro.controller.fragment
 
 
 import android.content.Intent
@@ -8,16 +8,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-
 import com.julien.findapro.R
+
+import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
 import com.julien.findapro.view.AssignmentListAdaptater
-import com.julien.findapro.view.UserListAdapater
 import kotlinx.android.synthetic.main.fragment_assignments_list.*
-import kotlinx.android.synthetic.main.fragment_users_list.*
 
 /**
  * A simple [Fragment] subclass.
@@ -80,7 +78,8 @@ class AssignmentsListFragment : Fragment() {
     }
 
     private fun assignmentItemClicked(assignmentItem : HashMap<String,String>) {
-        val intent = Intent(context,AssignmentsChoiceActivity::class.java)
+        val intent = Intent(context,
+            AssignmentsChoiceActivity::class.java)
         intent.putExtra("id",assignmentItem["id"])
         startActivity(intent)
     }

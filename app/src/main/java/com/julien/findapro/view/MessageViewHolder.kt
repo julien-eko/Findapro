@@ -46,40 +46,59 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val colorCurrentUser =ContextCompat.getColor(itemView.context, R.color.colorChat1)
     val colorRemoteUser = ContextCompat.getColor(itemView.context, R.color.colorChat2)
 
+    //bot message
+
+    val botMessage = itemView.activity_chat_item_bot_message
+
 
 
     fun updateWithMessage(message: Message, currentUserId:String){
 
-        // Check if current user is the sender
-        val isCurrentUser:Boolean = message.userSender.equals(currentUserId)
+        if(message.userSender == "bot"){
+            this.botMessage.text = message.message
 
-        //Update message text view
-        this.textViewMessage.text = message.message
-        this.textViewMessage.textAlignment = if (isCurrentUser) View.TEXT_ALIGNMENT_TEXT_END else View.TEXT_ALIGNMENT_TEXT_START
+            imageViewProfile.visibility =View.GONE
+            messageContainer.visibility =View.GONE
+            profileContainer.visibility =View.GONE
+            cardViewImageSent.visibility =View.GONE
+            imageSent.visibility =View.GONE
+            textMessageContainer.visibility =View.GONE
+            textViewMessage.visibility =View.GONE
+            textViewDate.visibility =View.GONE
+
+        }else{
+            // Check if current user is the sender
+            val isCurrentUser:Boolean = message.userSender.equals(currentUserId)
+
+            //Update message text view
+            this.textViewMessage.text = message.message
+            this.textViewMessage.textAlignment = if (isCurrentUser) View.TEXT_ALIGNMENT_TEXT_END else View.TEXT_ALIGNMENT_TEXT_START
 
 
 
-        //update date text view
-        if(message.dateCreated != null){
-            this.textViewDate.text = this.convertDateToHour(message.dateCreated!!)
+            //update date text view
+            if(message.dateCreated != null){
+                this.textViewDate.text = this.convertDateToHour(message.dateCreated!!)
+            }
+
+            //update profile picture image view
+
+            if(message.urlImageSender != null){
+                Picasso.get().load(message.urlImageSender).transform(CircleTransform()).into(imageViewProfile)
+            }
+
+            //update image sent texview (not implemented atm
+            this.imageSent.visibility=View.GONE
+
+            //Update Message Bubble Color Background
+            //Update Message Bubble Color Background
+            (textMessageContainer.background as GradientDrawable).setColor(if (isCurrentUser) colorCurrentUser else colorRemoteUser)
+
+            //update all views alignments depending is current user or not
+
+            this.updateDesignDependingUser(isCurrentUser)
         }
 
-        //update profile picture image view
-
-        if(message.urlImageSender != null){
-            Picasso.get().load(message.urlImageSender).transform(CircleTransform()).into(imageViewProfile)
-        }
-
-        //update image sent texview (not implemented atm
-        this.imageSent.visibility=View.GONE
-
-        //Update Message Bubble Color Background
-        //Update Message Bubble Color Background
-        (textMessageContainer.background as GradientDrawable).setColor(if (isCurrentUser) colorCurrentUser else colorRemoteUser)
-
-        //update all views alignments depending is current user or not
-
-        this.updateDesignDependingUser(isCurrentUser)
     }
 
     private  fun updateDesignDependingUser(isSender: Boolean){
