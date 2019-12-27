@@ -42,11 +42,13 @@ class AssignmentsInProgressFragment : Fragment() {
 
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
-        db.collection("assignments").whereEqualTo("pro user id", FirebaseAuth.getInstance().currentUser?.uid!!).get()
+        db.collection("assignments").whereEqualTo(tag!!, FirebaseAuth.getInstance().currentUser?.uid!!).get()
             .addOnSuccessListener { documents ->
 
                 for (document in documents) {
-                    db.collection("users").document(document["user id"].toString()).get()
+                    val user:String = if(tag!! == "pro user id") "users" else "pro users"
+                    val userId:String = if(tag!! == "pro user id") "user id" else "pro user id"
+                    db.collection(user).document(document[userId].toString()).get()
                         .addOnSuccessListener { data ->
 
                             val assignment = hashMapOf(

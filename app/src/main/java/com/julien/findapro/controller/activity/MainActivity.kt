@@ -97,6 +97,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         var itemid = p0?.itemId
 
+        if (itemid == R.id.activity_main_drawer_map){
+            val intent = Intent(this,
+                RatingActivity::class.java)
+            intent.putExtra("user","users")
+            intent.putExtra("userId", "28gO7Sb9AzUJU7cYYsOGKGQWINL2")
+            intent.putExtra("assignment","MApfU3HhpkuyJ0hEeyIY")
+            startActivity(intent)
+        }
 
 
         if (itemid == R.id.activity_main_drawer_information){
@@ -188,10 +196,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         if (item == R.id.action_planning){
+            var user=""
+            user = if(sharedPreferences.getBoolean("isPro",false)){
+                "pro user id"
+            }else{
+                "user id"
+            }
             supportFragmentManager.inTransaction {
                 replace(
                     R.id.main_activity_frame_layout,
-                    AssignmentsInProgressFragment())
+                    AssignmentsInProgressFragment(),user)
 
             }
 

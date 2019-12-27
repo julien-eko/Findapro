@@ -94,7 +94,8 @@ class InformationForm : AppCompatActivity() {
 
     private fun addInDatabase(){
         val db = FirebaseFirestore.getInstance()
-
+        val rating:Float? = null
+        val ratingNb: Int? = null
 
         if(spinner_status.selectedItemPosition == 1){
 
@@ -103,6 +104,8 @@ class InformationForm : AppCompatActivity() {
             editor.putBoolean("isPro",true)
             editor.apply()
 
+
+
             val user = hashMapOf(
                 "full name" to information_form_full_name.text.toString(),
                 "adress" to information_form_adress.text.toString(),
@@ -110,6 +113,8 @@ class InformationForm : AppCompatActivity() {
                 "city" to information_form_city.text.toString(),
                 "num" to information_form_phone_number.text.toString(),
                 "job" to spinner_job.selectedItem.toString(),
+                "rating" to rating,
+                "ratingNb" to ratingNb,
                 "photo" to FirebaseAuth.getInstance().currentUser?.photoUrl.toString()
 
             )
@@ -135,6 +140,8 @@ class InformationForm : AppCompatActivity() {
                 "postal code" to information_postal_code.text.toString(),
                 "city" to information_form_city.text.toString(),
                 "num" to information_form_phone_number.text.toString(),
+                "rating" to rating,
+                "ratingNb" to ratingNb,
                 "photo" to FirebaseAuth.getInstance().currentUser?.photoUrl.toString()
 
             )
