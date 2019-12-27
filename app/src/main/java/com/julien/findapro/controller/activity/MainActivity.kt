@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.julien.findapro.R
+import com.julien.findapro.controller.fragment.AssignmentsInProgressFragment
 import com.julien.findapro.controller.fragment.UserListFragment
 import com.julien.findapro.controller.fragment.AssignmentsListFragment
 import com.julien.findapro.controller.fragment.ChatListFragment
@@ -187,7 +188,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         if (item == R.id.action_planning){
-            //Toast.makeText(this,"2",Toast.LENGTH_SHORT).show()
+            supportFragmentManager.inTransaction {
+                replace(
+                    R.id.main_activity_frame_layout,
+                    AssignmentsInProgressFragment())
+
+            }
 
         }
         if(item == R.id.action_message){

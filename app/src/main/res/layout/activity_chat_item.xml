@@ -11,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="test"
         android:id="@+id/activity_chat_item_bot_message"/>
 
     <!-- PROFILE CONTAINER -->

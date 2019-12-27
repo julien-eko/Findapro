@@ -10,9 +10,6 @@ class AssignmentListAdaptater(var assignmentList: ArrayList<HashMap<String,Strin
     RecyclerView.Adapter<AssignmentListViewHolder>() {
 
 
-    var listener: ((String) -> Unit)? = null
-    private var index: Int = -1
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssignmentListViewHolder {
         val v = LayoutInflater.from(parent?.context)
             .inflate(R.layout.fragment_assignments_list_item, parent, false)

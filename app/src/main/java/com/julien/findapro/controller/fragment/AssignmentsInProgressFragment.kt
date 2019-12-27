@@ -11,16 +11,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.julien.findapro.R
 
+import com.julien.findapro.R
 import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
 import com.julien.findapro.view.AssignmentListAdaptater
+import kotlinx.android.synthetic.main.fragment_assignments_in_progress.*
 import kotlinx.android.synthetic.main.fragment_assignments_list.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class AssignmentsListFragment : Fragment() {
+class AssignmentsInProgressFragment : Fragment() {
 
     val assigmentsList: ArrayList<HashMap<String, String>> = ArrayList()
 
@@ -29,7 +30,7 @@ class AssignmentsListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_assignments_list, container, false)
+        return inflater.inflate(R.layout.fragment_assignments_in_progress, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -41,11 +42,10 @@ class AssignmentsListFragment : Fragment() {
 
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
-
-        db.collection("assignments").whereEqualTo("pro user id",FirebaseAuth.getInstance().currentUser?.uid!!).whereEqualTo("status","pending").get()
+        db.collection("assignments").whereEqualTo("pro user id", FirebaseAuth.getInstance().currentUser?.uid!!).get()
             .addOnSuccessListener { documents ->
 
-                    for (document in documents) {
+                for (document in documents) {
                     db.collection("users").document(document["user id"].toString()).get()
                         .addOnSuccessListener { data ->
 
@@ -58,12 +58,12 @@ class AssignmentsListFragment : Fragment() {
                             assigmentsList.add(assignment)
 
 
-                             }
+                        }
                         .addOnFailureListener { exception ->
                             Log.w("access db", "Error getting data", exception)
                         }
-                        .addOnCompleteListener {  recycler_view_assignments_list_fragment.layoutManager = LinearLayoutManager(context)
-                            recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
+                        .addOnCompleteListener {  recycler_view_assignments_in_progress_fragment.layoutManager = LinearLayoutManager(context)
+                            recycler_view_assignments_in_progress_fragment.adapter = AssignmentListAdaptater(
                                 assigmentsList,
                                 context!!,
                                 { assignmentItem: HashMap<String, String> -> assignmentItemClicked(assignmentItem) })
@@ -78,11 +78,9 @@ class AssignmentsListFragment : Fragment() {
     }
 
     private fun assignmentItemClicked(assignmentItem : HashMap<String,String>) {
-        val intent = Intent(context,
-            AssignmentsChoiceActivity::class.java)
-        intent.putExtra("id",assignmentItem["id"])
-        startActivity(intent)
+        //val intent = Intent(context,
+         //   AssignmentsChoiceActivity::class.java)
+        //intent.putExtra("id",assignmentItem["id"])
+        //startActivity(intent)
     }
-
 }
-
