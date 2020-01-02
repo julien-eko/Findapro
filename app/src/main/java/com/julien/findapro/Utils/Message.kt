@@ -10,6 +10,7 @@ class Message {
     var dateCreated: Date? = null
     var userSender: String? = null
     var urlImageSender: String? = null
+    var urlImageMessage:String? = null
 
     constructor() {}
     constructor(message: String?, userSender: String) {
@@ -23,6 +24,11 @@ class Message {
         this.userSender = userSender
     }
 
-
+    constructor(message: String?, urlImageSender: String?, userSender: String,urlImageMessage:String) {
+        this.message = message
+        this.urlImageSender = urlImageSender
+        this.userSender = userSender
+        this.urlImageMessage=urlImageMessage
+    }
 
 }

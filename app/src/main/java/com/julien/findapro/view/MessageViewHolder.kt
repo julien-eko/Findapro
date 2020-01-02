@@ -88,7 +88,14 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
 
             //update image sent texview (not implemented atm
-            this.imageSent.visibility=View.GONE
+           // this.imageSent.visibility=View.GONE
+
+            if(message.urlImageMessage != null){
+                Picasso.get().load(message.urlImageMessage).into(imageSent)
+                this.imageSent.visibility=View.VISIBLE
+            }else{
+                this.imageSent.visibility=View.GONE
+            }
 
             //Update Message Bubble Color Background
             //Update Message Bubble Color Background
