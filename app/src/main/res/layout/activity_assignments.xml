@@ -8,6 +8,13 @@
     android:orientation="vertical">
 
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_map_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:theme="@style/ToolBarStyle" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

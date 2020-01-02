@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 import com.julien.findapro.R
+import com.julien.findapro.controller.activity.AssignmentDetailActivity
 import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
 import com.julien.findapro.view.AssignmentListAdaptater
 import kotlinx.android.synthetic.main.fragment_assignments_in_progress.*
@@ -80,9 +81,8 @@ class AssignmentsInProgressFragment : Fragment() {
     }
 
     private fun assignmentItemClicked(assignmentItem : HashMap<String,String>) {
-        //val intent = Intent(context,
-         //   AssignmentsChoiceActivity::class.java)
-        //intent.putExtra("id",assignmentItem["id"])
-        //startActivity(intent)
+        val intent = Intent(context, AssignmentDetailActivity::class.java)
+        intent.putExtra("id",assignmentItem["id"])
+        startActivity(intent)
     }
 }
