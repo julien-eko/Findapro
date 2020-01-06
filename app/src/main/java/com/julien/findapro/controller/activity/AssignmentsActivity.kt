@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
+import com.julien.findapro.Utils.Assignment
 import kotlinx.android.synthetic.main.activity_assignments.*
 
 class AssignmentsActivity : AppCompatActivity() {
@@ -56,14 +57,16 @@ class AssignmentsActivity : AppCompatActivity() {
     private fun saveInDb(){
         val db = FirebaseFirestore.getInstance()
 
-
+        val assignments = Assignment(FirebaseAuth.getInstance().currentUser?.uid!!,intent.getStringExtra("proId"),"pending", activity_assignments_describe_edit_text.text.toString(),null)
+        /*
         val assignments = hashMapOf(
+            "dateCreated" to
             "user id" to FirebaseAuth.getInstance().currentUser?.uid!!,
             "pro user id" to intent.getStringExtra("proId"),
             "describe" to activity_assignments_describe_edit_text.text.toString(),
             "status" to "pending"
         )
-
+*/
         db.collection("assignments").document().set(assignments)
 
             .addOnSuccessListener { documentReference ->

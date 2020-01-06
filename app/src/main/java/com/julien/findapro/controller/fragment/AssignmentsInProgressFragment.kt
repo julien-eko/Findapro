@@ -16,6 +16,7 @@ import com.julien.findapro.R
 import com.julien.findapro.controller.activity.AssignmentDetailActivity
 import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
 import com.julien.findapro.view.AssignmentListAdaptater
+import com.julien.findapro.view.AssignmentsInProgressAdapter
 import kotlinx.android.synthetic.main.fragment_assignments_in_progress.*
 import kotlinx.android.synthetic.main.fragment_assignments_list.*
 
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_assignments_list.*
  */
 class AssignmentsInProgressFragment : Fragment() {
 
-    val assigmentsList: ArrayList<HashMap<String, String>> = ArrayList()
+    val assigmentsList: ArrayList<HashMap<String, Any?>> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,19 +44,21 @@ class AssignmentsInProgressFragment : Fragment() {
 
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
-        db.collection("assignments").whereEqualTo(tag!!, FirebaseAuth.getInstance().currentUser?.uid!!).get()
+        val user:String = if(tag!! == "proUserId") "users" else "pro users"
+        val userId:String = if(tag!! == "proUserId") "userId" else "proUserId"
+        db.collection("assignments").whereEqualTo(userId, FirebaseAuth.getInstance().currentUser?.uid!!).get()
             .addOnSuccessListener { documents ->
 
                 for (document in documents) {
-                    val user:String = if(tag!! == "pro user id") "users" else "pro users"
-                    val userId:String = if(tag!! == "pro user id") "user id" else "pro user id"
                     db.collection(user).document(document[userId].toString()).get()
                         .addOnSuccessListener { data ->
 
-                            val assignment = hashMapOf(
+                            val assignment:HashMap<String,Any?> = hashMapOf(
                                 "full name" to data["full name"].toString(),
                                 "photo" to data["photo"].toString(),
                                 "status" to document["status"].toString(),
+                                "dateEnd" to document["dateEnd"],
+                                "dateCreated" to document["dateCreated"],
                                 "id" to document.id
                             )
                             assigmentsList.add(assignment)
@@ -66,10 +69,10 @@ class AssignmentsInProgressFragment : Fragment() {
                             Log.w("access db", "Error getting data", exception)
                         }
                         .addOnCompleteListener {  recycler_view_assignments_in_progress_fragment.layoutManager = LinearLayoutManager(context)
-                            recycler_view_assignments_in_progress_fragment.adapter = AssignmentListAdaptater(
+                            recycler_view_assignments_in_progress_fragment.adapter = AssignmentsInProgressAdapter(
                                 assigmentsList,
                                 context!!,
-                                { assignmentItem: HashMap<String, String> -> assignmentItemClicked(assignmentItem) })
+                                { assignmentItem: HashMap<String, Any?> -> assignmentItemClicked(assignmentItem) })
                         }
 
                 }
@@ -80,9 +83,9 @@ class AssignmentsInProgressFragment : Fragment() {
             }
     }
 
-    private fun assignmentItemClicked(assignmentItem : HashMap<String,String>) {
+    private fun assignmentItemClicked(assignmentItem : HashMap<String,Any?>) {
         val intent = Intent(context, AssignmentDetailActivity::class.java)
-        intent.putExtra("id",assignmentItem["id"])
+        intent.putExtra("id",assignmentItem["id"].toString())
         startActivity(intent)
     }
 }

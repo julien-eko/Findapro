@@ -42,17 +42,18 @@ class AssignmentsListFragment : Fragment() {
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("assignments").whereEqualTo("pro user id",FirebaseAuth.getInstance().currentUser?.uid!!).whereEqualTo("status","pending").get()
+        db.collection("assignments").whereEqualTo("proUserId",FirebaseAuth.getInstance().currentUser?.uid!!).whereEqualTo("status","pending").get()
             .addOnSuccessListener { documents ->
 
                     for (document in documents) {
-                    db.collection("users").document(document["user id"].toString()).get()
+                    db.collection("users").document(document["userId"].toString()).get()
                         .addOnSuccessListener { data ->
 
                             val assignment = hashMapOf(
                                 "full name" to data["full name"].toString(),
                                 "photo" to data["photo"].toString(),
-                                "status" to document["status"].toString(),
+                                "city" to data["city"].toString(),
+                                "rating" to data["rating"].toString(),
                                 "id" to document.id
                             )
                             assigmentsList.add(assignment)

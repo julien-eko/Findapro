@@ -1,29 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/default_margin">
 
 
-    <ImageView android:layout_width="100dp" android:layout_height="100dp"
-        android:id="@+id/fragment_assignments_list_item_photo_imageview"/>
+
+        <ImageView
+            android:id="@+id/fragment_assignments_list_item_photo_imageview"
+            android:layout_width="75dip"
+            android:layout_height="75dip"
+            app:srcCompat="@drawable/ic_anon_user_48dp"/>
+    </LinearLayout>
 
 
+    <LinearLayout android:layout_width="match_parent" android:layout_height="80dp"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/default_margin">
 
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="100dp"
-        android:orientation="vertical">
-
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:id="@+id/fragment_assignments_list_item_name_textview"
             android:textStyle="bold"
-            android:layout_weight="1"
+            android:text="test"
             android:textColor="@android:color/black"/>
 
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:id="@+id/fragment_assignments_list_item_status_textview"
-            android:layout_weight="1"
-            android:textStyle="bold"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/fragment_assignments_list_item_city_textview"
+            android:textStyle="bold"
+            android:text="test"/>
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:id="@+id/fragment_assignment_item_list_ratingbar"
+            android:rating="3"
+            android:progressTint="@color/ratingColor"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fragment_assignment_item_list_no_rating"
+            android:visibility="gone"
+            android:text="AUCUN AVIS"/>
 
     </LinearLayout>
 

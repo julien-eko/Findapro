@@ -6,10 +6,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.julien.findapro.Utils.Message
 
-public class MessageHelper {
+class MessageHelper {
 
     companion object{
-        public fun getAllMessage(assignmentsId: String): Query{
+        fun getAllMessage(assignmentsId: String): Query{
             val db = FirebaseFirestore.getInstance()
 
             return db.collection("assignments").document(assignmentsId).collection("chat").orderBy("dateCreated")

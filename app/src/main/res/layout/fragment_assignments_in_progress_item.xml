@@ -3,27 +3,38 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/default_margin">
 
-
-    <ImageView android:layout_width="100dp" android:layout_height="100dp"
+    <ImageView android:layout_width="75dp" android:layout_height="75dp"
         android:id="@+id/fragment_assignments_in_progress_item_photo_imageview"/>
 
 
-
+</LinearLayout>
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="100dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_margin="@dimen/default_margin">
 
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:id="@+id/fragment_assignments_in_progress_item_name_textview"
             android:textStyle="bold"
-            android:layout_weight="1"
+            android:text="test"
             android:textColor="@android:color/black"/>
 
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:id="@+id/fragment_assignments_in_progress_item_status_textview"
-            android:layout_weight="1"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:text="test"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fragment_assignment_in_progress_date"/>
 
     </LinearLayout>
 
