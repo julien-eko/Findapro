@@ -15,16 +15,115 @@
         android:background="?attr/colorPrimary"
         app:theme="@style/ToolBarStyle" />
 
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/default_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Nom : "/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test"
+            android:id="@+id/activity_assignements_full_name_text_view"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/default_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Spécialité : "/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test"
+            android:id="@+id/activity_assignements_job_text_view"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/default_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Avis  "/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(3) :"
+            android:id="@+id/activity_assignements_nb_rating_text_view"/>
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/ratingBarStyleSmall"
+            android:id="@+id/activity_assignment_ratingbar"
+            android:rating="3"
+            android:progressTint="@color/ratingColor"/>
+
+
+
+    </LinearLayout>
+    <TextView
+        android:layout_margin="@dimen/default_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Veullier détaille votre demande pour le professionnel ci-dessus. Vous recevrez une réponse dans les plus brefs délais."/>
+
+    <!-- TEXT MESSAGE EDIT TEXT-->
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/activity_assignments_describe_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionDone"
+        android:textSize="@dimen/default_text_size"
+        android:inputType="textMultiLine"
+        android:hint="Composer votre demande ici"/>
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="horizontal">
+
+
+
+    <Button
+        android:id="@+id/assignments_finish_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Annuler"
+        android:layout_margin="@dimen/default_margin"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/assignments_save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="test"
+        android:layout_margin="@dimen/default_margin"
+        android:text="Envoyer la demande"
         tools:ignore="MissingConstraints" />
+
+</LinearLayout>
+
 
 </LinearLayout>

@@ -15,12 +15,12 @@
 
     <!-- PROFILE CONTAINER -->
     <LinearLayout
-        android:id="@+id/activity_chat_item_profile_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/default_margin">
+    android:id="@+id/activity_chat_item_profile_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentBottom="true"
+    android:layout_margin="@dimen/default_margin">
 
         <!-- IMAGE VIEW PROFILE -->
         <ImageView
