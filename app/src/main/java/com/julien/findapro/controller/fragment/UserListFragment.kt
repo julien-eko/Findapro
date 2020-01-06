@@ -57,6 +57,8 @@ class UserListFragment : Fragment() {
                                 "full name" to document["full name"].toString(),
                                 "job" to document["job"].toString(),
                                 "photo" to document["photo"].toString(),
+                                "city" to document["city"].toString(),
+                                "rating" to document["rating"].toString(),
                                 "uid" to document.id
                             )
 

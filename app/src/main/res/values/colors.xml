@@ -15,4 +15,6 @@
     <color name="startColor">#F137A6</color>
     <color name="centerColor">#F77A85</color>
     <color name="endColor">#FDBB69</color>
+
+    <color name="ratingColor">#F2E21F</color>
 </resources>
