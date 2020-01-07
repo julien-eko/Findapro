@@ -17,4 +17,7 @@
     <color name="endColor">#FDBB69</color>
 
     <color name="ratingColor">#F2E21F</color>
+
+    <color name="acceptColor">#28A503</color>
+    <color name="refuseColor">#FF0000</color>
 </resources>

@@ -234,4 +234,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fragmentTransaction.func()
         fragmentTransaction.commit()
     }
+
+
 }

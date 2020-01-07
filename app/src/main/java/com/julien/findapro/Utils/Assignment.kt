@@ -12,6 +12,7 @@ class Assignment {
     var proUserId: String? = null
     var status:String? = null
     var describe:String? = null
+    var dateAssignment: Date? = null
 
     constructor() {}
 
@@ -21,5 +22,6 @@ class Assignment {
         this.status = status
         this.describe = describe
         this.dateEnd = dateEnd
+        this.dateAssignment = null
     }
 }

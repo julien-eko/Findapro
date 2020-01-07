@@ -43,9 +43,11 @@ class ChatListFragment : Fragment() {
 
     private fun loadData(){
         val db = FirebaseFirestore.getInstance()
+        val user:String = if(tag!! == "proUserIdd") "users" else "pro users"
+        val userId:String = if(tag!! == "proUserId") "userId" else "proUserId"
 
         db.collection("assignments")
-            .whereEqualTo(tag!!, FirebaseAuth.getInstance().currentUser?.uid!!)
+            .whereEqualTo(userId, FirebaseAuth.getInstance().currentUser?.uid!!)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
@@ -54,8 +56,7 @@ class ChatListFragment : Fragment() {
                         .addOnSuccessListener {chatDocument ->
 
                             if (chatDocument.size() > 0){
-                                val user:String = if(tag!! == "pro user id") "users" else "pro users"
-                                val userId:String = if(tag!! == "pro user id") "user id" else "pro user id"
+
                                 db.collection(user).document(document[userId].toString()).get()
                                     .addOnSuccessListener { documentUser ->
                                         if (documentUser != null) {

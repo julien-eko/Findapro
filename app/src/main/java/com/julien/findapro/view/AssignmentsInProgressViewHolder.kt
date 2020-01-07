@@ -28,6 +28,12 @@ class AssignmentsInProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(
         if(assignment["status"].toString() == "finish"){
             status = "Fini"
         }
+        if(assignment["status"].toString() == "pending"){
+            status = "En attente"
+        }
+        if(assignment["status"].toString() == "refuse"){
+            status = "Refusé"
+        }
         itemView.fragment_assignments_in_progress_item_status_textview.text = status
 
         Picasso.get().load(assignment["photo"].toString()).transform(CircleTransform()).into(itemView.fragment_assignments_in_progress_item_photo_imageview)
@@ -36,7 +42,7 @@ class AssignmentsInProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(
         var date:String?
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
 
-        date = if (assignment["dateEnd"] == "null"){
+        date = if (assignment["dateEnd"] == null){
             val dateCreatedTimestamp =assignment["dateCreated"] as Timestamp
             val dateCreatedDate = dateCreatedTimestamp.toDate()
             "Débuté depuis le : " + dateFormat.format(dateCreatedDate).toString()

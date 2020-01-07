@@ -79,7 +79,7 @@ class AssignmentsActivity : AppCompatActivity() {
     }
 
     private fun configureToolbar() {
-        setSupportActionBar(activity_map_toolbar)
+        setSupportActionBar(activity_assignements_toolbar)
 
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
