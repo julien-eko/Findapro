@@ -85,5 +85,6 @@ class AssignmentsListFragment : Fragment() {
         startActivity(intent)
     }
 
+
 }
 

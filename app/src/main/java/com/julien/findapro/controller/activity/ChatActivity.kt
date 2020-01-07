@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ import com.julien.findapro.Utils.Message
 import com.julien.findapro.api.MessageHelper
 import com.julien.findapro.view.ChatAdapter
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_assignments.*
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.activity_chat_item.*
 import kotlinx.android.synthetic.main.activity_chat_item.view.*
@@ -41,6 +43,7 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+        configureToolbar()
         configureRecyclerView()
 
         this.imageViewPreview =  activity_chat_image_chosen_preview
@@ -216,7 +219,19 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
+    private fun configureToolbar() {
+        setSupportActionBar(activity_chat_toolbar)
 
+        val actionBar = supportActionBar
+        actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.title = "Chat"
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        onBackPressed()
+        return super.onOptionsItemSelected(item)
+    }
 
     companion object {
         private const val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100

@@ -9,8 +9,7 @@ import com.julien.findapro.R
 class ChatListAdapter (var chatList: ArrayList<HashMap<String,String>>,val context: Context,val clickListener: (HashMap<String,String>) -> Unit):
     RecyclerView.Adapter<ChatListViewHolder>() {
 
-    var listener: ((String) -> Unit)? = null
-    private var index: Int = -1
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatListViewHolder {
         val v = LayoutInflater.from(parent?.context)

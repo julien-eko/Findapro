@@ -15,6 +15,9 @@ import com.julien.findapro.R
 import com.julien.findapro.controller.activity.ChatActivity
 import com.julien.findapro.view.ChatListAdapter
 import kotlinx.android.synthetic.main.fragment_chat_list.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * A simple [Fragment] subclass.
@@ -45,7 +48,6 @@ class ChatListFragment : Fragment() {
         val db = FirebaseFirestore.getInstance()
         val user:String = if(tag!! == "proUserIdd") "users" else "pro users"
         val userId:String = if(tag!! == "proUserId") "userId" else "proUserId"
-
         db.collection("assignments")
             .whereEqualTo(userId, FirebaseAuth.getInstance().currentUser?.uid!!)
             .get()
@@ -55,30 +57,32 @@ class ChatListFragment : Fragment() {
                         .get()
                         .addOnSuccessListener {chatDocument ->
 
-                            if (chatDocument.size() > 0){
+                           if (chatDocument.size()>0){
+                               db.collection(user).document(document[userId].toString()).get()
+                                   .addOnSuccessListener { documentUser ->
+                                       if (documentUser != null) {
+                                           val chat = hashMapOf(
+                                               "full name" to documentUser["full name"].toString(),
+                                               "photo" to documentUser["photo"].toString(),
+                                               "id" to document.id
+                                           )
 
-                                db.collection(user).document(document[userId].toString()).get()
-                                    .addOnSuccessListener { documentUser ->
-                                        if (documentUser != null) {
-                                            val chat = hashMapOf(
-                                                "full name" to documentUser["full name"].toString(),
-                                                "photo" to documentUser["photo"].toString(),
-                                                "id" to document.id
-                                            )
+                                           chatList.add(chat)
 
-                                            chatList.add(chat)
+                                           recycler_view_chat_list_fragment.layoutManager = LinearLayoutManager(context)
+                                           recycler_view_chat_list_fragment.adapter = ChatListAdapter(chatList,context!!,{ chatItem : HashMap<String,String> -> chatItemClicked(chatItem) })
 
-                                            recycler_view_chat_list_fragment.layoutManager = LinearLayoutManager(context)
-                                            recycler_view_chat_list_fragment.adapter = ChatListAdapter(chatList,context!!,{ chatItem : HashMap<String,String> -> chatItemClicked(chatItem) })
+                                       } else {
+                                           Log.d("", "No such document")
+                                       }
+                                   }
+                                   .addOnFailureListener { exception ->
+                                       Log.d("", "get failed with ", exception)
+                                   }
+                           }
 
-                                        } else {
-                                            Log.d("", "No such document")
-                                        }
-                                    }
-                                    .addOnFailureListener { exception ->
-                                        Log.d("", "get failed with ", exception)
-                                    }
-                            }
+
+
 
 
                         }
@@ -92,6 +96,12 @@ class ChatListFragment : Fragment() {
             }
 
 
+    }
+
+    //refresh recycler view with last message
+    override fun onResume() {
+        super.onResume()
+        recycler_view_chat_list_fragment.adapter?.notifyDataSetChanged()
     }
     private fun chatItemClicked(chatItem : HashMap<String,String>) {
         //val intent = Intent(context,AssignmentsActivity::class.java)
