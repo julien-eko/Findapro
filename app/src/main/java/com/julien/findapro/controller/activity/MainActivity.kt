@@ -198,9 +198,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (item == R.id.action_planning){
             var user=""
             user = if(sharedPreferences.getBoolean("isPro",false)){
-                "pro user id"
+                "proUserId"
             }else{
-                "user id"
+                "userId"
             }
             supportFragmentManager.inTransaction {
                 replace(
@@ -214,9 +214,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             //Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()
             var user=""
             user = if(sharedPreferences.getBoolean("isPro",false)){
-                "pro user id"
+                "proUserId"
             }else{
-                "user id"
+                "userId"
             }
             supportFragmentManager.inTransaction {
                     replace(

@@ -46,7 +46,7 @@ class AssignmentsInProgressFragment : Fragment() {
         val db = FirebaseFirestore.getInstance()
         val user:String = if(tag!! == "proUserId") "users" else "pro users"
         val userId:String = if(tag!! == "proUserId") "userId" else "proUserId"
-        db.collection("assignments").whereEqualTo(userId, FirebaseAuth.getInstance().currentUser?.uid!!).get()
+        db.collection("assignments").whereEqualTo(tag!!, FirebaseAuth.getInstance().currentUser?.uid!!).get()
             .addOnSuccessListener { documents ->
 
                 for (document in documents) {
