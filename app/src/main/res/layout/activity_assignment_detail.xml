@@ -4,10 +4,223 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.activity.AssignmentDetailActivity">
+    tools:context=".controller.activity.AssignmentDetailActivity"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/activity_assignment_detail_describe_text_view"
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_assignment_detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ToolBarStyle"
+        app:titleTextColor="@android:color/white"
+        app:subtitleTextColor="@android:color/black"/>
+
+
+    <LinearLayout
+        android:id="@+id/activity_assignment_detail_profil_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/default_margin">
+
+
+
+        <ImageView
+            android:id="@+id/activity_assignment_detail_photo_imageview"
+            android:layout_gravity="center_vertical"
+            android:layout_width="75dip"
+            android:layout_height="75dip"
+            app:srcCompat="@drawable/ic_anon_user_48dp"/>
+
+
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="80dp"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/default_margin">
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/activity_assignment_detail_name_textview"
+            android:textStyle="bold"
+            android:text="julien test"
+            android:textColor="@android:color/black"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/activity_assignment_detail_adress_textview"
+            android:text="10 rue du test"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/activity_assignment_detail_postal_code_textview"
+            android:text="00000"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/activity_assignment_detail_city_textview"
+            android:text="test"/>
+
+
+    </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Description du problème de  l'utilisateur : "
+            android:layout_margin="@dimen/default_margin"/>
+
+        <TextView
+            android:id="@+id/activity_assignment_detail_describe_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/default_margin"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/activity_assignment_detail_created_date_linearlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Date de création : "
+            android:layout_marginLeft="@dimen/default_margin"/>
+
+        <TextView
+            android:id="@+id/activity_assignment_detail_created_date_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00/00/0000 "
+            android:layout_marginLeft="@dimen/default_margin"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_assignment_detail_intervention_date_linearlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Date d'intervention: "
+            android:layout_marginLeft="@dimen/default_margin"/>
+
+        <TextView
+            android:id="@+id/activity_assignment_detail_intervention_date_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00/00/0000 "
+            android:layout_marginLeft="@dimen/default_margin"/>
+
+        <Button
+            android:id="@+id/activity_assignment_detail_intervention_date_button"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ajouter une date"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_assignment_detail_finish_date_linearlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Date de fin : "
+            android:layout_marginLeft="@dimen/default_margin"/>
+
+        <TextView
+            android:id="@+id/activity_assignment_detail_finish_date_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00/00/0000 "
+            android:layout_marginLeft="@dimen/default_margin"/>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/activity_assignment_detail_more_information_linearlayout"
+        android:layout_margin="@dimen/default_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_assignment_detail_more_information_textview"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/default_margin">
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:text="Noter la mission"
+        android:id="@+id/activity_assignment_detail_rating_button"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:text="Annuler la mission"
+        android:id="@+id/activity_assignment_detail_cancel_assignment_button"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:text="Répondre à la mission"
+        android:id="@+id/activity_assignment_detail_accept_assignment_button"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:text="Terminer la mission"
+        android:id="@+id/activity_assignment_detail_finish_assignment_button"/>
+
+
+    </LinearLayout>
+
+
 </LinearLayout>

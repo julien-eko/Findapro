@@ -27,7 +27,7 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
 
         assignments_choice_activity_accept_button.setOnClickListener {
             db.collection("assignments").document(intent.getStringExtra("id"))
-                .update("status", "accept")
+                .update("status", "inProgress")
                 .addOnSuccessListener {
                     Log.d(
                         "update status",

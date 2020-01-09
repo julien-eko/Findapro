@@ -19,14 +19,15 @@ class AssignmentsInProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(
         itemView.fragment_assignments_in_progress_item_name_textview.text = assignment["full name"].toString()
 
         var status:String? =""
-        if(assignment["status"].toString() == "accept"){
-            status = "Accepter"
-        }
-        if(assignment["status"].toString() == "in progress"){
+        if(assignment["status"].toString() == "inProgress"){
             status = "En cours"
         }
+
         if(assignment["status"].toString() == "finish"){
             status = "Fini"
+        }
+        if(assignment["status"].toString() == "cancel"){
+            status = "Annuler"
         }
         if(assignment["status"].toString() == "pending"){
             status = "En attente"

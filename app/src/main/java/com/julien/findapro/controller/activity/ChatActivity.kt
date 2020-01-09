@@ -73,7 +73,7 @@ class ChatActivity : AppCompatActivity() {
 
     private fun configureRecyclerView(){
 
-        val chatAdapter = ChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessage(intent.getStringExtra("assignment"))),FirebaseAuth.getInstance().currentUser?.uid!!)
+        val chatAdapter = ChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessage(intent.getStringExtra("assignment")?:"default value")),FirebaseAuth.getInstance().currentUser?.uid!!)
 
 
         recycler_view_chat_activity.layoutManager = LinearLayoutManager(this)

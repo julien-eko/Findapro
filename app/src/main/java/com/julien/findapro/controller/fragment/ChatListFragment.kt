@@ -104,9 +104,6 @@ class ChatListFragment : Fragment() {
         recycler_view_chat_list_fragment.adapter?.notifyDataSetChanged()
     }
     private fun chatItemClicked(chatItem : HashMap<String,String>) {
-        //val intent = Intent(context,AssignmentsActivity::class.java)
-        //intent.putExtra("proId",userItem["uid"])
-        //startActivity(intent)
 
         val intent = Intent(context, ChatActivity::class.java)
         intent.putExtra("assignment",chatItem["id"])
