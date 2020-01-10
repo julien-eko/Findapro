@@ -1,5 +1,6 @@
 package com.julien.findapro.controller.activity
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.Utils.Assignment
@@ -57,6 +59,14 @@ class AssignmentDetailActivity : AppCompatActivity() {
             pickDateTime()
             //activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
 
+        }
+
+        activity_assignment_detail_cancel_assignment_button.setOnClickListener {
+            cancelAssignment()
+        }
+
+        activity_assignment_detail_finish_assignment_button.setOnClickListener {
+            finishAssignmentDialog()
         }
 
     }
@@ -230,9 +240,12 @@ class AssignmentDetailActivity : AppCompatActivity() {
     }
 
     private fun finishAssignment() {
+        activity_assignment_detail_cancel_assignment_button.visibility = View.GONE
+        activity_assignment_detail_finish_assignment_button.visibility =View.GONE
         activity_assignment_detail_intervention_date_linearlayout.visibility = View.VISIBLE
         activity_assignment_detail_finish_date_linearlayout.visibility = View.VISIBLE
         activity_assignment_detail_more_information_linearlayout.visibility =View.VISIBLE
+        activity_assignment_detail_intervention_date_button.visibility = View.GONE
 
         activity_assignment_detail_created_date_textview.text =
             convertDate(assignment?.dateCreated, false)
@@ -240,8 +253,15 @@ class AssignmentDetailActivity : AppCompatActivity() {
         activity_assignment_detail_finish_date_textview.text =
             convertDate(assignment?.dateEnd, true)
 
-        activity_assignment_detail_intervention_date_textview.text =
-            convertDate(assignment?.dateAssignment, false)
+
+        if (assignment!!.dateAssignment == null){
+            activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
+            activity_assignment_detail_intervention_date_textview.text = getString(R.string.no_date_found)
+        }else{
+            activity_assignment_detail_intervention_date_textview.text =
+                convertDate(assignment?.dateAssignment, false)
+        }
+
 
 
         val db = FirebaseFirestore.getInstance()
@@ -297,15 +317,20 @@ class AssignmentDetailActivity : AppCompatActivity() {
     }
 
     private fun cancel() {
+        activity_assignment_detail_cancel_assignment_button.visibility = View.GONE
+        activity_assignment_detail_finish_assignment_button.visibility =View.GONE
         activity_assignment_detail_created_date_textview.text =
             convertDate(assignment?.dateCreated, false)
+        activity_assignment_detail_intervention_date_linearlayout.visibility = View.GONE
 
         activity_assignment_detail_more_information_linearlayout.visibility = View.VISIBLE
 
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy",Locale.getDefault())
+        val date = dateFormat.format(assignment?.dateEnd).toString()
         if (sharedPreferences.getBoolean("isPro", false)) {
-            activity_assignment_detail_more_information_textview.text = "Mission annulé"
+            activity_assignment_detail_more_information_textview.text = "Mission annulé le $date"
         } else {
-            activity_assignment_detail_more_information_textview.text = "Mission annulé"
+            activity_assignment_detail_more_information_textview.text = "Mission annulé le $date"
         }
     }
 
@@ -345,6 +370,64 @@ class AssignmentDetailActivity : AppCompatActivity() {
         }, startYear, startMonth, startDay).show()
     }
 
+    private fun cancelAssignment(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.cancel_assignment))
+        builder.setMessage(getString(R.string.cancel_assignment_question))
+        //builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
+
+        builder.setPositiveButton("Oui") { dialog, which ->
+            val db = FirebaseFirestore.getInstance()
+            db.collection("assignments").document(assignmentId)
+                .update("status", "cancel")
+                .addOnSuccessListener { Log.d("update status", "DocumentSnapshot successfully updated!")
+                    }
+                .addOnFailureListener { e -> Log.w("update status", "Error updating document", e) }
+
+            db.collection("assignments").document(assignmentId)
+                .update("dateEnd", FieldValue.serverTimestamp())
+                .addOnSuccessListener { Log.d("update date", "DocumentSnapshot successfully updated!")
+                    loadAssignment()}
+                .addOnFailureListener { e -> Log.w("update date", "Error updating document", e) }
+        }
+
+        builder.setNegativeButton("Non") { dialog, which ->
+
+        }
+
+
+        builder.show()
+    }
+
+    private fun finishAssignmentDialog(){
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.finish_assignment))
+        builder.setMessage(getString(R.string.finish_missio_question))
+        //builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
+
+        builder.setPositiveButton("Oui") { dialog, which ->
+            val db = FirebaseFirestore.getInstance()
+            db.collection("assignments").document(assignmentId)
+                .update("status", "finish")
+                .addOnSuccessListener { Log.d("update status", "DocumentSnapshot successfully updated!")
+                }
+                .addOnFailureListener { e -> Log.w("update status", "Error updating document", e) }
+
+            db.collection("assignments").document(assignmentId)
+                .update("dateEnd", FieldValue.serverTimestamp())
+                .addOnSuccessListener { Log.d("update date", "DocumentSnapshot successfully updated!")
+                    loadAssignment()}
+                .addOnFailureListener { e -> Log.w("update date", "Error updating document", e) }
+        }
+
+        builder.setNegativeButton("Non") { dialog, which ->
+
+        }
+
+
+        builder.show()
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.assignment_detail_toolbar, menu)
 

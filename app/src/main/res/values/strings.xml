@@ -33,5 +33,10 @@
     <string name="assignment_finish">la mission est terminée</string>
     <string name="pending_assignment">Vous n\'avez pas encore répondu à la mission</string>
     <string name="waiting_for_response">Votre demande est en attente d\'une réponse</string>
+    <string name="cancel_assignment">Annulation</string>
+    <string name="cancel_assignment_question">Voulez-vous vraiment annuler cette mission ?</string>
+    <string name="finish_assignment">Terminer la mission</string>
+    <string name="finish_missio_question">Êtes-vous sure que la mission est bien terminée</string>
+    <string name="no_date_found">Aucune date trouvée</string>
 
 </resources>
