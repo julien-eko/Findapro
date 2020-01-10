@@ -1,11 +1,14 @@
 package com.julien.findapro.controller.activity
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -28,6 +31,7 @@ import kotlinx.android.synthetic.main.fragment_assignments_in_progress_item.view
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.xml.datatype.DatatypeConstants.MONTHS
 
 
 class AssignmentDetailActivity : AppCompatActivity() {
@@ -48,6 +52,12 @@ class AssignmentDetailActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("isPro", 0)
         //Toast.makeText(this,sharedPreferences.getBoolean("isPro",false).toString(),Toast.LENGTH_SHORT).show()
 
+
+        activity_assignment_detail_intervention_date_button.setOnClickListener {
+            pickDateTime()
+            //activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
+
+        }
 
     }
 
@@ -170,16 +180,32 @@ class AssignmentDetailActivity : AppCompatActivity() {
             if (sharedPreferences.getBoolean("isPro", false)) {
                 activity_assignment_detail_intervention_date_textview.visibility = View.GONE
                 activity_assignment_detail_intervention_date_button.visibility = View.VISIBLE
+                activity_assignment_detail_intervention_date_button.setBackgroundResource(R.drawable.baseline_add_circle_black_24)
+            } else {
+                //activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
+                activity_assignment_detail_intervention_date_button.visibility = View.GONE
+
+
+                activity_assignment_detail_intervention_date_textview.text =
+                    "En attente d'une date "
+            }
+        } else {
+            activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
+            if (sharedPreferences.getBoolean("isPro", false)) {
+                //activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
+                activity_assignment_detail_intervention_date_button.visibility = View.VISIBLE
+                activity_assignment_detail_intervention_date_button.setBackgroundResource(R.drawable.baseline_edit_black_24)
+
+                activity_assignment_detail_intervention_date_textview.text =
+                    convertDate(assignment?.dateAssignment, true)
             } else {
                 //activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
                 activity_assignment_detail_intervention_date_button.visibility = View.GONE
 
                 activity_assignment_detail_intervention_date_textview.text =
-                    "En attente d'une datte "
+                    convertDate(assignment?.dateAssignment, true)
             }
-        } else {
-            activity_assignment_detail_intervention_date_textview.text =
-                convertDate(assignment?.dateAssignment, true)
+
         }
 
         activity_assignment_detail_cancel_assignment_button.visibility = View.VISIBLE
@@ -293,6 +319,30 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
 
         return dateFormatDay.format(date).toString()
+    }
+
+    private fun pickDateTime() {
+        val currentDateTime = Calendar.getInstance()
+        val startYear = currentDateTime.get(Calendar.YEAR)
+        val startMonth = currentDateTime.get(Calendar.MONTH)
+        val startDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
+        val startHour = currentDateTime.get(Calendar.HOUR_OF_DAY)
+        val startMinute = currentDateTime.get(Calendar.MINUTE)
+
+        DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, day ->
+            TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+                val pickedDateTime = Calendar.getInstance()
+                pickedDateTime.set(year, month, day, hour, minute)
+
+                val db = FirebaseFirestore.getInstance()
+                db.collection("assignments").document(assignmentId)
+                    .update("dateAssignment", pickedDateTime.time)
+                    .addOnSuccessListener { Log.d("update date", "DocumentSnapshot successfully updated!")
+                    loadAssignment()}
+                    .addOnFailureListener { e -> Log.w("update date", "Error updating document", e) }
+
+            }, startHour, startMinute, DateFormat.is24HourFormat(this)).show()
+        }, startYear, startMonth, startDay).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

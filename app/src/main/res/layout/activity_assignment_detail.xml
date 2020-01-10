@@ -128,12 +128,12 @@
             android:text="00/00/0000 "
             android:layout_marginLeft="@dimen/default_margin"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/activity_assignment_detail_intervention_date_button"
             android:visibility="gone"
+            android:layout_marginLeft="@dimen/default_margin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ajouter une date"/>
+            android:layout_height="wrap_content"/>
 
 
     </LinearLayout>
