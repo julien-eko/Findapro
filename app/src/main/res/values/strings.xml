@@ -39,5 +39,7 @@
     <string name="finish_missio_question">Êtes-vous sure que la mission est bien terminée</string>
     <string name="no_date_found">Aucune date trouvée</string>
     <string name="add_comment">Ajouté un commentaire</string>
+    <string name="chat_restrict_pending">Le chat n\'est pas disponible pour les missions en attente</string>
+    <string name="chat_restrict_refuse">Le chat n\'est pas disponible pour les missions refusées</string>
 
 </resources>

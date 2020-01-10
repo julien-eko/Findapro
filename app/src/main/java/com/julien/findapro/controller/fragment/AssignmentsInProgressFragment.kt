@@ -35,12 +35,7 @@ class AssignmentsInProgressFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_assignments_in_progress, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
-        loadData()
-
-    }
 
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
@@ -87,5 +82,12 @@ class AssignmentsInProgressFragment : Fragment() {
         val intent = Intent(context, AssignmentDetailActivity::class.java)
         intent.putExtra("id",assignmentItem["id"].toString())
         startActivity(intent)
+    }
+
+    override fun onResume() {
+        assigmentsList.clear()
+        loadData()
+        super.onResume()
+
     }
 }

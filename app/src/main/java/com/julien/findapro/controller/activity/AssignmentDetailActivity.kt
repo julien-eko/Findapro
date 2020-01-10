@@ -453,9 +453,20 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
 
         if (itemid == R.id.action_open_chat) {
-            val intent = Intent(this, ChatActivity::class.java)
-            intent.putExtra("assignment", assignmentId)
-            startActivity(intent)
+            when (assignment?.status) {
+                "pending" -> {
+                    Toast.makeText(this,getString(R.string.chat_restrict_pending),Toast.LENGTH_SHORT).show()
+                }
+                "refuse" -> {
+                    Toast.makeText(this,getString(R.string.chat_restrict_refuse),Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    val intent = Intent(this, ChatActivity::class.java)
+                    intent.putExtra("assignment", assignmentId)
+                    startActivity(intent)
+                }
+            }
+
         } else {
             onBackPressed()
         }

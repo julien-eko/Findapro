@@ -32,12 +32,7 @@ class AssignmentsListFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_assignments_list, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
-        loadData()
-
-    }
 
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
@@ -85,6 +80,11 @@ class AssignmentsListFragment : Fragment() {
         startActivity(intent)
     }
 
+    override fun onResume() {
+        assigmentsList.clear()
+        loadData()
+        super.onResume()
+    }
 
 }
 

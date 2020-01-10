@@ -62,14 +62,7 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
 
-        val intent = Intent(this,
-            MainActivity::class.java)
-        startActivity(intent)
-
-    }
 
     private fun loadData(db:FirebaseFirestore){
         db.collection("assignments").document(intent.getStringExtra("id")).get()
