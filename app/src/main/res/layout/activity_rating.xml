@@ -7,21 +7,62 @@
     android:orientation="vertical"
     tools:context=".controller.activity.RatingActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_rating_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ToolBarStyle"
+        app:titleTextColor="@android:color/white"
+        app:subtitleTextColor="@android:color/black"/>
+
+    <LinearLayout
+        android:id="@+id/activity_assignment_detail_profil_linearlayout"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/default_margin">
+
+
+
+        <ImageView
+            android:id="@+id/activity_rating_photo_imageview"
+            android:layout_gravity="center_vertical"
+            android:layout_width="75dip"
+            android:layout_height="75dip"
+            app:srcCompat="@drawable/ic_anon_user_48dp"/>
+
+
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:id="@+id/activity_rating_name_textview"
+                android:layout_gravity="center_horizontal"
+                android:text="test"/>
+
+
+    </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatRatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:id="@+id/activity_rating_rating_bar"/>
 
     <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="@string/add_comment"
+        android:layout_margin="@dimen/default_margin"
         android:layout_height="wrap_content"
         android:id="@+id/activity_rating_edit_text"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="test"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/default_margin"
+        android:text="Noter"
         android:id="@+id/activity_rating_button"/>
 
 

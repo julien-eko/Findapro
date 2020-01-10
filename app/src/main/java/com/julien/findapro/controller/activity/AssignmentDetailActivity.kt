@@ -305,6 +305,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                     //Toast.makeText(this,"pas noté",Toast.LENGTH_SHORT).show()
                 }else{
                     //rated
+                    activity_assignment_detail_rating_button.visibility = View.GONE
                     activity_assignment_detail_more_information_textview.text =getString(R.string.assignment_finish)
                     //Toast.makeText(this,"déja noté",Toast.LENGTH_SHORT).show()
                 }
@@ -460,5 +461,10 @@ class AssignmentDetailActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadAssignment()
     }
 }

@@ -38,5 +38,6 @@
     <string name="finish_assignment">Terminer la mission</string>
     <string name="finish_missio_question">Êtes-vous sure que la mission est bien terminée</string>
     <string name="no_date_found">Aucune date trouvée</string>
+    <string name="add_comment">Ajouté un commentaire</string>
 
 </resources>
