@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".controller.activity.InformationForm">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -143,6 +150,25 @@
             android:hint="Code postal"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:errorTextAppearance="@style/MyErrorText"
+            app:errorEnabled="true">
+            <EditText
+                android:id="@+id/information_form_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:inputType="textAutoComplete"
+                android:imeOptions="actionDone"
+                android:theme="@style/MyEditText"
+                android:textSize="18sp"
+                android:layout_weight="1"
+                android:hint="Pays"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
         <Button
             android:id="@+id/information_form_save_button"
             android:layout_width="wrap_content"
@@ -152,7 +178,7 @@
 
     </LinearLayout>
 
-
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

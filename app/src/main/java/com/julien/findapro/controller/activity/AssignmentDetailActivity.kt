@@ -69,6 +69,14 @@ class AssignmentDetailActivity : AppCompatActivity() {
             finishAssignmentDialog()
         }
 
+        activity_assignment_detail_photo_imageview.setOnClickListener {
+            val id = if(sharedPreferences.getBoolean("isPro", false)) assignment?.proUserId else assignment?.userId
+            val intent = Intent(this,
+                ProfilActivity::class.java)
+            intent.putExtra("id",id)
+            startActivity(intent)
+        }
+
     }
 
     private fun loadAssignment() {

@@ -50,9 +50,15 @@ class ProfilActivity : AppCompatActivity() {
                     activity_profil_name_textview.text = document["full name"].toString()
                     activity_profil_job_textview.visibility = View.VISIBLE
                     activity_profil_job_textview.text = document["job"].toString()
-                    activity_profil_ratingbar.rating = document["rating"].toString().toFloat()
                     activity_profil_city_textview.text = document["city"].toString()
-                    activity_profil_nb_rate_textview.text = document["ratingNb"].toString() + " avis"
+
+                    if (document["rating"] != null){
+                        activity_profil_ratingbar.rating = document["rating"].toString().toFloat()
+                        activity_profil_nb_rate_textview.text = document["ratingNb"].toString() + " avis"
+                    }else{
+                        activity_profil_ratingbar_linearlayout.visibility = View.GONE
+                    }
+
                     load("users",typeUser)
                 } else {
                     db.collection("users").document(userId).get()
@@ -61,9 +67,15 @@ class ProfilActivity : AppCompatActivity() {
                                 typeUser = "users"
                                 Picasso.get().load(document["photo"].toString()).transform(CircleTransform()).into(activity_profil_photo_imageview)
                                 activity_profil_name_textview.text = document["full name"].toString()
-                                activity_profil_ratingbar.rating = document["rating"].toString().toFloat()
                                 activity_profil_city_textview.text = document["city"].toString()
-                                activity_profil_nb_rate_textview.text = document["ratingNb"].toString() + " avis"
+
+
+                                if (document["rating"] != null){
+                                    activity_profil_ratingbar.rating = document["rating"].toString().toFloat()
+                                    activity_profil_nb_rate_textview.text = document["ratingNb"].toString() + " avis"
+                                }else{
+                                    activity_profil_ratingbar_linearlayout.visibility = View.GONE
+                                }
                                 load("pro users",typeUser)
                             } else {
 
@@ -91,6 +103,7 @@ class ProfilActivity : AppCompatActivity() {
                         .addOnSuccessListener { documentRater ->
                             if (documentRater != null) {
                                 Log.e("user profil", "test")
+
                                 val profil = hashMapOf(
                                     "full name" to documentRater["full name"].toString(),
                                     "photo" to documentRater["photo"].toString(),
@@ -98,6 +111,8 @@ class ProfilActivity : AppCompatActivity() {
                                     "rating" to document["rating"].toString(),
                                     "userId" to documentRater.id,
                                     "id" to document.id
+
+
                                 )
                                 profilList.add(profil)
                                 recycler_view_user_profil_activity.layoutManager = LinearLayoutManager(this)

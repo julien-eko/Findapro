@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.Utils.Message
@@ -76,9 +77,14 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                             activity_assignements_choice_adress_text_view.text = document2["adress"].toString()
                             activity_assignements_choice_city_text_view.text = document2["city"].toString()
 
-                            val nbRating:String = "(" + document2["ratingNb"].toString() + ") : "
-                            activity_assignements_choice_nb_rating_text_view.text = nbRating
-                            activity_assignment_choice_ratingbar.rating = document2["rating"].toString().toFloat()
+                            if (document2["rating"] != null){
+                                val nbRating:String = "(" + document2["ratingNb"].toString() + ") : "
+                                activity_assignements_choice_nb_rating_text_view.text = nbRating
+                                activity_assignment_choice_ratingbar.rating = document2["rating"].toString().toFloat()
+                            }else{
+                                activity_assignment_choice_ratingbar_linearlayout.visibility = View.GONE
+                            }
+
                         }else{
                             Log.e("db", "no document")
                         }

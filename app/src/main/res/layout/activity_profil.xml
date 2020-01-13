@@ -29,7 +29,7 @@
 
         <ImageView
             android:id="@+id/activity_profil_photo_imageview"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center_horizontal"
             android:layout_width="75dip"
             android:layout_height="75dip"
             app:srcCompat="@drawable/ic_anon_user_48dp"/>
@@ -72,22 +72,31 @@
 
     </LinearLayout>
 
-    <RatingBar
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        style="?android:attr/ratingBarStyleIndicator"
-        android:id="@+id/activity_profil_ratingbar"
-        android:rating="3"
-        android:progressTint="@color/ratingColor"/>
+        android:id="@+id/activity_profil_ratingbar_linearlayout"
+        android:orientation="vertical">
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:id="@+id/activity_profil_ratingbar"
+            android:rating="3"
+            android:progressTint="@color/ratingColor"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/activity_profil_nb_rate_textview"
-        android:textStyle="bold"
-        android:text="19 avis"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/activity_profil_nb_rate_textview"
+            android:textStyle="bold"
+            android:text="19 avis"/>
+
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_user_profil_activity"

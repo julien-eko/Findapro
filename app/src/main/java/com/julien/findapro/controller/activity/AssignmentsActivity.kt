@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,10 +43,16 @@ class AssignmentsActivity : AppCompatActivity() {
                 if (document != null) {
                     activity_assignements_full_name_text_view.text = document["full name"].toString()
                     activity_assignements_job_text_view.text = document["job"].toString()
-                    activity_assignment_ratingbar.rating = document["rating"].toString().toFloat()
 
-                    val nbRating:String = "(" + document["ratingNb"].toString() + ") : "
-                    activity_assignements_nb_rating_text_view.text = nbRating
+                    if (document["rating"] != null){
+                        activity_assignment_ratingbar.rating = document["rating"].toString().toFloat()
+
+                        val nbRating:String = "(" + document["ratingNb"].toString() + ") : "
+                        activity_assignements_nb_rating_text_view.text = nbRating
+                    }else{
+                        activity_assignment_ratingbar_linearlayout.visibility =View.GONE
+                    }
+
                 } else {
                     Log.d("load document pro user", "No such document")
                 }

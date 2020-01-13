@@ -2,17 +2,23 @@ package com.julien.findapro.controller.activity
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.location.Address
+import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import kotlinx.android.synthetic.main.activity_information_form.*
 
 class InformationForm : AppCompatActivity() {
+
+    private var latitude = 0.0
+    private var longitude = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,13 +53,32 @@ class InformationForm : AppCompatActivity() {
 
             information_form_save_button.setOnClickListener{
                 if(validateForm()){
-                    editDatabase()
+                    val fullAdress:String = information_form_adress.text.toString() + " " +
+                            information_form_city.text.toString() + " "  +
+                            information_postal_code.text.toString() + " " +
+                            information_form_country.toString()
+
+                    if (isGoodAdress(fullAdress)){
+                        editDatabase()
+                    }else{
+                        alertDialogWrongAdress(true)
+                    }
                 }
             }
         }else{
             information_form_save_button.setOnClickListener{
                 if(validateForm()){
-                    addInDatabase()
+                    val fullAdress:String = information_form_adress.text.toString() + " " +
+                            information_form_city.text.toString() + " "  +
+                            information_postal_code.text.toString() + " " +
+                            information_form_country.toString()
+
+                    if (isGoodAdress(fullAdress)){
+                        addInDatabase()
+                    }else{
+                        alertDialogWrongAdress(false)
+                    }
+
                 }
             }
         }
@@ -68,7 +93,8 @@ class InformationForm : AppCompatActivity() {
                 information_form_city.text.toString().trim() != "" &&
                     information_form_full_name.text.toString().trim() != "" &&
                         information_form_phone_number.text.toString().trim() != "" &&
-                            information_postal_code.text.toString().trim() != ""
+                            information_postal_code.text.toString().trim() != "" &&
+                                information_form_country.text.toString().trim() != ""
         ){
             return true
         }else{
@@ -86,6 +112,9 @@ class InformationForm : AppCompatActivity() {
             }
             if(information_form_phone_number.text.toString().trim() == ""){
                 information_form_phone_number.error= getString(R.string.field_cannot_be_blank)
+            }
+            if(information_form_country.text.toString().trim() == ""){
+                information_form_country.error = getString(R.string.field_cannot_be_blank)
             }
             return false
         }
@@ -112,7 +141,10 @@ class InformationForm : AppCompatActivity() {
                 "postal code" to information_postal_code.text.toString(),
                 "city" to information_form_city.text.toString(),
                 "num" to information_form_phone_number.text.toString(),
+                "country" to information_form_country.text.toString(),
                 "job" to spinner_job.selectedItem.toString(),
+                "latitude" to latitude,
+                "longitude" to longitude,
                 "rating" to rating,
                 "ratingNb" to ratingNb,
                 "photo" to FirebaseAuth.getInstance().currentUser?.photoUrl.toString()
@@ -139,7 +171,10 @@ class InformationForm : AppCompatActivity() {
                 "adress" to information_form_adress.text.toString(),
                 "postal code" to information_postal_code.text.toString(),
                 "city" to information_form_city.text.toString(),
+                "country" to information_form_country.text.toString(),
                 "num" to information_form_phone_number.text.toString(),
+                "latitude" to latitude,
+                "longitude" to longitude,
                 "rating" to rating,
                 "ratingNb" to ratingNb,
                 "photo" to FirebaseAuth.getInstance().currentUser?.photoUrl.toString()
@@ -171,6 +206,7 @@ class InformationForm : AppCompatActivity() {
                information_postal_code.setText(document["postal code"].toString())
                information_form_phone_number.setText(document["num"].toString())
                information_form_city.setText(document["city"].toString())
+               information_form_country.setText(document["country"].toString())
                information_form_adress.setText(document["adress"].toString())
            }else{
                db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
@@ -179,6 +215,7 @@ class InformationForm : AppCompatActivity() {
                        information_postal_code.setText(document["postal code"].toString())
                        information_form_phone_number.setText(document["num"].toString())
                        information_form_city.setText(document["city"].toString())
+                       information_form_country.setText(document["country"].toString())
                        information_form_adress.setText(document["adress"].toString())
                    }else{
                        Log.e("db", "no document")
@@ -205,6 +242,7 @@ class InformationForm : AppCompatActivity() {
                     "adress" to information_form_adress.text.toString(),
                     "postal code" to information_postal_code.text.toString(),
                     "city" to information_form_city.text.toString(),
+                    "country" to information_form_country.text.toString(),
                     "num" to information_form_phone_number.text.toString()
 
                 )
@@ -226,6 +264,7 @@ class InformationForm : AppCompatActivity() {
                             "postal code" to information_postal_code.text.toString(),
                             "city" to information_form_city.text.toString(),
                             "num" to information_form_phone_number.text.toString(),
+                            "country" to information_form_country.text.toString(),
                             "job" to spinner_job.selectedItem.toString()
 
                         )
@@ -251,5 +290,51 @@ class InformationForm : AppCompatActivity() {
         }
 
         finish()
+    }
+
+    private fun isGoodAdress(fullAdress:String):Boolean{
+
+        var geocoder = Geocoder(this)
+        var listAdress: List<Address> = geocoder.getFromLocationName(fullAdress, 1)
+
+        if (listAdress.size > 0) {
+            latitude = listAdress[0].latitude
+            longitude = listAdress[0].longitude
+            return true
+
+            //activity?.findViewById<Stepper>(R.id.Stepper)?.forward()
+
+        } else {
+            latitude = 0.0
+            longitude = 0.0
+            return false
+
+        }
+    }
+
+
+    fun alertDialogWrongAdress(isEdit:Boolean) {
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle("l'adresse n'est pas valide")
+
+        builder.setMessage("Voulez-vous modifier votre adresse ?")
+
+        builder.setPositiveButton("OUI") { dialog, which ->
+
+        }
+
+        builder.setNegativeButton("NON") { dialog, which ->
+            if(isEdit){
+                editDatabase()
+            }else{
+                addInDatabase()
+            }
+            //activity?.findViewById<Stepper>(R.id.Stepper)?.forward()
+        }
+
+        val dialog: AlertDialog = builder.create()
+
+        dialog.show()
     }
 }
