@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
 
-class AssignmentListAdaptater(var assignmentList: ArrayList<HashMap<String,String>>, val context: Context, val clickListener: (HashMap<String,String>) -> Unit):
+class AssignmentListAdaptater(var assignmentList: ArrayList<HashMap<String,String>>, val context: Context, val clickListener: (HashMap<String,String>,isProfil:Boolean) -> Unit):
     RecyclerView.Adapter<AssignmentListViewHolder>() {
 
 

@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.controller.activity.ChatActivity
+import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.ChatListAdapter
 import kotlinx.android.synthetic.main.fragment_chat_list.*
 import java.util.*
@@ -64,13 +65,14 @@ class ChatListFragment : Fragment() {
                                            val chat = hashMapOf(
                                                "full name" to documentUser["full name"].toString(),
                                                "photo" to documentUser["photo"].toString(),
+                                               "idUser" to documentUser.id,
                                                "id" to document.id
                                            )
 
                                            chatList.add(chat)
 
                                            recycler_view_chat_list_fragment.layoutManager = LinearLayoutManager(context)
-                                           recycler_view_chat_list_fragment.adapter = ChatListAdapter(chatList,context!!,{ chatItem : HashMap<String,String> -> chatItemClicked(chatItem) })
+                                           recycler_view_chat_list_fragment.adapter = ChatListAdapter(chatList,context!!,{ chatItem : HashMap<String,String>,isProfil:Boolean -> chatItemClicked(chatItem,isProfil) })
 
                                        } else {
                                            Log.d("", "No such document")
@@ -103,10 +105,18 @@ class ChatListFragment : Fragment() {
         super.onResume()
         recycler_view_chat_list_fragment.adapter?.notifyDataSetChanged()
     }
-    private fun chatItemClicked(chatItem : HashMap<String,String>) {
+    private fun chatItemClicked(chatItem : HashMap<String,String>,isProfil:Boolean) {
 
-        val intent = Intent(context, ChatActivity::class.java)
-        intent.putExtra("assignment",chatItem["id"])
-        startActivity(intent)
+        if (isProfil){
+            val intent = Intent(context,
+                ProfilActivity::class.java)
+            intent.putExtra("id",chatItem["idUser"])
+            startActivity(intent)
+        }else{
+            val intent = Intent(context, ChatActivity::class.java)
+            intent.putExtra("assignment",chatItem["id"])
+            startActivity(intent)
+        }
+
     }
 }

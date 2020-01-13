@@ -13,7 +13,7 @@ import kotlin.collections.HashMap
 
 class AssignmentsInProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun update(assignment:HashMap<String,Any?>,clickListener: (HashMap<String,Any?>) -> Unit) {
+    fun update(assignment:HashMap<String,Any?>,clickListener: (HashMap<String,Any?>,isProfil:Boolean) -> Unit) {
 
 
         itemView.fragment_assignments_in_progress_item_name_textview.text = assignment["full name"].toString()
@@ -55,7 +55,10 @@ class AssignmentsInProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(
         }
         itemView.fragment_assignment_in_progress_date.text = date
 
-        itemView.setOnClickListener{clickListener(assignment)}
+
+        itemView.fragment_assignments_in_progress_item_photo_imageview.setOnClickListener{clickListener(assignment,true)}
+
+        itemView.fragment_assignments_in_progress_item_clik_linearlayout.setOnClickListener{clickListener(assignment,false)}
 
     }
 }

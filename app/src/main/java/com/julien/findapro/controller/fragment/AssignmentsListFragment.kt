@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 
 import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
+import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.AssignmentListAdaptater
 import kotlinx.android.synthetic.main.fragment_assignments_list.*
 
@@ -49,6 +50,7 @@ class AssignmentsListFragment : Fragment() {
                                 "photo" to data["photo"].toString(),
                                 "city" to data["city"].toString(),
                                 "rating" to data["rating"].toString(),
+                                "userId" to data.id,
                                 "id" to document.id
                             )
                             assigmentsList.add(assignment)
@@ -62,7 +64,7 @@ class AssignmentsListFragment : Fragment() {
                             recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
                                 assigmentsList,
                                 context!!,
-                                { assignmentItem: HashMap<String, String> -> assignmentItemClicked(assignmentItem) })
+                                { assignmentItem: HashMap<String, String>,isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) })
                         }
 
                 }
@@ -73,11 +75,19 @@ class AssignmentsListFragment : Fragment() {
             }
     }
 
-    private fun assignmentItemClicked(assignmentItem : HashMap<String,String>) {
-        val intent = Intent(context,
-            AssignmentsChoiceActivity::class.java)
-        intent.putExtra("id",assignmentItem["id"])
-        startActivity(intent)
+    private fun assignmentItemClicked(assignmentItem : HashMap<String,String>,isProfil:Boolean) {
+        if (isProfil){
+            val intent = Intent(context,
+                ProfilActivity::class.java)
+            intent.putExtra("id",assignmentItem["userId"])
+            startActivity(intent)
+        }else{
+            val intent = Intent(context,
+                AssignmentsChoiceActivity::class.java)
+            intent.putExtra("id",assignmentItem["id"])
+            startActivity(intent)
+        }
+
     }
 
     override fun onResume() {

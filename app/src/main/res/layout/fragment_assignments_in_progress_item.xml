@@ -17,6 +17,7 @@
 </LinearLayout>
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="100dp"
+        android:id="@+id/fragment_assignments_in_progress_item_clik_linearlayout"
         android:orientation="vertical"
         android:layout_margin="@dimen/default_margin">
 

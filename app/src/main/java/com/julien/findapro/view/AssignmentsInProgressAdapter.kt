@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
 
-class AssignmentsInProgressAdapter(var assignmentList: ArrayList<HashMap<String,Any?>>, val context: Context, val clickListener: (HashMap<String,Any?>) -> Unit):
+class AssignmentsInProgressAdapter(var assignmentList: ArrayList<HashMap<String,Any?>>, val context: Context, val clickListener: (HashMap<String,Any?>,isProfil:Boolean) -> Unit):
     RecyclerView.Adapter<AssignmentsInProgressViewHolder>() {
 
 

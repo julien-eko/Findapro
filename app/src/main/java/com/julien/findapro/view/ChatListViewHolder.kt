@@ -19,7 +19,7 @@ import kotlin.collections.HashMap
 
 class ChatListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun update(chat:HashMap<String,String>,clickListener: (HashMap<String,String>) -> Unit) {
+    fun update(chat:HashMap<String,String>,clickListener: (HashMap<String,String>,isProfil:Boolean) -> Unit) {
 
         load(chat)
 
@@ -29,7 +29,8 @@ class ChatListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         Picasso.get().load(chat["photo"].toString()).transform(CircleTransform()).into(itemView.fragment_chat_list_item_photo_imageview)
 
-        itemView.setOnClickListener{clickListener(chat)}
+        itemView.fragment_chat_list_item_clik_linearlayout.setOnClickListener{clickListener(chat,false)}
+        itemView.fragment_chat_list_item_photo_imageview.setOnClickListener{clickListener(chat,true)}
 
     }
 

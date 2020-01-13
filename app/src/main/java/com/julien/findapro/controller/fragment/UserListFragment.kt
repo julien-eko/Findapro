@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.controller.activity.AssignmentsActivity
+import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.UserListAdapater
 import kotlinx.android.synthetic.main.fragment_users_list.*
 
@@ -65,7 +66,7 @@ class UserListFragment : Fragment() {
                             userList.add(user)
                         }
                         recycler_view_users_list_fragment.layoutManager = LinearLayoutManager(context)
-                        recycler_view_users_list_fragment.adapter = UserListAdapater(userList,context!!,{ userItem : HashMap<String,String> -> userItemClicked(userItem) })
+                        recycler_view_users_list_fragment.adapter = UserListAdapater(userList,context!!,{ userItem : HashMap<String,String>,isProfil:Boolean -> userItemClicked(userItem,isProfil) })
                     }
                     .addOnFailureListener {exception ->
                         Log.w("access db","Error getting data", exception)
@@ -78,11 +79,20 @@ class UserListFragment : Fragment() {
     }
 
 
-    private fun userItemClicked(userItem : HashMap<String,String>) {
-        val intent = Intent(context,
-            AssignmentsActivity::class.java)
-        intent.putExtra("proId",userItem["uid"])
-        startActivity(intent)
+    private fun userItemClicked(userItem : HashMap<String,String>,isProfil:Boolean) {
+
+        if (isProfil){
+            val intent = Intent(context,
+                ProfilActivity::class.java)
+            intent.putExtra("id",userItem["uid"])
+            startActivity(intent)
+        }else{
+            val intent = Intent(context,
+                AssignmentsActivity::class.java)
+            intent.putExtra("proId",userItem["uid"])
+            startActivity(intent)
+        }
+
     }
 
 }

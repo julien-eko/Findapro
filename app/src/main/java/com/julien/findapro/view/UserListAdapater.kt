@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
 
-class UserListAdapater(var userList: ArrayList<HashMap<String,String>>,val context: Context,val clickListener: (HashMap<String,String>) -> Unit):
+class UserListAdapater(var userList: ArrayList<HashMap<String,String>>,val context: Context,val clickListener: (HashMap<String,String>,isProfil:Boolean) -> Unit):
     RecyclerView.Adapter<UserListViewHolder>() {
 
     var listener: ((String) -> Unit)? = null

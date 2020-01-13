@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controller.activity.ProfilActivity"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_profil_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ToolBarStyle"
+        app:titleTextColor="@android:color/white"
+        app:subtitleTextColor="@android:color/black"/>
+
+    <LinearLayout
+        android:id="@+id/activity_profil_information_linearlayout"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/default_margin">
+
+
+
+        <ImageView
+            android:id="@+id/activity_profil_photo_imageview"
+            android:layout_gravity="center_vertical"
+            android:layout_width="75dip"
+            android:layout_height="75dip"
+            app:srcCompat="@drawable/ic_anon_user_48dp"/>
+
+
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/activity_profil_name_textview"
+            android:layout_gravity="center_horizontal"
+            android:text="test"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:id="@+id/activity_profil_job_textview"
+        android:visibility="gone"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:text="test"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:text="Ville : "/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:id="@+id/activity_profil_city_textview"
+                android:layout_gravity="center_horizontal"
+                android:text="test"/>
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:id="@+id/activity_profil_ratingbar"
+        android:rating="3"
+        android:progressTint="@color/ratingColor"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/activity_profil_nb_rate_textview"
+        android:textStyle="bold"
+        android:text="19 avis"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_user_profil_activity"
+        android:layout_width="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>
+

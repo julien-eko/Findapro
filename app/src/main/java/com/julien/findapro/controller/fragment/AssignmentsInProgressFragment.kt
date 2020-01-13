@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.controller.activity.AssignmentDetailActivity
 import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
+import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.AssignmentListAdaptater
 import com.julien.findapro.view.AssignmentsInProgressAdapter
 import kotlinx.android.synthetic.main.fragment_assignments_in_progress.*
@@ -54,6 +55,7 @@ class AssignmentsInProgressFragment : Fragment() {
                                 "status" to document["status"].toString(),
                                 "dateEnd" to document["dateEnd"],
                                 "dateCreated" to document["dateCreated"],
+                                "idUser" to data.id,
                                 "id" to document.id
                             )
                             assigmentsList.add(assignment)
@@ -67,7 +69,7 @@ class AssignmentsInProgressFragment : Fragment() {
                             recycler_view_assignments_in_progress_fragment.adapter = AssignmentsInProgressAdapter(
                                 assigmentsList,
                                 context!!,
-                                { assignmentItem: HashMap<String, Any?> -> assignmentItemClicked(assignmentItem) })
+                                { assignmentItem: HashMap<String, Any?>,isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) })
                         }
 
                 }
@@ -78,10 +80,18 @@ class AssignmentsInProgressFragment : Fragment() {
             }
     }
 
-    private fun assignmentItemClicked(assignmentItem : HashMap<String,Any?>) {
-        val intent = Intent(context, AssignmentDetailActivity::class.java)
-        intent.putExtra("id",assignmentItem["id"].toString())
-        startActivity(intent)
+    private fun assignmentItemClicked(assignmentItem : HashMap<String,Any?>,isProfil:Boolean) {
+        if (isProfil){
+            val intent = Intent(context,
+                ProfilActivity::class.java)
+            intent.putExtra("id",assignmentItem["idUser"].toString())
+            startActivity(intent)
+        }else{
+            val intent = Intent(context, AssignmentDetailActivity::class.java)
+            intent.putExtra("id",assignmentItem["id"].toString())
+            startActivity(intent)
+        }
+
     }
 
     override fun onResume() {

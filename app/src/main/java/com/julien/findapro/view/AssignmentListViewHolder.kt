@@ -11,7 +11,7 @@ class AssignmentListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
 
 
 
-    fun update(assignment:HashMap<String,String>,clickListener: (HashMap<String,String>) -> Unit) {
+    fun update(assignment:HashMap<String,String>,clickListener: (HashMap<String,String>,isProfil:Boolean) -> Unit) {
 
 
         itemView.fragment_assignments_list_item_name_textview.text = assignment["full name"]
@@ -26,8 +26,9 @@ class AssignmentListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
             itemView.fragment_assignment_item_list_no_rating.visibility = View.VISIBLE
         }
 
+        itemView.fragment_assignments_list_item_photo_imageview.setOnClickListener{clickListener(assignment,true)}
+        itemView.fragment_assignments_list_item_click_linearlayout.setOnClickListener{clickListener(assignment,false)}
 
-        itemView.setOnClickListener{clickListener(assignment)}
 
     }
 }

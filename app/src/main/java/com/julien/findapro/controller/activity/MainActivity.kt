@@ -99,10 +99,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (itemid == R.id.activity_main_drawer_map){
             val intent = Intent(this,
-                RatingActivity::class.java)
-            intent.putExtra("user","users")
-            intent.putExtra("userId", "28gO7Sb9AzUJU7cYYsOGKGQWINL2")
-            intent.putExtra("assignment","MApfU3HhpkuyJ0hEeyIY")
+                ProfilActivity::class.java)
+            intent.putExtra("id","28gO7Sb9AzUJU7cYYsOGKGQWINL2")
             startActivity(intent)
         }
 

@@ -17,7 +17,7 @@ class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
 
-    fun update(user:HashMap<String,String>,clickListener: (HashMap<String,String>) -> Unit) {
+    fun update(user:HashMap<String,String>,clickListener: (HashMap<String,String>,isProfil:Boolean) -> Unit) {
 
 
         itemView.fragment_users_list_item_job_textview.text = user["full name"]
@@ -35,7 +35,11 @@ class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         Picasso.get().load(user["photo"]).transform(CircleTransform()).into(itemView.fragment_users_list_item_photo_imageview)
 
-        itemView.setOnClickListener{clickListener(user)}
+        //itemView.setOnClickListener{clickListener(user)}
+
+        itemView.fragment_users_list_item_photo_imageview.setOnClickListener{clickListener(user,true)}
+
+        itemView.fragment_users_list_item_click_linearlayout.setOnClickListener{clickListener(user,false)}
 
     }
 }

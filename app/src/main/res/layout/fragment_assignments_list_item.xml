@@ -24,6 +24,7 @@
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="80dp"
         android:orientation="vertical"
+        android:id="@+id/fragment_assignments_list_item_click_linearlayout"
         android:layout_margin="@dimen/default_margin">
 
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
