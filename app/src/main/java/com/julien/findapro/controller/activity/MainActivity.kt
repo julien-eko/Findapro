@@ -246,7 +246,7 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
     }
 
 
-    override fun passData(job:String,maxDistance:Float,rating:Double){
+    override fun passDataUserList(job:String,maxDistance:Float,rating:Double){
         val bundle = Bundle()
         bundle.putString("job",job)
         bundle.putFloat("maxDistance",maxDistance)
@@ -257,6 +257,21 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
         userListFragment.arguments = bundle
 
         transaction.replace(R.id.main_activity_frame_layout,userListFragment)
+        transaction.addToBackStack(null)
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        transaction.commit()
+    }
+
+    override fun passDataAssignmentList(maxDistance: Float, rating: Double) {
+        val bundle = Bundle()
+        bundle.putFloat("maxDistance",maxDistance)
+        bundle.putDouble("rating",rating)
+
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val assignmentListFragment = AssignmentsListFragment()
+        assignmentListFragment.arguments = bundle
+
+        transaction.replace(R.id.main_activity_frame_layout,assignmentListFragment)
         transaction.addToBackStack(null)
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         transaction.commit()

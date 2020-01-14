@@ -2,5 +2,7 @@ package com.julien.findapro.Utils
 
 interface Communicator {
 
-    fun passData(job:String,maxDistance:Float,rating:Double)
+    fun passDataUserList(job:String,maxDistance:Float,rating:Double)
+
+    fun passDataAssignmentList(maxDistance:Float,rating:Double)
 }
