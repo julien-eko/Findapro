@@ -26,6 +26,10 @@ class AssignmentsInProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(
         if(assignment["status"].toString() == "finish"){
             status = "Fini"
         }
+
+        if(assignment["status"].toString() == "notRated"){
+            status = "Fini mais pas noter"
+        }
         if(assignment["status"].toString() == "cancel"){
             status = "Annuler"
         }
@@ -33,7 +37,7 @@ class AssignmentsInProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(
             status = "En attente"
         }
         if(assignment["status"].toString() == "refuse"){
-            status = "Refusé"
+            status = "Refuser"
         }
         itemView.fragment_assignments_in_progress_item_status_textview.text = status
 

@@ -17,6 +17,15 @@
         <item>Coiffeur</item>
     </string-array>
 
+    <string-array name="status_assignment_arrays">
+        <item>En cours</item>
+        <item>Fini</item>
+        <item>Annuler</item>
+        <item>En attente</item>
+        <item>Refuser</item>
+
+    </string-array>
+
     <string name="toolbar_title_mentor_chat_activity">Chats de discussions</string>
     <string name="text_input_title_mentor_chat_activity">Composer votre message</string>
     <string name="button_title_mentor_chat_activity">ENVOYER</string>

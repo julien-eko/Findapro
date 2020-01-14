@@ -56,14 +56,7 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
         this.configureBottomNavigationView()
 
         sharedPreferences = getSharedPreferences("isPro",0)
-        //Toast.makeText(baseContext,sharedPreferences.getBoolean("isPro",false).toString(),Toast.LENGTH_SHORT).show()
 
-
-
-    }
-
-    override fun onResume() {
-        super.onResume()
         supportFragmentManager.inTransaction {
 
 
@@ -82,6 +75,15 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
             }
 
         }
+        //Toast.makeText(baseContext,sharedPreferences.getBoolean("isPro",false).toString(),Toast.LENGTH_SHORT).show()
+
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
 /*
@@ -272,6 +274,20 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
         assignmentListFragment.arguments = bundle
 
         transaction.replace(R.id.main_activity_frame_layout,assignmentListFragment)
+        transaction.addToBackStack(null)
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        transaction.commit()
+    }
+
+    override fun passDataAssignmentInProgressList(status: String) {
+        val bundle = Bundle()
+        bundle.putString("status",status)
+
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val assignmentInProgressFragment = AssignmentsInProgressFragment()
+        assignmentInProgressFragment.arguments = bundle
+
+        transaction.replace(R.id.main_activity_frame_layout,assignmentInProgressFragment)
         transaction.addToBackStack(null)
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         transaction.commit()
