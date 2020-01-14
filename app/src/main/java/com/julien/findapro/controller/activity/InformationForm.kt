@@ -61,7 +61,7 @@ class InformationForm : AppCompatActivity() {
                     if (isGoodAdress(fullAdress)){
                         editDatabase()
                     }else{
-                        alertDialogWrongAdress(true)
+                        alertDialogWrongAdress()
                     }
                 }
             }
@@ -76,7 +76,7 @@ class InformationForm : AppCompatActivity() {
                     if (isGoodAdress(fullAdress)){
                         addInDatabase()
                     }else{
-                        alertDialogWrongAdress(false)
+                        alertDialogWrongAdress()
                     }
 
                 }
@@ -243,13 +243,20 @@ class InformationForm : AppCompatActivity() {
                     "postal code" to information_postal_code.text.toString(),
                     "city" to information_form_city.text.toString(),
                     "country" to information_form_country.text.toString(),
-                    "num" to information_form_phone_number.text.toString()
+                    "latitude" to latitude,
+                    "longitude" to longitude,
+                    "num" to information_form_phone_number.text.toString(),
+                    "rating" to document["rating"],
+                    "ratingNb" to document["ratingNb"],
+                    "photo" to FirebaseAuth.getInstance().currentUser?.photoUrl.toString()
+
 
                 )
 
                 db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
                     .set(user)
                     .addOnSuccessListener { documentReference ->
+                        finish()
                         Log.d("addDB", "DocumentSnapshot added ")
                     }
                     .addOnFailureListener { e ->
@@ -265,6 +272,11 @@ class InformationForm : AppCompatActivity() {
                             "city" to information_form_city.text.toString(),
                             "num" to information_form_phone_number.text.toString(),
                             "country" to information_form_country.text.toString(),
+                            "latitude" to latitude,
+                            "longitude" to longitude,
+                            "rating" to document["rating"],
+                            "ratingNb" to document["ratingNb"],
+                            "photo" to FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),
                             "job" to spinner_job.selectedItem.toString()
 
                         )
@@ -273,6 +285,7 @@ class InformationForm : AppCompatActivity() {
                             .set(user)
                             .addOnSuccessListener { documentReference ->
                                 Log.d("addDB", "DocumentSnapshot added ")
+                                finish()
                             }
                             .addOnFailureListener { e ->
                                 Log.w("addDB", "Error adding document", e)
@@ -289,7 +302,6 @@ class InformationForm : AppCompatActivity() {
             Log.e("db","get fail with",exeption)
         }
 
-        finish()
     }
 
     private fun isGoodAdress(fullAdress:String):Boolean{
@@ -313,25 +325,18 @@ class InformationForm : AppCompatActivity() {
     }
 
 
-    fun alertDialogWrongAdress(isEdit:Boolean) {
+    fun alertDialogWrongAdress() {
         val builder = AlertDialog.Builder(this)
 
-        builder.setTitle("l'adresse n'est pas valide")
+        builder.setTitle("L'adresse n'est pas valide")
 
-        builder.setMessage("Voulez-vous modifier votre adresse ?")
+        builder.setMessage("Vous devez entrer une adresse valide")
 
-        builder.setPositiveButton("OUI") { dialog, which ->
+        builder.setPositiveButton("OK") { dialog, which ->
 
         }
 
-        builder.setNegativeButton("NON") { dialog, which ->
-            if(isEdit){
-                editDatabase()
-            }else{
-                addInDatabase()
-            }
-            //activity?.findViewById<Stepper>(R.id.Stepper)?.forward()
-        }
+
 
         val dialog: AlertDialog = builder.create()
 

@@ -20,14 +20,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.julien.findapro.R
-import com.julien.findapro.controller.fragment.AssignmentsInProgressFragment
-import com.julien.findapro.controller.fragment.UserListFragment
-import com.julien.findapro.controller.fragment.AssignmentsListFragment
-import com.julien.findapro.controller.fragment.ChatListFragment
+import com.julien.findapro.Utils.Communicator
+import com.julien.findapro.controller.fragment.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
+class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigationItemSelectedListener{
 
 
     private lateinit var toolbar: Toolbar
@@ -60,6 +58,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         sharedPreferences = getSharedPreferences("isPro",0)
         //Toast.makeText(baseContext,sharedPreferences.getBoolean("isPro",false).toString(),Toast.LENGTH_SHORT).show()
 
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         supportFragmentManager.inTransaction {
 
 
@@ -78,9 +82,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
         }
-
     }
 
+/*
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_activity_toolbar, menu)
         return super.onCreateOptionsMenu(menu)
@@ -89,11 +93,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         var itemid = item?.itemId
 
-        //if itemid = ....
+        if(itemid == R.id.action_search){
+            /*
+            val searchUserFragment = SearchUserFragment()
+            searchUserFragment.show(supportFragmentManager, "test")
+
+             */
+        }
 
         return super.onOptionsItemSelected(item)
     }
 
+
+ */
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         var itemid = p0?.itemId
 
@@ -234,4 +246,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
+    override fun passData(job:String,maxDistance:Float,rating:Double){
+        val bundle = Bundle()
+        bundle.putString("job",job)
+        bundle.putFloat("maxDistance",maxDistance)
+        bundle.putDouble("rating",rating)
+
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val userListFragment = UserListFragment()
+        userListFragment.arguments = bundle
+
+        transaction.replace(R.id.main_activity_frame_layout,userListFragment)
+        transaction.addToBackStack(null)
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        transaction.commit()
+    }
 }
