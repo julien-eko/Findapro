@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
 
-class ChatListAdapter (var chatList: ArrayList<HashMap<String,String>>,val context: Context,val clickListener: (HashMap<String,String>,isProfil:Boolean) -> Unit):
+class ChatListAdapter (var chatList: List<HashMap<String,Any?>>,val context: Context,val clickListener: (HashMap<String,Any?>,isProfil:Boolean) -> Unit):
     RecyclerView.Adapter<ChatListViewHolder>() {
 
 
