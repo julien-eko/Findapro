@@ -114,24 +114,10 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         var itemid = p0?.itemId
 
-        if (itemid == R.id.activity_main_drawer_map){
-            //val notification = Notification()
-            //notification.createNotification(this,"title","description")
-            FirebaseInstanceId.getInstance().instanceId
-                .addOnCompleteListener(OnCompleteListener { task ->
-                    if (!task.isSuccessful) {
-                        Log.w("", "getInstanceId failed", task.exception)
-                        return@OnCompleteListener
-                    }
-
-                    // Get new Instance ID token
-                    val token = task.result?.token
-
-                    // Log and toast
-                    //val msg = getString(R.string.msg_token_fmt, token)
-                    //Log.d(TAG, msg)
-                    Toast.makeText(baseContext,token, Toast.LENGTH_SHORT).show()
-                })
+        if (itemid == R.id.activity_main_drawer_notification){
+            val intent = Intent(this,
+                NotificationListActivity::class.java)
+            startActivity(intent)
         }
 
 

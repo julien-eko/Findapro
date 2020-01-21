@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.activity.ProfilActivity"></activity>
+        <activity android:name=".controller.activity.NotificationListActivity"></activity>
+        <activity android:name=".controller.activity.ProfilActivity" />
         <activity android:name=".controller.activity.AssignmentDetailActivity" />
         <activity android:name=".controller.activity.RatingActivity" />
         <activity android:name=".controller.activity.ChatActivity" />
@@ -34,7 +35,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>
