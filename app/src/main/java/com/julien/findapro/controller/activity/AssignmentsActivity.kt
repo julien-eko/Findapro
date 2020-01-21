@@ -10,7 +10,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.Utils.Assignment
+import com.julien.findapro.Utils.Notification
 import kotlinx.android.synthetic.main.activity_assignments.*
+import java.util.*
 
 class AssignmentsActivity : AppCompatActivity() {
 
@@ -74,10 +76,19 @@ class AssignmentsActivity : AppCompatActivity() {
             "status" to "pending"
         )
 */
-        db.collection("assignments").document().set(assignments)
+        val uuid = UUID.randomUUID()
+        db.collection("assignments").document(uuid.toString()).set(assignments)
 
             .addOnSuccessListener { documentReference ->
                 Log.d("addDB", "DocumentSnapshot added ")
+                Notification.createNotificationInDb("pro users",
+                    assignments.proUserId.toString(),
+                    FirebaseAuth.getInstance().currentUser?.uid!!,
+                    uuid.toString(),
+                    "Nouvelle mission",
+                    "Vous avez une nouvelle mission en attente",
+                    "new assignment created")
+
             }
             .addOnFailureListener { e ->
                 Log.w("addDB", "Error adding document", e)

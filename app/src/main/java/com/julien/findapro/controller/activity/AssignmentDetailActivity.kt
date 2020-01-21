@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.Utils.Assignment
 import com.julien.findapro.Utils.CircleTransform
+import com.julien.findapro.Utils.Notification
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
@@ -41,6 +42,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
     private lateinit var assignmentId: String
     private var assignment: Assignment? = null
     private lateinit var sharedPreferences: SharedPreferences
+    private var userType =""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +55,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("isPro", 0)
         //Toast.makeText(this,sharedPreferences.getBoolean("isPro",false).toString(),Toast.LENGTH_SHORT).show()
+        userType = if(sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
 
 
         activity_assignment_detail_intervention_date_button.setOnClickListener {
@@ -372,7 +375,15 @@ class AssignmentDetailActivity : AppCompatActivity() {
                 db.collection("assignments").document(assignmentId)
                     .update("dateAssignment", pickedDateTime.time)
                     .addOnSuccessListener { Log.d("update date", "DocumentSnapshot successfully updated!")
-                    loadAssignment()}
+                        val idReceiver = if(sharedPreferences.getBoolean("isPro", false)) assignment?.userId else assignment?.proUserId
+                        Notification.createNotificationInDb(userType,
+                            idReceiver.toString(),
+                            FirebaseAuth.getInstance().currentUser?.uid!!,
+                            assignmentId,
+                            "Nouvelle date d'intervention",
+                            "Une nouvelle date d'intervention vient d'être ajouté à votre mission",
+                            "add date assignment")
+                        loadAssignment()}
                     .addOnFailureListener { e -> Log.w("update date", "Error updating document", e) }
 
             }, startHour, startMinute, DateFormat.is24HourFormat(this)).show()
@@ -390,6 +401,14 @@ class AssignmentDetailActivity : AppCompatActivity() {
             db.collection("assignments").document(assignmentId)
                 .update("status", "cancel")
                 .addOnSuccessListener { Log.d("update status", "DocumentSnapshot successfully updated!")
+                    val idReceiver = if(sharedPreferences.getBoolean("isPro", false)) assignment?.userId else assignment?.proUserId
+                    Notification.createNotificationInDb(userType,
+                        idReceiver.toString(),
+                        FirebaseAuth.getInstance().currentUser?.uid!!,
+                        assignmentId,
+                        "Mission Annulée",
+                        "Votre mission a été annulée",
+                        "status update cancel")
                     }
                 .addOnFailureListener { e -> Log.w("update status", "Error updating document", e) }
 
@@ -420,6 +439,14 @@ class AssignmentDetailActivity : AppCompatActivity() {
             db.collection("assignments").document(assignmentId)
                 .update("status", "finish")
                 .addOnSuccessListener { Log.d("update status", "DocumentSnapshot successfully updated!")
+                    val idReceiver = if(sharedPreferences.getBoolean("isPro", false)) assignment?.userId else assignment?.proUserId
+                    Notification.createNotificationInDb(userType,
+                        idReceiver.toString(),
+                        FirebaseAuth.getInstance().currentUser?.uid!!,
+                        assignmentId,
+                        "Mission Terminée",
+                        "Votre mission a été terminée",
+                        "status update finish")
                 }
                 .addOnFailureListener { e -> Log.w("update status", "Error updating document", e) }
 

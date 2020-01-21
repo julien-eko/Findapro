@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -16,9 +17,12 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.firebase.ui.auth.AuthUI
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.iid.FirebaseInstanceId
+import com.julien.findapro.Notification
 import com.julien.findapro.R
 import com.julien.findapro.Utils.Communicator
 import com.julien.findapro.controller.fragment.*
@@ -38,13 +42,30 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        sharedPreferences = getSharedPreferences("isPro",0)
 
         if(FirebaseAuth.getInstance().currentUser == null){
             val intent = Intent(this,
                 FirebaseUIActivity::class.java)
             startActivity(intent)
 
+        }else{
+            supportFragmentManager.inTransaction {
+
+
+                if(sharedPreferences.getBoolean("isPro",false)){
+                    //Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
+                    add(
+                        R.id.main_activity_frame_layout,
+                        AssignmentsListFragment()
+                    )
+                }else{
+
+                    add(
+                        R.id.main_activity_frame_layout,
+                        UserListFragment()
+                    )
+                }
         }
 
         this.configureToolBar()
@@ -55,24 +76,9 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
 
         this.configureBottomNavigationView()
 
-        sharedPreferences = getSharedPreferences("isPro",0)
-
-        supportFragmentManager.inTransaction {
 
 
-            if(sharedPreferences.getBoolean("isPro",false)){
-                //Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
-                add(
-                    R.id.main_activity_frame_layout,
-                    AssignmentsListFragment()
-                )
-            }else{
 
-                add(
-                    R.id.main_activity_frame_layout,
-                    UserListFragment()
-                )
-            }
 
         }
         //Toast.makeText(baseContext,sharedPreferences.getBoolean("isPro",false).toString(),Toast.LENGTH_SHORT).show()
@@ -81,10 +87,7 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
 
     }
 
-    override fun onResume() {
-        super.onResume()
 
-    }
 
 /*
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -112,10 +115,23 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
         var itemid = p0?.itemId
 
         if (itemid == R.id.activity_main_drawer_map){
-            val intent = Intent(this,
-                ProfilActivity::class.java)
-            intent.putExtra("id","28gO7Sb9AzUJU7cYYsOGKGQWINL2")
-            startActivity(intent)
+            //val notification = Notification()
+            //notification.createNotification(this,"title","description")
+            FirebaseInstanceId.getInstance().instanceId
+                .addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.w("", "getInstanceId failed", task.exception)
+                        return@OnCompleteListener
+                    }
+
+                    // Get new Instance ID token
+                    val token = task.result?.token
+
+                    // Log and toast
+                    //val msg = getString(R.string.msg_token_fmt, token)
+                    //Log.d(TAG, msg)
+                    Toast.makeText(baseContext,token, Toast.LENGTH_SHORT).show()
+                })
         }
 
 

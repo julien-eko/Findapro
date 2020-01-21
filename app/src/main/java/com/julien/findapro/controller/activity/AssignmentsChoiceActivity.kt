@@ -6,13 +6,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.julien.findapro.R
 import com.julien.findapro.Utils.Message
+import com.julien.findapro.Utils.Notification
 import kotlinx.android.synthetic.main.activity_assignments.*
 import kotlinx.android.synthetic.main.activity_assignments_choice.*
 
 class AssignmentsChoiceActivity : AppCompatActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +34,24 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
             db.collection("assignments").document(intent.getStringExtra("id"))
                 .update("status", "inProgress")
                 .addOnSuccessListener {
+
+                    db.collection("assignments").document(intent.getStringExtra("id")).get()
+                        .addOnSuccessListener { document ->
+                            if (document.data != null){
+                                Notification.createNotificationInDb("users",
+                                    document["userId"].toString(),
+                                    FirebaseAuth.getInstance().currentUser?.uid!!,
+                                    intent.getStringExtra("id"),
+                                    "Mission acceptée",
+                                    "Votre mission a été acceptée",
+                                    "status update in progress")
+                            }
+
+                        }.addOnFailureListener{exeption ->
+                            Log.e("db","get fail with",exeption)
+                        }
+
+
                     Log.d(
                         "update status",
                         "DocumentSnapshot successfully updated!"
@@ -53,6 +75,18 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                             "update status",
                             "DocumentSnapshot successfully updated!"
                         )
+
+                        db.collection("assignments").document(intent.getStringExtra("id")).get()
+                            .addOnSuccessListener { document ->
+                                if (document.data != null){
+                                    Notification.createNotificationInDb("users",
+                                        document["userId"].toString(),
+                                        FirebaseAuth.getInstance().currentUser?.uid!!,
+                                        intent.getStringExtra("id"),
+                                        "Mission refusée",
+                                        "Votre mission a été refusée",
+                                        "status update refuse")
+                                }
                     }
                     .addOnFailureListener { e ->
                         Log.w("update status", "Error updating document", e)
@@ -61,7 +95,7 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                 finish()
             }
 
-    }
+    }}
 
 
 

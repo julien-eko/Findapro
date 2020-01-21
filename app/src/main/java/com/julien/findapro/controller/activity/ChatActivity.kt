@@ -3,6 +3,7 @@ package com.julien.findapro.controller.activity
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -20,11 +21,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.julien.findapro.R
 import com.julien.findapro.Utils.CircleTransform
 import com.julien.findapro.Utils.Message
+import com.julien.findapro.Utils.Notification
 import com.julien.findapro.api.MessageHelper
 import com.julien.findapro.view.ChatAdapter
 import com.squareup.picasso.Picasso
@@ -39,25 +42,31 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var uriImageSelected: Uri
     private lateinit var  imageViewPreview:ImageView
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var userType:String
+    private lateinit var assignmentId:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
         configureToolbar()
         configureRecyclerView()
+        sharedPreferences = getSharedPreferences("isPro", 0)
+
+        userType = if(sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
+        assignmentId = intent.getStringExtra("assignment")
 
         this.imageViewPreview =  activity_chat_image_chosen_preview
 
         activity_chat_send_button.setOnClickListener {
             if(!TextUtils.isEmpty(activity_chat_message_edit_text.text) && FirebaseAuth.getInstance().currentUser != null){
                 if(this.imageViewPreview.drawable == null){
-                    MessageHelper.createMessageForChat(activity_chat_message_edit_text.text.toString(),FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),FirebaseAuth.getInstance().currentUser?.uid!!,intent.getStringExtra("assignment"))
-                        .addOnFailureListener{exeption ->
-                            Log.e("add message in chat","get fail with",exeption)
-                        }
+                    MessageHelper.createMessageForChat(activity_chat_message_edit_text.text.toString(),FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),FirebaseAuth.getInstance().currentUser?.uid!!,assignmentId)
+                    createNotification(true,activity_chat_message_edit_text.text.toString())
                     activity_chat_message_edit_text.setText("")
                 }else{
                     this.uploadPhotoInFirebaseAndSendMessage(activity_chat_message_edit_text.text.toString())
+                    createNotification(false,null)
                     activity_chat_message_edit_text.setText("")
                     this.imageViewPreview.setImageDrawable(null)
                 }
@@ -233,8 +242,45 @@ class ChatActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun createNotification(isTextMessage:Boolean,message: String?){
+        val db = FirebaseFirestore.getInstance()
+        val docRef = db.collection("assignments").document(assignmentId)
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val userId = if (userType == "pro users") "proUserId" else "userId"
+                    if(isTextMessage){
+                        Notification.createNotificationInDb(userType,
+                            document[userId].toString(),
+                            FirebaseAuth.getInstance().currentUser?.uid!!,
+                            assignmentId,
+                            "Nouveau message",
+                            message,
+                            "new message")
+                    }else{
+                        Notification.createNotificationInDb(userType,
+                            document[userId].toString(),
+                            FirebaseAuth.getInstance().currentUser?.uid!!,
+                            assignmentId,
+                            "Nouvelle image",
+                            "Vous avez reçu une nouvelle image",
+                            "new image")
+                    }
+
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
+
+
+    }
+
     companion object {
         private const val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 100
         private const val RC_CHOOSE_PHOTO = 200
+        private const val TAG = "Chat activity"
     }
 }

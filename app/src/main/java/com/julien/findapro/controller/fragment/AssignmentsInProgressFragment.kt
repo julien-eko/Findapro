@@ -83,7 +83,6 @@ class AssignmentsInProgressFragment : Fragment() {
                 for (document in documents) {
                     db.collection(user).document(document[userId].toString()).get()
                         .addOnSuccessListener { data ->
-
                             if(document["status"].toString() == "finish") {
                                 db.collection(user).document(document[userId].toString()).collection("rating")
                                     .whereEqualTo("assignmentsId",document.id)

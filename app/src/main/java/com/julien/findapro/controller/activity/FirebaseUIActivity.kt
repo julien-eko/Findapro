@@ -8,8 +8,10 @@ import android.os.Bundle
 import android.util.Log
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.julien.findapro.R
 import kotlinx.android.synthetic.main.activity_firebase_ui.*
 
@@ -53,9 +55,30 @@ class FirebaseUIActivity : AppCompatActivity() {
                 // Successfully signed in
                 //val user = FirebaseAuth.getInstance().currentUser
                 //val intent = Intent(this,MainActivity::class.java)
+                val db = FirebaseFirestore.getInstance()
                 //startActivity(intent)
 
-                val db = FirebaseFirestore.getInstance()
+                FirebaseInstanceId.getInstance().instanceId
+                    .addOnCompleteListener(OnCompleteListener { task ->
+                        if (!task.isSuccessful) {
+                            Log.w(TAG, "getInstanceId failed", task.exception)
+                            return@OnCompleteListener
+                        }
+
+                        // Get new Instance ID token
+                        val token = task.result?.token
+
+                        db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).update("token",token)
+                            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+                            .addOnFailureListener {
+                                db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).update("token",token)
+                                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+                                    .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) } }
+
+                    })
+
+
+
 
                 db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
 
@@ -120,7 +143,7 @@ class FirebaseUIActivity : AppCompatActivity() {
 
 
     companion object {
-
+        private const val TAG = "FirebaseUIActivity"
         private const val RC_SIGN_IN = 123
     }
 }
