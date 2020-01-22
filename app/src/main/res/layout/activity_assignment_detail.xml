@@ -61,8 +61,15 @@
 
 
     </LinearLayout>
-    </LinearLayout>
 
+
+    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_assignment_detail_direction_button"
+        android:text="Ouvrir maps"
+        android:visibility="gone"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

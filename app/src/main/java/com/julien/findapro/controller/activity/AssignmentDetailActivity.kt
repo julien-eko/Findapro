@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
@@ -43,6 +44,8 @@ class AssignmentDetailActivity : AppCompatActivity() {
     private var assignment: Assignment? = null
     private lateinit var sharedPreferences: SharedPreferences
     private var userType =""
+    private var latitude = 0.0
+    private var longitude = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +83,10 @@ class AssignmentDetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        activity_assignment_detail_direction_button.setOnClickListener {
+            openGoogleMap()
+        }
+
     }
 
     private fun loadAssignment() {
@@ -115,6 +122,8 @@ class AssignmentDetailActivity : AppCompatActivity() {
             docRef.get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
+                        latitude = document["latitude"] as Double
+                        longitude = document["longitude"] as Double
                         Picasso.get().load(document["photo"].toString())
                             .transform(CircleTransform())
                             .into(activity_assignment_detail_photo_imageview)
@@ -191,6 +200,11 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
     private fun inProgressAssignment() {
         activity_assignment_detail_intervention_date_linearlayout.visibility = View.VISIBLE
+
+        if (sharedPreferences.getBoolean("isPro", false)){
+            activity_assignment_detail_direction_button.visibility = View.VISIBLE
+        }
+
 
 
         activity_assignment_detail_created_date_textview.text =
@@ -425,6 +439,17 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
 
         builder.show()
+    }
+
+    private fun openGoogleMap(){
+
+        //Toast.makeText(this,latitude.toString() + longitude.toString(),Toast.LENGTH_SHORT).show()
+
+        val intent = Intent(android.content.Intent.ACTION_VIEW,
+        Uri.parse("https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}"));
+        startActivity(intent);
+
+
     }
 
     private fun finishAssignmentDialog(){
