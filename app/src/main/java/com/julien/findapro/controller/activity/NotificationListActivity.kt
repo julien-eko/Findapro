@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import com.julien.findapro.R
 import com.julien.findapro.Utils.Notification
@@ -40,7 +41,7 @@ class NotificationListActivity : AppCompatActivity() {
 
     private fun loadRecyclerView(){
         val db = FirebaseFirestore.getInstance()
-        db.collection(userType).document(FirebaseAuth.getInstance().currentUser?.uid!!).collection("notification")
+        db.collection(userType).document(FirebaseAuth.getInstance().currentUser?.uid!!).collection("notification").orderBy("dateCreated",Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {

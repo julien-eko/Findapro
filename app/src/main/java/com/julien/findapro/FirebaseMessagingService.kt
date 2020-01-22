@@ -2,13 +2,18 @@ package com.julien.findapro
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.julien.findapro.controller.activity.AssignmentDetailActivity
+import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
+import com.julien.findapro.controller.activity.ChatActivity
 
 class FirebaseMessagingService: FirebaseMessagingService() {
 
@@ -21,7 +26,7 @@ class FirebaseMessagingService: FirebaseMessagingService() {
 
         }
 
-        createNotification(applicationContext,remoteMessage.data["titleNotification"].toString(),remoteMessage.data["textNotification"].toString())
+        createNotification(applicationContext,remoteMessage.data["titleNotification"].toString(),remoteMessage.data["textNotification"].toString(),remoteMessage.data["cause"].toString(),remoteMessage.data["assignmentId"].toString())
     }
 
     override fun onNewToken(token: String) {
@@ -51,11 +56,48 @@ class FirebaseMessagingService: FirebaseMessagingService() {
     }
 
 
-    fun createNotification(
+    private fun createNotification(
         context: Context,
         notificationTitle: String,
-        notificationDescription: String
+        notificationDescription: String,
+        cause:String,
+        assignmentId:String
     ) {
+
+        val intent:Intent?
+
+
+
+         //intent = Intent(this, ChatActivity::class.java).apply {
+            //flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
+        //intentChat.putExtra("assignment",assignmentId)
+
+
+        when (cause) {
+            "new message" -> {
+                intent = Intent(this, ChatActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                intent.putExtra("assignment",assignmentId)
+            }
+            "new assignment created" -> {
+                intent = Intent(
+                    this,
+                    AssignmentsChoiceActivity::class.java
+                ).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                intent.putExtra("id",assignmentId)
+            }
+            else -> {
+                intent = Intent(this, AssignmentDetailActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                intent.putExtra("id",assignmentId)
+            }
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         createNotificationChannel(context)
 
@@ -68,7 +110,7 @@ class FirebaseMessagingService: FirebaseMessagingService() {
             .setContentTitle(notificationTitle)
             .setContentText(notificationDescription)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            // Set the intent that will fire when the user taps the notification
+            .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
 
