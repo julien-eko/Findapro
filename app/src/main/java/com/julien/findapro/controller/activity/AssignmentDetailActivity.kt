@@ -443,8 +443,6 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
     private fun openGoogleMap(){
 
-        //Toast.makeText(this,latitude.toString() + longitude.toString(),Toast.LENGTH_SHORT).show()
-
         val intent = Intent(android.content.Intent.ACTION_VIEW,
         Uri.parse("https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}"));
         startActivity(intent);

@@ -112,11 +112,17 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
 
  */
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
-        var itemid = p0?.itemId
+        val itemid = p0?.itemId
 
         if (itemid == R.id.activity_main_drawer_notification){
             val intent = Intent(this,
                 NotificationListActivity::class.java)
+            startActivity(intent)
+        }
+
+        if (itemid == R.id.activity_main_drawer_planning){
+            val intent = Intent(this,
+                PlanningActivity::class.java)
             startActivity(intent)
         }
 
