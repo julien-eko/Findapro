@@ -15,6 +15,16 @@
         android:background="?attr/colorPrimary"
         app:theme="@style/ToolBarStyle" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/activity_notification_list_no_item"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_margin="@dimen/default_margin"
+        android:layout_gravity="center_horizontal"
+        android:text="Aucune notification"/>
     <!-- RECYCLER VIEW -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_notification_list_activity"

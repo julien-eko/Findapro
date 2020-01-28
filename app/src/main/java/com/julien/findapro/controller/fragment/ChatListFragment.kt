@@ -22,6 +22,9 @@ import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.ChatListAdapter
 import kotlinx.android.synthetic.main.fragment_chat_list.*
 import kotlinx.android.synthetic.main.fragment_chat_list_item.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -103,9 +106,12 @@ class ChatListFragment : Fragment() {
 
 
 
+
+
                         }
                         .addOnFailureListener { exception ->
                             Log.w("chatlist", "Error getting documents: ", exception)
+
                         }
                 }
 
@@ -113,6 +119,7 @@ class ChatListFragment : Fragment() {
             }
             .addOnFailureListener { exception ->
                 Log.w("chatlist", "Error getting documents: ", exception)
+
             }
             .addOnCompleteListener {
 
@@ -220,12 +227,14 @@ class ChatListFragment : Fragment() {
                 val sortList:List<HashMap<String,Any?>> = chatList.sortedWith(compareByDescending { it["createdDate"] as Comparable<*>? })
 
 
+
                 recycler_view_chat_list_fragment.layoutManager = LinearLayoutManager(context)
                 recycler_view_chat_list_fragment.adapter = ChatListAdapter(sortList,context!!,{ chatItem : HashMap<String,Any?>,isProfil:Boolean -> chatItemClicked(chatItem,isProfil) })
 
 
             }
             .addOnFailureListener { exception ->
+
                 Log.w("", "Error getting documents: ", exception)
             }
 
@@ -243,13 +252,22 @@ class ChatListFragment : Fragment() {
             }
 
 
-
     //refresh recycler view with last message
     override fun onResume() {
         super.onResume()
         if(Internet.isInternetAvailable(context)){
             chatList.clear()
             loadData()
+            GlobalScope.launch {
+                delay(2000)
+                if (chatList.isEmpty()){
+                    activity?.runOnUiThread(java.lang.Runnable {
+                        fragment_chat_list_no_item.visibility = View.VISIBLE
+                    })
+
+                }
+
+            }
         }else{
             Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }

@@ -16,7 +16,11 @@ import com.julien.findapro.Utils.Internet
 import com.julien.findapro.controller.activity.AssignmentsActivity
 import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.UserListAdapater
+import kotlinx.android.synthetic.main.fragment_chat_list.*
 import kotlinx.android.synthetic.main.fragment_users_list.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 /**
@@ -275,6 +279,16 @@ class UserListFragment : Fragment() {
                 fragment_user_list_cancel_search_button.visibility = View.GONE
                 userList.clear()
                 nearUserList(30000f)
+                GlobalScope.launch {
+                    delay(2000)
+                    if (userList.isEmpty()){
+                        activity?.runOnUiThread(java.lang.Runnable {
+                            fragment_user_list_no_item.visibility = View.VISIBLE
+                        })
+
+                    }
+
+                }
             }
         }else{
             Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()

@@ -23,7 +23,11 @@ import com.julien.findapro.view.AssignmentsInProgressAdapter
 import kotlinx.android.synthetic.main.activity_assignment_detail.*
 import kotlinx.android.synthetic.main.fragment_assignments_in_progress.*
 import kotlinx.android.synthetic.main.fragment_assignments_list.*
+import kotlinx.android.synthetic.main.fragment_chat_list.*
 import kotlinx.android.synthetic.main.fragment_users_list.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
@@ -314,6 +318,16 @@ class AssignmentsInProgressFragment : Fragment() {
                 //fragment_user_list_cancel_search_button.visibility = View.GONE
                 assigmentsList.clear()
                 loadData()
+                GlobalScope.launch {
+                    delay(2000)
+                    if (assigmentsList.isEmpty()){
+                        activity?.runOnUiThread(java.lang.Runnable {
+                            fragment_assignment_in_progress_list_no_item.visibility = View.VISIBLE
+                        })
+
+                    }
+
+                }
             }
         }else{
             Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()

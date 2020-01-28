@@ -19,11 +19,9 @@ import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
 import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.AssignmentListAdaptater
 import kotlinx.android.synthetic.main.fragment_assignments_list.*
+import kotlinx.android.synthetic.main.fragment_chat_list.*
 import kotlinx.android.synthetic.main.fragment_users_list.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
 /**
@@ -221,7 +219,15 @@ class AssignmentsListFragment : Fragment() {
                 assigmentsList.clear()
 
                 loadData()
+                GlobalScope.launch {
+                    delay(2000)
+                    if (assigmentsList.isEmpty()) {
+                        activity?.runOnUiThread(java.lang.Runnable {
+                            fragment_assignment_list_no_item.visibility = View.VISIBLE
+                        })
 
+                    }
+                }
 
 
 

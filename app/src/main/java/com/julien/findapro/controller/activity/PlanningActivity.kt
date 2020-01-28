@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -17,7 +18,11 @@ import com.julien.findapro.view.PlanningAdapter
 import com.julien.findapro.view.UserListAdapater
 import kotlinx.android.synthetic.main.activity_notification_list.*
 import kotlinx.android.synthetic.main.activity_planning.*
+import kotlinx.android.synthetic.main.fragment_assignments_list.*
 import kotlinx.android.synthetic.main.fragment_users_list.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlanningActivity : AppCompatActivity() {
 
@@ -34,6 +39,14 @@ class PlanningActivity : AppCompatActivity() {
 
         if(Internet.isInternetAvailable(this)){
             loadPlanning()
+            GlobalScope.launch {
+                delay(2000)
+            if (planningList.isEmpty()){
+                this@PlanningActivity.runOnUiThread(java.lang.Runnable {
+                    activity_planning_list_no_item.visibility = View.VISIBLE
+                })
+
+            }}
         }else{
             Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }

@@ -15,6 +15,17 @@
         android:id="@+id/fragment_assignment_list_cancel_search_button"
         android:visibility="gone"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/fragment_assignment_list_no_item"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_margin="@dimen/default_margin"
+        android:layout_gravity="center_horizontal"
+        android:text="Aucune Mission"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_assignments_list_fragment"
         android:layout_width="match_parent"
