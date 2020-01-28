@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.julien.findapro.R
+import com.julien.findapro.Utils.Internet
 import com.julien.findapro.Utils.Message
 import com.julien.findapro.Utils.Notification
 import kotlinx.android.synthetic.main.activity_assignments.*
@@ -26,55 +28,20 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
 
         val db = FirebaseFirestore.getInstance()
 
-        loadData(db)
+        if(Internet.isInternetAvailable(this)){
+            loadData(db)
+        }else{
+            Toast.makeText(this,"Pas de connexion internet", Toast.LENGTH_SHORT).show()
+        }
+
 
 
 
         assignments_choice_activity_accept_button.setOnClickListener {
-            db.collection("assignments").document(intent.getStringExtra("id"))
-                .update("status", "inProgress")
-                .addOnSuccessListener {
-
-                    db.collection("assignments").document(intent.getStringExtra("id")).get()
-                        .addOnSuccessListener { document ->
-                            if (document.data != null){
-                                Notification.createNotificationInDb("users",
-                                    document["userId"].toString(),
-                                    FirebaseAuth.getInstance().currentUser?.uid!!,
-                                    intent.getStringExtra("id"),
-                                    "Mission acceptée",
-                                    "Votre mission a été acceptée",
-                                    "status update in progress")
-                            }
-
-                        }.addOnFailureListener{exeption ->
-                            Log.e("db","get fail with",exeption)
-                        }
-
-
-                    Log.d(
-                        "update status",
-                        "DocumentSnapshot successfully updated!"
-                    )
-                }
-                .addOnFailureListener { e ->
-                    Log.w("update status", "Error updating document", e)
-                }
-
-            val message = Message("debut","bot")
-            db.collection("assignments").document(intent.getStringExtra("id")).collection("chat").add(message)
-
-            finish()
-        }
-
-            assignments_choice_activity_decline_button.setOnClickListener {
+            if(Internet.isInternetAvailable(this)){
                 db.collection("assignments").document(intent.getStringExtra("id"))
-                    .update("status", "refuse")
+                    .update("status", "inProgress")
                     .addOnSuccessListener {
-                        Log.d(
-                            "update status",
-                            "DocumentSnapshot successfully updated!"
-                        )
 
                         db.collection("assignments").document(intent.getStringExtra("id")).get()
                             .addOnSuccessListener { document ->
@@ -83,17 +50,67 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                                         document["userId"].toString(),
                                         FirebaseAuth.getInstance().currentUser?.uid!!,
                                         intent.getStringExtra("id"),
-                                        "Mission refusée",
-                                        "Votre mission a été refusée",
-                                        "status update refuse")
+                                        "Mission acceptée",
+                                        "Votre mission a été acceptée",
+                                        "status update in progress")
                                 }
+
+                            }.addOnFailureListener{exeption ->
+                                Log.e("db","get fail with",exeption)
+                            }
+
+
+                        Log.d(
+                            "update status",
+                            "DocumentSnapshot successfully updated!"
+                        )
                     }
                     .addOnFailureListener { e ->
                         Log.w("update status", "Error updating document", e)
                     }
 
+                val message = Message("debut","bot")
+                db.collection("assignments").document(intent.getStringExtra("id")).collection("chat").add(message)
+
                 finish()
+            }else{
+                Toast.makeText(this,"Pas de connexion internet", Toast.LENGTH_SHORT).show()
             }
+
+        }
+
+            assignments_choice_activity_decline_button.setOnClickListener {
+                if(Internet.isInternetAvailable(this)){
+                    db.collection("assignments").document(intent.getStringExtra("id"))
+                        .update("status", "refuse")
+                        .addOnSuccessListener {
+                            Log.d(
+                                "update status",
+                                "DocumentSnapshot successfully updated!"
+                            )
+
+                            db.collection("assignments").document(intent.getStringExtra("id")).get()
+                                .addOnSuccessListener { document ->
+                                    if (document.data != null){
+                                        Notification.createNotificationInDb("users",
+                                            document["userId"].toString(),
+                                            FirebaseAuth.getInstance().currentUser?.uid!!,
+                                            intent.getStringExtra("id"),
+                                            "Mission refusée",
+                                            "Votre mission a été refusée",
+                                            "status update refuse")
+                                    }
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w("update status", "Error updating document", e)
+                                }
+
+                            finish()
+                        }
+                }else{
+                    Toast.makeText(this,"Pas de connexion internet", Toast.LENGTH_SHORT).show()
+                }
+
 
     }}
 

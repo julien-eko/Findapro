@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.Utils.CircleTransform
+import com.julien.findapro.Utils.Internet
 import com.julien.findapro.Utils.Rating
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_assignment_detail.*
@@ -21,9 +23,19 @@ class RatingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_rating)
 
         configureToolbar()
-        load()
+        if(Internet.isInternetAvailable(this)){
+            load()
+        }else{
+            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+        }
+
         activity_rating_button.setOnClickListener {
-            addRating()
+
+            if(Internet.isInternetAvailable(this)){
+                addRating()
+            }else{
+                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

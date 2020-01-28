@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 import com.julien.findapro.R
+import com.julien.findapro.Utils.Internet
 import com.julien.findapro.controller.activity.AssignmentDetailActivity
 import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
 import com.julien.findapro.controller.activity.ProfilActivity
@@ -48,7 +49,12 @@ class AssignmentsInProgressFragment : Fragment() {
         fragment_assignment_inprogress_list_cancel_search_button.setOnClickListener {
             fragment_assignment_inprogress_list_cancel_search_button.visibility = View.GONE
             assigmentsList.clear()
-            loadData()
+            if(Internet.isInternetAvailable(context)){
+                loadData()
+            }else{
+                Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
@@ -266,16 +272,21 @@ class AssignmentsInProgressFragment : Fragment() {
             }
     }
     private fun assignmentItemClicked(assignmentItem : HashMap<String,Any?>,isProfil:Boolean) {
-        if (isProfil){
-            val intent = Intent(context,
-                ProfilActivity::class.java)
-            intent.putExtra("id",assignmentItem["idUser"].toString())
-            startActivity(intent)
+        if(Internet.isInternetAvailable(context)){
+            if (isProfil){
+                val intent = Intent(context,
+                    ProfilActivity::class.java)
+                intent.putExtra("id",assignmentItem["idUser"].toString())
+                startActivity(intent)
+            }else{
+                val intent = Intent(context, AssignmentDetailActivity::class.java)
+                intent.putExtra("id",assignmentItem["id"].toString())
+                startActivity(intent)
+            }
         }else{
-            val intent = Intent(context, AssignmentDetailActivity::class.java)
-            intent.putExtra("id",assignmentItem["id"].toString())
-            startActivity(intent)
+            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }
+
 
     }
 
@@ -289,20 +300,25 @@ class AssignmentsInProgressFragment : Fragment() {
 
     override fun onResume() {
 
-        if (arguments != null) {
-            //fragment_user_list_cancel_search_button.visibility = View.VISIBLE
-            fragment_assignment_inprogress_list_cancel_search_button.visibility = View.VISIBLE
-            //assigmentsList.clear()
-            //Toast.makeText(context,arguments?.getString("status"),Toast.LENGTH_SHORT).show()
-            assigmentsList.clear()
-            searchByStatus(arguments?.getString("status")!!)
+        if(Internet.isInternetAvailable(context)){
+            if (arguments != null) {
+                //fragment_user_list_cancel_search_button.visibility = View.VISIBLE
+                fragment_assignment_inprogress_list_cancel_search_button.visibility = View.VISIBLE
+                //assigmentsList.clear()
+                //Toast.makeText(context,arguments?.getString("status"),Toast.LENGTH_SHORT).show()
+                assigmentsList.clear()
+                searchByStatus(arguments?.getString("status")!!)
 
-        } else {
-            fragment_assignment_inprogress_list_cancel_search_button.visibility = View.GONE
-            //fragment_user_list_cancel_search_button.visibility = View.GONE
-            assigmentsList.clear()
-            loadData()
+            } else {
+                fragment_assignment_inprogress_list_cancel_search_button.visibility = View.GONE
+                //fragment_user_list_cancel_search_button.visibility = View.GONE
+                assigmentsList.clear()
+                loadData()
+            }
+        }else{
+            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }
+
 
         super.onResume()
 

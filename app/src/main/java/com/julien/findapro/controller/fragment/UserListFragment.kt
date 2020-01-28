@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
+import com.julien.findapro.Utils.Internet
 import com.julien.findapro.controller.activity.AssignmentsActivity
 import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.UserListAdapater
@@ -44,9 +45,14 @@ class UserListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         fragment_user_list_cancel_search_button.setOnClickListener {
-            fragment_user_list_cancel_search_button.visibility = View.GONE
-            userList.clear()
-            nearUserList(30000f)
+            if(Internet.isInternetAvailable(context)){
+                fragment_user_list_cancel_search_button.visibility = View.GONE
+                userList.clear()
+                nearUserList(30000f)
+            }else{
+                Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
@@ -114,22 +120,26 @@ class UserListFragment : Fragment() {
 
 
     private fun userItemClicked(userItem: HashMap<String, String>, isProfil: Boolean) {
-
-        if (isProfil) {
-            val intent = Intent(
-                context,
-                ProfilActivity::class.java
-            )
-            intent.putExtra("id", userItem["uid"])
-            startActivity(intent)
-        } else {
-            val intent = Intent(
-                context,
-                AssignmentsActivity::class.java
-            )
-            intent.putExtra("proId", userItem["uid"])
-            startActivity(intent)
+        if(Internet.isInternetAvailable(context)){
+            if (isProfil) {
+                val intent = Intent(
+                    context,
+                    ProfilActivity::class.java
+                )
+                intent.putExtra("id", userItem["uid"])
+                startActivity(intent)
+            } else {
+                val intent = Intent(
+                    context,
+                    AssignmentsActivity::class.java
+                )
+                intent.putExtra("proId", userItem["uid"])
+                startActivity(intent)
+            }
+        }else{
+            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }
+
 
     }
 
@@ -250,22 +260,27 @@ class UserListFragment : Fragment() {
 
 
     override fun onResume() {
-
-        if (arguments != null) {
-            fragment_user_list_cancel_search_button.visibility = View.VISIBLE
-            userList.clear()
-            val rating: Double =
-                if (arguments?.getDouble("rating") == null) 0.0 else arguments?.getDouble("rating")!!
-            searchUserList(
-                arguments?.getFloat("maxDistance")!!,
-                arguments?.getString("job")!!,
-                rating
-            )
-        } else {
-            fragment_user_list_cancel_search_button.visibility = View.GONE
-            userList.clear()
-            nearUserList(30000f)
+        if(Internet.isInternetAvailable(context)){
+            if (arguments != null) {
+                fragment_user_list_cancel_search_button.visibility = View.VISIBLE
+                userList.clear()
+                val rating: Double =
+                    if (arguments?.getDouble("rating") == null) 0.0 else arguments?.getDouble("rating")!!
+                searchUserList(
+                    arguments?.getFloat("maxDistance")!!,
+                    arguments?.getString("job")!!,
+                    rating
+                )
+            } else {
+                fragment_user_list_cancel_search_button.visibility = View.GONE
+                userList.clear()
+                nearUserList(30000f)
+            }
+        }else{
+            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }
+
+
 
 
 

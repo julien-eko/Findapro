@@ -1,7 +1,7 @@
 package com.julien.findapro.controller.activity
 
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -112,6 +112,32 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
 
 
  */
+
+    /*
+    private var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val notConnected = intent.getBooleanExtra(
+                ConnectivityManager
+                    .EXTRA_NO_CONNECTIVITY, false)
+            if (notConnected) {
+                Toast.makeText(context,"deconecter",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context,"conecter",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(broadcastReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(broadcastReceiver)
+    }
+
+     */
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         val itemid = p0?.itemId
 

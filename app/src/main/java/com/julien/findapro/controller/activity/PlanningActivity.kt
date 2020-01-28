@@ -7,10 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
+import com.julien.findapro.Utils.Internet
 import com.julien.findapro.view.PlanningAdapter
 import com.julien.findapro.view.UserListAdapater
 import kotlinx.android.synthetic.main.activity_notification_list.*
@@ -30,8 +32,12 @@ class PlanningActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("isPro", 0)
 
+        if(Internet.isInternetAvailable(this)){
+            loadPlanning()
+        }else{
+            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+        }
 
-        loadPlanning()
     }
 
 
@@ -115,31 +121,36 @@ class PlanningActivity : AppCompatActivity() {
 
     private fun planningItemClicked(planningItem : HashMap<String,Any?>,button:String) {
 
-        when (button) {
-            "profil" -> {
-                val intent = Intent(
-                    this,
-                    ProfilActivity::class.java
-                )
-                intent.putExtra("id", planningItem["uid"].toString())
-                startActivity(intent)
+        if(Internet.isInternetAvailable(this)){
+            when (button) {
+                "profil" -> {
+                    val intent = Intent(
+                        this,
+                        ProfilActivity::class.java
+                    )
+                    intent.putExtra("id", planningItem["uid"].toString())
+                    startActivity(intent)
+                }
+                "message" -> {
+                    val intent = Intent(this, ChatActivity::class.java)
+                    intent.putExtra("assignment",planningItem["assignmentId"].toString())
+                    startActivity(intent)
+                }
+                "detail" -> {
+                    val intent = Intent(this, AssignmentDetailActivity::class.java)
+                    intent.putExtra("id",planningItem["assignmentId"].toString())
+                    startActivity(intent)
+                }
+                "map" -> {
+                    val intent = Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("https://www.google.com/maps/search/?api=1&query=${planningItem["latitude"].toString()},${planningItem["longitude"].toString()}"));
+                    startActivity(intent);
+                }
             }
-            "message" -> {
-                val intent = Intent(this, ChatActivity::class.java)
-                intent.putExtra("assignment",planningItem["assignmentId"].toString())
-                startActivity(intent)
-            }
-            "detail" -> {
-                val intent = Intent(this, AssignmentDetailActivity::class.java)
-                intent.putExtra("id",planningItem["assignmentId"].toString())
-                startActivity(intent)
-            }
-            "map" -> {
-                val intent = Intent(android.content.Intent.ACTION_VIEW,
-                    Uri.parse("https://www.google.com/maps/search/?api=1&query=${planningItem["latitude"].toString()},${planningItem["longitude"].toString()}"));
-                startActivity(intent);
-            }
+        }else{
+            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }
+
 
 
     }

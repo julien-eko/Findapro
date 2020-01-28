@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.julien.findapro.R
+import com.julien.findapro.Utils.Internet
 import com.julien.findapro.controller.activity.ChatActivity
 import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.ChatListAdapter
@@ -246,24 +247,32 @@ class ChatListFragment : Fragment() {
     //refresh recycler view with last message
     override fun onResume() {
         super.onResume()
+        if(Internet.isInternetAvailable(context)){
+            chatList.clear()
+            loadData()
+        }else{
+            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+        }
 
-        chatList.clear()
-        loadData()
 
 
     }
     private fun chatItemClicked(chatItem : HashMap<String,Any?>,isProfil:Boolean) {
-
-        if (isProfil){
-            val intent = Intent(context,
-                ProfilActivity::class.java)
-            intent.putExtra("id",chatItem["idUser"].toString())
-            startActivity(intent)
+        if(Internet.isInternetAvailable(context)){
+            if (isProfil){
+                val intent = Intent(context,
+                    ProfilActivity::class.java)
+                intent.putExtra("id",chatItem["idUser"].toString())
+                startActivity(intent)
+            }else{
+                val intent = Intent(context, ChatActivity::class.java)
+                intent.putExtra("assignment",chatItem["id"].toString())
+                startActivity(intent)
+            }
         }else{
-            val intent = Intent(context, ChatActivity::class.java)
-            intent.putExtra("assignment",chatItem["id"].toString())
-            startActivity(intent)
+            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }
+
 
     }
 }

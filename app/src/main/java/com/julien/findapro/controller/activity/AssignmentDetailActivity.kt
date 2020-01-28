@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.Utils.Assignment
 import com.julien.findapro.Utils.CircleTransform
+import com.julien.findapro.Utils.Internet
 import com.julien.findapro.Utils.Notification
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
@@ -53,8 +54,11 @@ class AssignmentDetailActivity : AppCompatActivity() {
         assignmentId = intent.getStringExtra("id") ?: "default value"
 
         configureToolbar()
-
-        loadAssignment()
+        if(Internet.isInternetAvailable(this)){
+loadAssignment()
+        }else{
+            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+        }
 
         sharedPreferences = getSharedPreferences("isPro", 0)
         //Toast.makeText(this,sharedPreferences.getBoolean("isPro",false).toString(),Toast.LENGTH_SHORT).show()
@@ -62,29 +66,53 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
 
         activity_assignment_detail_intervention_date_button.setOnClickListener {
-            pickDateTime()
-            //activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
+            if(Internet.isInternetAvailable(this)){
+                pickDateTime()
+            }else{
+                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            }
+
 
         }
 
         activity_assignment_detail_cancel_assignment_button.setOnClickListener {
-            cancelAssignment()
+            if(Internet.isInternetAvailable(this)){
+                cancelAssignment()
+            }else{
+                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         activity_assignment_detail_finish_assignment_button.setOnClickListener {
-            finishAssignmentDialog()
+            if(Internet.isInternetAvailable(this)){
+                finishAssignmentDialog()
+            }else{
+                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         activity_assignment_detail_photo_imageview.setOnClickListener {
-            val id = if(sharedPreferences.getBoolean("isPro", false)) assignment?.proUserId else assignment?.userId
-            val intent = Intent(this,
-                ProfilActivity::class.java)
-            intent.putExtra("id",id)
-            startActivity(intent)
+            if(Internet.isInternetAvailable(this)){
+                val id = if(sharedPreferences.getBoolean("isPro", false)) assignment?.proUserId else assignment?.userId
+                val intent = Intent(this,
+                    ProfilActivity::class.java)
+                intent.putExtra("id",id)
+                startActivity(intent)
+            }else{
+                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         activity_assignment_detail_direction_button.setOnClickListener {
-            openGoogleMap()
+            if(Internet.isInternetAvailable(this)){
+                openGoogleMap()
+            }else{
+                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            }
+
         }
 
     }
@@ -534,6 +562,11 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadAssignment()
+        if(Internet.isInternetAvailable(this)){
+loadAssignment()
+        }else{
+            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+        }
+
     }
 }

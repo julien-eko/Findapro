@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.Utils.Assignment
+import com.julien.findapro.Utils.Internet
 import com.julien.findapro.Utils.Notification
 import kotlinx.android.synthetic.main.activity_assignments.*
 import java.util.*
@@ -22,13 +23,22 @@ class AssignmentsActivity : AppCompatActivity() {
 
         configureToolbar()
 
-        loadDb()
+        if(Internet.isInternetAvailable(this)){
+            loadDb()
+        }else{
+            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+        }
+
 
         assignments_save_button.setOnClickListener {
             if(activity_assignments_describe_edit_text.text.toString().trim() == ""){
                 Toast.makeText(this,getString(R.string.no_blank_field),Toast.LENGTH_SHORT).show()
             }else{
-                saveInDb()
+                if(Internet.isInternetAvailable(this)){
+                    saveInDb()
+                }else{
+                    Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+                }
             }
 
         }

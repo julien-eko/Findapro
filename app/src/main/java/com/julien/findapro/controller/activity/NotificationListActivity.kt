@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import com.julien.findapro.R
+import com.julien.findapro.Utils.Internet
 import com.julien.findapro.Utils.Notification
 import com.julien.findapro.view.NotificationListAdapter
 import com.julien.findapro.view.UserListAdapater
@@ -34,7 +35,12 @@ class NotificationListActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("isPro", 0)
         userType = if(sharedPreferences.getBoolean("isPro", false)) "pro users" else "users"
 
-        loadRecyclerView()
+        if(Internet.isInternetAvailable(this)){
+            loadRecyclerView()
+        }else{
+            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+        }
+
 
 
     }

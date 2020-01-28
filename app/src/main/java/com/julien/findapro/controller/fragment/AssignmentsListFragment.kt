@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
+import com.julien.findapro.Utils.Internet
 
 import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
 import com.julien.findapro.controller.activity.ProfilActivity
@@ -47,7 +48,11 @@ class AssignmentsListFragment : Fragment() {
         fragment_assignment_list_cancel_search_button.setOnClickListener {
             fragment_assignment_list_cancel_search_button.visibility = View.GONE
             assigmentsList.clear()
-            loadData()
+            if(Internet.isInternetAvailable(context)){
+                loadData()
+            }else{
+                Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
@@ -180,42 +185,51 @@ class AssignmentsListFragment : Fragment() {
             }
     }
     private fun assignmentItemClicked(assignmentItem : HashMap<String,String>,isProfil:Boolean) {
-        if (isProfil){
-            val intent = Intent(context,
-                ProfilActivity::class.java)
-            intent.putExtra("id",assignmentItem["userId"])
-            startActivity(intent)
+        if(Internet.isInternetAvailable(context)){
+            if (isProfil){
+                val intent = Intent(context,
+                    ProfilActivity::class.java)
+                intent.putExtra("id",assignmentItem["userId"])
+                startActivity(intent)
+            }else{
+                val intent = Intent(context,
+                    AssignmentsChoiceActivity::class.java)
+                intent.putExtra("id",assignmentItem["id"])
+                startActivity(intent)
+            }
         }else{
-            val intent = Intent(context,
-                AssignmentsChoiceActivity::class.java)
-            intent.putExtra("id",assignmentItem["id"])
-            startActivity(intent)
+            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }
+
 
     }
 
     override fun onResume() {
 
+        if(Internet.isInternetAvailable(context)){
+            if (arguments != null) {
+                fragment_assignment_list_cancel_search_button.visibility = View.VISIBLE
+                assigmentsList.clear()
+                val rating: Double =
+                    if (arguments?.getDouble("rating") == null) 0.0 else arguments?.getDouble("rating")!!
 
-        if (arguments != null) {
-            fragment_assignment_list_cancel_search_button.visibility = View.VISIBLE
-            assigmentsList.clear()
-            val rating: Double =
-                if (arguments?.getDouble("rating") == null) 0.0 else arguments?.getDouble("rating")!!
+                searchAssignment(rating,arguments?.getFloat("maxDistance")!!)
+                //Toast.makeText(context,arguments?.getFloat("maxDistance")!!.toString(),Toast.LENGTH_SHORT).show()
 
-            searchAssignment(rating,arguments?.getFloat("maxDistance")!!)
-            //Toast.makeText(context,arguments?.getFloat("maxDistance")!!.toString(),Toast.LENGTH_SHORT).show()
+            } else {
+                fragment_assignment_list_cancel_search_button.visibility = View.GONE
+                assigmentsList.clear()
 
-        } else {
-            fragment_assignment_list_cancel_search_button.visibility = View.GONE
-            assigmentsList.clear()
-
-            loadData()
-
-
+                loadData()
 
 
+
+
+            }
+        }else{
+            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }
+
         super.onResume()
 
     }

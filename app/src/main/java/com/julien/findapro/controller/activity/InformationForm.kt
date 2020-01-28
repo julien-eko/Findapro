@@ -9,12 +9,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.julien.findapro.R
+import com.julien.findapro.Utils.Internet
 import kotlinx.android.synthetic.main.activity_information_form.*
 
 class InformationForm : AppCompatActivity() {
@@ -65,41 +67,46 @@ class InformationForm : AppCompatActivity() {
 
         }
 
-        if (intent.getBooleanExtra("edit",false)){
-            information_form_linear_layout_statut.visibility = View.GONE
-            loadDatabase()
+        if(Internet.isInternetAvailable(this)){
+            if (intent.getBooleanExtra("edit",false)){
+                information_form_linear_layout_statut.visibility = View.GONE
+                loadDatabase()
 
-            information_form_save_button.setOnClickListener{
-                if(validateForm()){
-                    val fullAdress:String = information_form_adress.text.toString() + " " +
-                            information_form_city.text.toString() + " "  +
-                            information_postal_code.text.toString() + " " +
-                            information_form_country.toString()
+                information_form_save_button.setOnClickListener{
+                    if(validateForm()){
+                        val fullAdress:String = information_form_adress.text.toString() + " " +
+                                information_form_city.text.toString() + " "  +
+                                information_postal_code.text.toString() + " " +
+                                information_form_country.toString()
 
-                    if (isGoodAdress(fullAdress)){
-                        editDatabase()
-                    }else{
-                        alertDialogWrongAdress()
+                        if (isGoodAdress(fullAdress)){
+                            editDatabase()
+                        }else{
+                            alertDialogWrongAdress()
+                        }
+                    }
+                }
+            }else{
+                information_form_save_button.setOnClickListener{
+                    if(validateForm()){
+                        val fullAdress:String = information_form_adress.text.toString() + " " +
+                                information_form_city.text.toString() + " "  +
+                                information_postal_code.text.toString() + " " +
+                                information_form_country.toString()
+
+                        if (isGoodAdress(fullAdress)){
+                            addInDatabase()
+                        }else{
+                            alertDialogWrongAdress()
+                        }
+
                     }
                 }
             }
         }else{
-            information_form_save_button.setOnClickListener{
-                if(validateForm()){
-                    val fullAdress:String = information_form_adress.text.toString() + " " +
-                            information_form_city.text.toString() + " "  +
-                            information_postal_code.text.toString() + " " +
-                            information_form_country.toString()
-
-                    if (isGoodAdress(fullAdress)){
-                        addInDatabase()
-                    }else{
-                        alertDialogWrongAdress()
-                    }
-
-                }
-            }
+            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }
+
 
 
 

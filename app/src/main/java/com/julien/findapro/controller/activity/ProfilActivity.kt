@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.Utils.CircleTransform
+import com.julien.findapro.Utils.Internet
 import com.julien.findapro.view.AssignmentListAdaptater
 import com.julien.findapro.view.ProfilAdaptater
 import com.squareup.picasso.Picasso
@@ -33,7 +34,13 @@ class ProfilActivity : AppCompatActivity() {
         userId = intent.getStringExtra("id") ?: "default value"
 
         configureToolbar()
-        displayInformation()
+
+        if(Internet.isInternetAvailable(this)){
+            displayInformation()
+        }else{
+            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+        }
+
 
 
         //load()
@@ -156,14 +163,19 @@ class ProfilActivity : AppCompatActivity() {
 
     private fun userItemClicked(userItem : HashMap<String,String>,isProfil:Boolean) {
 
-        if (isProfil){
-            val intent = Intent(this,
-                ProfilActivity::class.java)
-            intent.putExtra("id",userItem["userId"])
-            startActivity(intent)
-        }else{
+        if(Internet.isInternetAvailable(this)){
+            if (isProfil){
+                val intent = Intent(this,
+                    ProfilActivity::class.java)
+                intent.putExtra("id",userItem["userId"])
+                startActivity(intent)
+            }else{
 
+            }
+        }else{
+            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
         }
+
 
     }
 }
