@@ -129,8 +129,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                             .into(activity_assignment_detail_photo_imageview)
                         activity_assignment_detail_name_textview.text =
                             document["full name"].toString()
-                        activity_assignment_detail_adress_textview.text =
-                            document["adress"].toString()
+                        //activity_assignment_detail_adress_textview.text = document["adress"].toString()
                         activity_assignment_detail_city_textview.text = document["city"].toString()
                         activity_assignment_detail_postal_code_textview.text =
                             document["postal code"].toString()
@@ -154,7 +153,8 @@ class AssignmentDetailActivity : AppCompatActivity() {
                             document["full name"].toString()
                         activity_assignment_detail_name_textview.text =
                             document["full name"].toString()
-                        activity_assignment_detail_adress_textview.text = document["job"].toString()
+                        activity_assignment_detail_job_textview.visibility = View.VISIBLE
+                        activity_assignment_detail_job_textview.text = document["job"].toString()
                         activity_assignment_detail_city_textview.text = document["city"].toString()
                         activity_assignment_detail_postal_code_textview.text =
                             document["postal code"].toString()

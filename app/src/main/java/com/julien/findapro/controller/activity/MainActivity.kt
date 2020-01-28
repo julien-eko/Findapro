@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.julien.findapro.Notification
 import com.julien.findapro.R
+import com.julien.findapro.Utils.CircleTransform
 import com.julien.findapro.Utils.Communicator
 import com.julien.findapro.controller.fragment.*
 import com.squareup.picasso.Picasso
@@ -55,13 +56,13 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
 
                 if(sharedPreferences.getBoolean("isPro",false)){
                     //Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
-                    add(
+                    replace(
                         R.id.main_activity_frame_layout,
                         AssignmentsListFragment()
                     )
                 }else{
 
-                    add(
+                    replace(
                         R.id.main_activity_frame_layout,
                         UserListFragment()
                     )
@@ -184,7 +185,9 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
         fullName.text = FirebaseAuth.getInstance().currentUser?.displayName
         email.text = FirebaseAuth.getInstance().currentUser?.email
 
-        Picasso.get().load(FirebaseAuth.getInstance().currentUser?.photoUrl).into(image)
+        Picasso.get().load(FirebaseAuth.getInstance().currentUser?.photoUrl).transform(
+            CircleTransform()
+        ).into(image)
 
     }
 

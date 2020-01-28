@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 
@@ -18,6 +19,11 @@ import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.AssignmentListAdaptater
 import kotlinx.android.synthetic.main.fragment_assignments_list.*
 import kotlinx.android.synthetic.main.fragment_users_list.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 /**
  * A simple [Fragment] subclass.
@@ -37,6 +43,7 @@ class AssignmentsListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         fragment_assignment_list_cancel_search_button.setOnClickListener {
             fragment_assignment_list_cancel_search_button.visibility = View.GONE
             assigmentsList.clear()
@@ -84,11 +91,12 @@ class AssignmentsListFragment : Fragment() {
                             assigmentsList.add(assignment)
 
 
+
                              }
                         .addOnFailureListener { exception ->
                             Log.w("access db", "Error getting data", exception)
                         }
-                        .addOnCompleteListener {  recycler_view_assignments_list_fragment.layoutManager = LinearLayoutManager(context)
+                        .addOnCompleteListener {recycler_view_assignments_list_fragment.layoutManager = LinearLayoutManager(context)
                             recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
                                 assigmentsList,
                                 context!!,
@@ -102,7 +110,6 @@ class AssignmentsListFragment : Fragment() {
                 Log.w("access db", "Error getting data", exception)
             }
     }
-
 
     private fun searchAssignment(minRating:Double,maxDistance:Float){
         val db = FirebaseFirestore.getInstance()
@@ -156,6 +163,7 @@ class AssignmentsListFragment : Fragment() {
                                         { assignmentItem: HashMap<String, String>,isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) })
                                 }
 
+
                         }
 
 
@@ -201,12 +209,18 @@ class AssignmentsListFragment : Fragment() {
         } else {
             fragment_assignment_list_cancel_search_button.visibility = View.GONE
             assigmentsList.clear()
+
             loadData()
+
+
+
 
         }
         super.onResume()
 
     }
+
+
 
 }
 

@@ -6,17 +6,17 @@
         android:enabled="true"
         android:icon="@drawable/baseline_format_list_bulleted_white_24"
         app:showAsAction="ifRoom"
-        android:title="test" />
+        android:title="Missions" />
     <item
         android:id="@+id/action_planning"
         android:enabled="true"
-        android:icon="@drawable/baseline_calendar_today_white_24"
+        android:icon="@drawable/baseline_format_list_bulleted_white_24"
         app:showAsAction="ifRoom"
-        android:title="test" />
+        android:title="Mes missions" />
     <item
         android:id="@+id/action_message"
         android:enabled="true"
         android:icon="@drawable/baseline_mail_white_24"
         app:showAsAction="ifRoom"
-        android:title="test" />
+        android:title="Chat" />
 </menu>

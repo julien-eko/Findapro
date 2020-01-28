@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Toast
@@ -228,6 +229,13 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.chat_activity_toolbar, menu)
+
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
     private fun configureToolbar() {
         setSupportActionBar(activity_chat_toolbar)
 
@@ -238,7 +246,23 @@ class ChatActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        onBackPressed()
+
+        var itemid = item?.itemId
+
+
+        if (itemid == R.id.action_open_assignment) {
+
+
+            val intent = Intent(this, AssignmentDetailActivity::class.java)
+            intent.putExtra("id",assignmentId)
+            startActivity(intent)
+
+
+
+        } else {
+            onBackPressed()
+        }
+
         return super.onOptionsItemSelected(item)
     }
 
