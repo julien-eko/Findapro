@@ -30,141 +30,98 @@ import com.julien.findapro.controller.fragment.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigationItemSelectedListener{
+class MainActivity : AppCompatActivity(), Communicator,
+    NavigationView.OnNavigationItemSelectedListener {
 
 
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var sharedPreferences:SharedPreferences
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sharedPreferences = getSharedPreferences("isPro",0)
+        sharedPreferences = getSharedPreferences("isPro", 0)
 
-        if(FirebaseAuth.getInstance().currentUser == null){
-            val intent = Intent(this,
-                FirebaseUIActivity::class.java)
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            val intent = Intent(
+                this,
+                FirebaseUIActivity::class.java
+            )
             startActivity(intent)
 
-        }else{
+        } else {
             supportFragmentManager.inTransaction {
 
 
-                if(sharedPreferences.getBoolean("isPro",false)){
+                if (sharedPreferences.getBoolean("isPro", false)) {
                     //Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
                     replace(
                         R.id.main_activity_frame_layout,
                         AssignmentsListFragment()
                     )
-                }else{
+                } else {
 
                     replace(
                         R.id.main_activity_frame_layout,
                         UserListFragment()
                     )
                 }
-        }
-
-        this.configureToolBar()
-
-        this.configureDrawerLayout()
-
-        this.configureNavigationView()
-
-        this.configureBottomNavigationView()
-
-
-
-
-
-        }
-        //Toast.makeText(baseContext,sharedPreferences.getBoolean("isPro",false).toString(),Toast.LENGTH_SHORT).show()
-
-
-
-    }
-
-
-
-/*
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_activity_toolbar, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        var itemid = item?.itemId
-
-        if(itemid == R.id.action_search){
-            /*
-            val searchUserFragment = SearchUserFragment()
-            searchUserFragment.show(supportFragmentManager, "test")
-
-             */
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-
- */
-
-    /*
-    private var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val notConnected = intent.getBooleanExtra(
-                ConnectivityManager
-                    .EXTRA_NO_CONNECTIVITY, false)
-            if (notConnected) {
-                Toast.makeText(context,"deconecter",Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(context,"conecter",Toast.LENGTH_SHORT).show()
             }
+
+            this.configureToolBar()
+
+            this.configureDrawerLayout()
+
+            this.configureNavigationView()
+
+            this.configureBottomNavigationView()
+
+
         }
+
+
     }
 
-    override fun onStart() {
-        super.onStart()
-        registerReceiver(broadcastReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-    }
 
-    override fun onStop() {
-        super.onStop()
-        unregisterReceiver(broadcastReceiver)
-    }
-
-     */
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         val itemid = p0?.itemId
 
-        if (itemid == R.id.activity_main_drawer_notification){
-            val intent = Intent(this,
-                NotificationListActivity::class.java)
+        if (itemid == R.id.activity_main_drawer_notification) {
+            val intent = Intent(
+                this,
+                NotificationListActivity::class.java
+            )
             startActivity(intent)
         }
 
-        if (itemid == R.id.activity_main_drawer_planning){
-            val intent = Intent(this,
-                PlanningActivity::class.java)
+        if (itemid == R.id.activity_main_drawer_planning) {
+            val intent = Intent(
+                this,
+                PlanningActivity::class.java
+            )
             startActivity(intent)
         }
 
 
-        if (itemid == R.id.activity_main_drawer_information){
-            val intent = Intent(this,
-                InformationForm::class.java)
-            intent.putExtra("edit",true)
+        if (itemid == R.id.activity_main_drawer_information) {
+            val intent = Intent(
+                this,
+                InformationForm::class.java
+            )
+            intent.putExtra("edit", true)
             startActivity(intent)
         }
 
-        if (itemid == R.id.activity_main_drawer_signout){
+        if (itemid == R.id.activity_main_drawer_signout) {
             AuthUI.getInstance().signOut(this)
-            val intent = Intent(this,
-                FirebaseUIActivity::class.java)
+            val intent = Intent(
+                this,
+                FirebaseUIActivity::class.java
+            )
             startActivity(intent)
         }
 
@@ -199,6 +156,7 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
         toggle.syncState()
     }
 
+    //display info user
     private fun configureNavigationView() {
         navigationView = findViewById(R.id.main_activity_nav_view)
         navigationView.setNavigationItemSelectedListener(this)
@@ -217,24 +175,25 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
 
     }
 
-    private fun configureBottomNavigationView(){
+    private fun configureBottomNavigationView() {
         activity_main_bottom_navigation.setOnNavigationItemSelectedListener { item ->
             updateFragment(item.itemId)
         }
     }
 
-    private fun updateFragment(item: Int):Boolean{
-        if(item == R.id.action_list){
+    //change fragment
+    private fun updateFragment(item: Int): Boolean {
+        if (item == R.id.action_list) {
             supportFragmentManager.inTransaction {
 
 
-                if(sharedPreferences.getBoolean("isPro",false)){
+                if (sharedPreferences.getBoolean("isPro", false)) {
                     //Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
                     replace(
                         R.id.main_activity_frame_layout,
                         AssignmentsListFragment()
                     )
-                }else{
+                } else {
 
                     replace(
                         R.id.main_activity_frame_layout,
@@ -244,33 +203,35 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
 
             }
         }
-        if (item == R.id.action_planning){
-            var user=""
-            user = if(sharedPreferences.getBoolean("isPro",false)){
+        if (item == R.id.action_planning) {
+            var user = ""
+            user = if (sharedPreferences.getBoolean("isPro", false)) {
                 "proUserId"
-            }else{
+            } else {
                 "userId"
             }
             supportFragmentManager.inTransaction {
                 replace(
                     R.id.main_activity_frame_layout,
-                    AssignmentsInProgressFragment(),user)
+                    AssignmentsInProgressFragment(), user
+                )
 
             }
 
         }
-        if(item == R.id.action_message){
+        if (item == R.id.action_message) {
             //Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()
-            var user=""
-            user = if(sharedPreferences.getBoolean("isPro",false)){
+            var user = ""
+            user = if (sharedPreferences.getBoolean("isPro", false)) {
                 "proUserId"
-            }else{
+            } else {
                 "userId"
             }
             supportFragmentManager.inTransaction {
-                    replace(
-                        R.id.main_activity_frame_layout,
-                        ChatListFragment(),user)
+                replace(
+                    R.id.main_activity_frame_layout,
+                    ChatListFragment(), user
+                )
 
             }
 
@@ -284,18 +245,20 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
         fragmentTransaction.commit()
     }
 
-
-    override fun passDataUserList(job:String,maxDistance:Float,rating:Double){
+    //////////////////////////////
+    /// COMMUNICATION WITH FRAGMENT
+    ///////////////////////////////
+    override fun passDataUserList(job: String, maxDistance: Float, rating: Double) {
         val bundle = Bundle()
-        bundle.putString("job",job)
-        bundle.putFloat("maxDistance",maxDistance)
-        bundle.putDouble("rating",rating)
+        bundle.putString("job", job)
+        bundle.putFloat("maxDistance", maxDistance)
+        bundle.putDouble("rating", rating)
 
         val transaction = this.supportFragmentManager.beginTransaction()
         val userListFragment = UserListFragment()
         userListFragment.arguments = bundle
 
-        transaction.replace(R.id.main_activity_frame_layout,userListFragment)
+        transaction.replace(R.id.main_activity_frame_layout, userListFragment)
         transaction.addToBackStack(null)
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         transaction.commit()
@@ -303,14 +266,14 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
 
     override fun passDataAssignmentList(maxDistance: Float, rating: Double) {
         val bundle = Bundle()
-        bundle.putFloat("maxDistance",maxDistance)
-        bundle.putDouble("rating",rating)
+        bundle.putFloat("maxDistance", maxDistance)
+        bundle.putDouble("rating", rating)
 
         val transaction = this.supportFragmentManager.beginTransaction()
         val assignmentListFragment = AssignmentsListFragment()
         assignmentListFragment.arguments = bundle
 
-        transaction.replace(R.id.main_activity_frame_layout,assignmentListFragment)
+        transaction.replace(R.id.main_activity_frame_layout, assignmentListFragment)
         transaction.addToBackStack(null)
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         transaction.commit()
@@ -318,13 +281,13 @@ class MainActivity : AppCompatActivity(),Communicator, NavigationView.OnNavigati
 
     override fun passDataAssignmentInProgressList(status: String) {
         val bundle = Bundle()
-        bundle.putString("status",status)
+        bundle.putString("status", status)
 
         val transaction = this.supportFragmentManager.beginTransaction()
         val assignmentInProgressFragment = AssignmentsInProgressFragment()
         assignmentInProgressFragment.arguments = bundle
 
-        transaction.replace(R.id.main_activity_frame_layout,assignmentInProgressFragment)
+        transaction.replace(R.id.main_activity_frame_layout, assignmentInProgressFragment)
         transaction.addToBackStack(null)
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         transaction.commit()

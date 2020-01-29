@@ -29,6 +29,7 @@ class Notification {
 
     companion object{
 
+        //create notification in db
         fun createNotificationInDb(userType:String,idUserRecieve:String,otherUserId: String?,assignmentId: String,titleNotification: String?,textNotification: String?,cause: String?){
             val db = FirebaseFirestore.getInstance()
 

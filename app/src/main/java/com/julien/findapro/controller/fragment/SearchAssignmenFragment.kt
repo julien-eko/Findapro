@@ -32,8 +32,8 @@ class SearchAssignmenFragment : DialogFragment() {
 
             comm = activity as Communicator
 
-            //configureButtonDate(view)
 
+            //seekbar
             view.fragment_search_assignment_seekBar.setOnSeekBarChangeListener(object :
                 SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(
@@ -44,17 +44,18 @@ class SearchAssignmenFragment : DialogFragment() {
                 }
 
                 override fun onStartTrackingTouch(seek: SeekBar) {
-                    // write custom code for progress is started
                 }
 
                 override fun onStopTrackingTouch(seek: SeekBar) {
                 }
             })
 
+            //ratingbar
             view.fragment_search_assignment_ratingbar.setOnRatingBarChangeListener { ratingBar, fl, b ->
                 view.fragment_search_assignment_rating_textview.text = ratingBar.rating.toString() + "/5"
             }
 
+            //start search and update recycler view
             view.fragment_search_assignment_button.setOnClickListener {
                 comm.passDataAssignmentList(
 

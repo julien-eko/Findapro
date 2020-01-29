@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 class PlanningActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
-    private val planningList:ArrayList<HashMap<String,Any?>> = ArrayList()
+    private val planningList: ArrayList<HashMap<String, Any?>> = ArrayList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,31 +37,40 @@ class PlanningActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("isPro", 0)
 
-        if(Internet.isInternetAvailable(this)){
+        //check internet connexion
+        if (Internet.isInternetAvailable(this)) {
             loadPlanning()
             GlobalScope.launch {
                 delay(2000)
-            if (planningList.isEmpty()){
-                this@PlanningActivity.runOnUiThread(java.lang.Runnable {
-                    activity_planning_list_no_item.visibility = View.VISIBLE
-                })
+                if (planningList.isEmpty()) {
+                    this@PlanningActivity.runOnUiThread(java.lang.Runnable {
+                        activity_planning_list_no_item.visibility = View.VISIBLE
+                    })
 
-            }}
-        }else{
-            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
     }
 
 
-    private fun loadPlanning(){
+    //search in db assignment with date and add in list and load recycler view
+    private fun loadPlanning() {
         val db = FirebaseFirestore.getInstance()
-        val user:String = if(sharedPreferences.getBoolean("isPro",false)) "users" else "pro users"
-        val otherUserId:String = if(sharedPreferences.getBoolean("isPro",false)) "userId" else "proUserId"
-        val myUserId:String = if(sharedPreferences.getBoolean("isPro",false)) "proUserId" else "userId"
-        val userType:String = if (sharedPreferences.getBoolean("isPro",false)) "proUserId" else "userId"
+        val user: String =
+            if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
+        val otherUserId: String =
+            if (sharedPreferences.getBoolean("isPro", false)) "userId" else "proUserId"
+        val myUserId: String =
+            if (sharedPreferences.getBoolean("isPro", false)) "proUserId" else "userId"
+        val userType: String =
+            if (sharedPreferences.getBoolean("isPro", false)) "proUserId" else "userId"
 
-        db.collection("assignments").whereEqualTo(myUserId,FirebaseAuth.getInstance().currentUser?.uid!!).whereEqualTo("status","inProgress")
+        db.collection("assignments")
+            .whereEqualTo(myUserId, FirebaseAuth.getInstance().currentUser?.uid!!)
+            .whereEqualTo("status", "inProgress")
             .orderBy("dateAssignment").get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
@@ -69,16 +78,17 @@ class PlanningActivity : AppCompatActivity() {
                     db.collection(user).document(document[otherUserId].toString()).get()
                         .addOnSuccessListener { documentUser ->
                             if (documentUser != null) {
-                                if (document["dateAssignment"] != null){
-                                    val planning:HashMap<String,Any?> = hashMapOf(
+                                if (document["dateAssignment"] != null) {
+                                    val planning: HashMap<String, Any?> = hashMapOf(
                                         "full name" to documentUser["full name"].toString(),
                                         "photo" to documentUser["photo"].toString(),
                                         "date" to document["dateAssignment"],
-                                        "isPro" to sharedPreferences.getBoolean("isPro",false),
+                                        "isPro" to sharedPreferences.getBoolean("isPro", false),
                                         "assignmentId" to document.id,
                                         "latitude" to documentUser["latitude"],
                                         "longitude" to documentUser["longitude"],
-                                        "uid" to documentUser.id)
+                                        "uid" to documentUser.id
+                                    )
 
                                     planningList.add(planning)
 
@@ -108,7 +118,6 @@ class PlanningActivity : AppCompatActivity() {
                 }
 
 
-
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents: ", exception)
@@ -132,11 +141,13 @@ class PlanningActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun planningItemClicked(planningItem : HashMap<String,Any?>,button:String) {
+    //click on item in list
+    private fun planningItemClicked(planningItem: HashMap<String, Any?>, button: String) {
 
-        if(Internet.isInternetAvailable(this)){
+        if (Internet.isInternetAvailable(this)) {
             when (button) {
                 "profil" -> {
+                    //open profil
                     val intent = Intent(
                         this,
                         ProfilActivity::class.java
@@ -145,30 +156,34 @@ class PlanningActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 "message" -> {
+                    //open chat
                     val intent = Intent(this, ChatActivity::class.java)
-                    intent.putExtra("assignment",planningItem["assignmentId"].toString())
+                    intent.putExtra("assignment", planningItem["assignmentId"].toString())
                     startActivity(intent)
                 }
                 "detail" -> {
+                    //open detail assignment acticity
                     val intent = Intent(this, AssignmentDetailActivity::class.java)
-                    intent.putExtra("id",planningItem["assignmentId"].toString())
+                    intent.putExtra("id", planningItem["assignmentId"].toString())
                     startActivity(intent)
                 }
                 "map" -> {
-                    val intent = Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("https://www.google.com/maps/search/?api=1&query=${planningItem["latitude"].toString()},${planningItem["longitude"].toString()}"));
+                    //open google map with position's user
+                    val intent = Intent(
+                        android.content.Intent.ACTION_VIEW,
+                        Uri.parse("https://www.google.com/maps/search/?api=1&query=${planningItem["latitude"].toString()},${planningItem["longitude"].toString()}")
+                    );
                     startActivity(intent);
                 }
             }
-        }else{
-            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
-
 
 
     }
 
-    companion object{
+    companion object {
         private const val TAG = "Planning activity"
     }
 }

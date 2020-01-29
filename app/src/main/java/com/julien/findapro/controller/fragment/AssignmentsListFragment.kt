@@ -43,13 +43,14 @@ class AssignmentsListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        //button search
         fragment_assignment_list_cancel_search_button.setOnClickListener {
             fragment_assignment_list_cancel_search_button.visibility = View.GONE
             assigmentsList.clear()
             if(Internet.isInternetAvailable(context)){
                 loadData()
             }else{
-                Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -73,6 +74,7 @@ class AssignmentsListFragment : Fragment() {
         }
     }
 
+    //load data and display in recycler view
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
 
@@ -114,6 +116,7 @@ class AssignmentsListFragment : Fragment() {
             }
     }
 
+    //update recycler view with filter choose by user
     private fun searchAssignment(minRating:Double,maxDistance:Float){
         val db = FirebaseFirestore.getInstance()
 
@@ -182,21 +185,25 @@ class AssignmentsListFragment : Fragment() {
                 Log.w("access db", "Error getting data", exception)
             }
     }
+
+    //clik on item recycler view
     private fun assignmentItemClicked(assignmentItem : HashMap<String,String>,isProfil:Boolean) {
         if(Internet.isInternetAvailable(context)){
             if (isProfil){
+                //open profil when click on image
                 val intent = Intent(context,
                     ProfilActivity::class.java)
                 intent.putExtra("id",assignmentItem["userId"])
                 startActivity(intent)
             }else{
+                //else open choice activity
                 val intent = Intent(context,
                     AssignmentsChoiceActivity::class.java)
                 intent.putExtra("id",assignmentItem["id"])
                 startActivity(intent)
             }
         }else{
-            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
 
 
@@ -212,7 +219,6 @@ class AssignmentsListFragment : Fragment() {
                     if (arguments?.getDouble("rating") == null) 0.0 else arguments?.getDouble("rating")!!
 
                 searchAssignment(rating,arguments?.getFloat("maxDistance")!!)
-                //Toast.makeText(context,arguments?.getFloat("maxDistance")!!.toString(),Toast.LENGTH_SHORT).show()
 
             } else {
                 fragment_assignment_list_cancel_search_button.visibility = View.GONE
@@ -233,7 +239,7 @@ class AssignmentsListFragment : Fragment() {
 
             }
         }else{
-            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
 
         super.onResume()

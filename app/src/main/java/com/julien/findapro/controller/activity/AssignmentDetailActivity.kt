@@ -44,7 +44,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
     private lateinit var assignmentId: String
     private var assignment: Assignment? = null
     private lateinit var sharedPreferences: SharedPreferences
-    private var userType =""
+    private var userType = ""
     private var latitude = 0.0
     private var longitude = 0.0
 
@@ -54,72 +54,86 @@ class AssignmentDetailActivity : AppCompatActivity() {
         assignmentId = intent.getStringExtra("id") ?: "default value"
 
         configureToolbar()
-        if(Internet.isInternetAvailable(this)){
-loadAssignment()
-        }else{
-            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+
+        //check internet connexion
+        if (Internet.isInternetAvailable(this)) {
+            loadAssignment()
+        } else {
+            Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
         sharedPreferences = getSharedPreferences("isPro", 0)
-        //Toast.makeText(this,sharedPreferences.getBoolean("isPro",false).toString(),Toast.LENGTH_SHORT).show()
-        userType = if(sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
+
+        userType = if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
 
 
+        //button add date in db
         activity_assignment_detail_intervention_date_button.setOnClickListener {
-            if(Internet.isInternetAvailable(this)){
+            if (Internet.isInternetAvailable(this)) {
                 pickDateTime()
-            }else{
-                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
             }
 
 
         }
 
+        //button cancel assignment
         activity_assignment_detail_cancel_assignment_button.setOnClickListener {
-            if(Internet.isInternetAvailable(this)){
+            if (Internet.isInternetAvailable(this)) {
                 cancelAssignment()
-            }else{
-                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
             }
 
         }
 
+        //button finish assignment
         activity_assignment_detail_finish_assignment_button.setOnClickListener {
-            if(Internet.isInternetAvailable(this)){
+            if (Internet.isInternetAvailable(this)) {
                 finishAssignmentDialog()
-            }else{
-                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
             }
 
         }
 
+        //button display user profil
         activity_assignment_detail_photo_imageview.setOnClickListener {
-            if(Internet.isInternetAvailable(this)){
-                val id = if(sharedPreferences.getBoolean("isPro", false)) assignment?.proUserId else assignment?.userId
-                val intent = Intent(this,
-                    ProfilActivity::class.java)
-                intent.putExtra("id",id)
+            if (Internet.isInternetAvailable(this)) {
+                val id = if (sharedPreferences.getBoolean(
+                        "isPro",
+                        false
+                    )
+                ) assignment?.proUserId else assignment?.userId
+                val intent = Intent(
+                    this,
+                    ProfilActivity::class.java
+                )
+                intent.putExtra("id", id)
                 startActivity(intent)
-            }else{
-                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
             }
 
         }
 
+        //button open google map
         activity_assignment_detail_direction_button.setOnClickListener {
-            if(Internet.isInternetAvailable(this)){
+            if (Internet.isInternetAvailable(this)) {
                 openGoogleMap()
-            }else{
-                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
             }
 
         }
 
     }
 
+
+    //read assignment in db
     private fun loadAssignment() {
         val db = FirebaseFirestore.getInstance()
-        //var assignment:Assignment?
         val docRef = db.collection("assignments").document(intent.getStringExtra("id"))
         docRef.get().addOnSuccessListener { documentSnapshot ->
             assignment = documentSnapshot.toObject(Assignment::class.java)
@@ -142,6 +156,7 @@ loadAssignment()
 
     }
 
+    //update view with user info in db
     private fun displayDataUser(isPro: Boolean) {
         val db = FirebaseFirestore.getInstance()
 
@@ -199,6 +214,7 @@ loadAssignment()
 
     }
 
+
     private fun pendingAssignment() {
         activity_assignment_detail_created_date_textview.text =
             convertDate(assignment?.dateCreated, false)
@@ -229,7 +245,7 @@ loadAssignment()
     private fun inProgressAssignment() {
         activity_assignment_detail_intervention_date_linearlayout.visibility = View.VISIBLE
 
-        if (sharedPreferences.getBoolean("isPro", false)){
+        if (sharedPreferences.getBoolean("isPro", false)) {
             activity_assignment_detail_direction_button.visibility = View.VISIBLE
         }
 
@@ -250,7 +266,7 @@ loadAssignment()
 
 
                 activity_assignment_detail_intervention_date_textview.text =
-                    "En attente d'une date "
+                    getString(R.string.wait_date)
             }
         } else {
             activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
@@ -294,10 +310,10 @@ loadAssignment()
 
     private fun finishAssignment() {
         activity_assignment_detail_cancel_assignment_button.visibility = View.GONE
-        activity_assignment_detail_finish_assignment_button.visibility =View.GONE
+        activity_assignment_detail_finish_assignment_button.visibility = View.GONE
         activity_assignment_detail_intervention_date_linearlayout.visibility = View.VISIBLE
         activity_assignment_detail_finish_date_linearlayout.visibility = View.VISIBLE
-        activity_assignment_detail_more_information_linearlayout.visibility =View.VISIBLE
+        activity_assignment_detail_more_information_linearlayout.visibility = View.VISIBLE
         activity_assignment_detail_intervention_date_button.visibility = View.GONE
 
         activity_assignment_detail_created_date_textview.text =
@@ -307,14 +323,14 @@ loadAssignment()
             convertDate(assignment?.dateEnd, true)
 
 
-        if (assignment!!.dateAssignment == null){
+        if (assignment!!.dateAssignment == null) {
             activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
-            activity_assignment_detail_intervention_date_textview.text = getString(R.string.no_date_found)
-        }else{
+            activity_assignment_detail_intervention_date_textview.text =
+                getString(R.string.no_date_found)
+        } else {
             activity_assignment_detail_intervention_date_textview.text =
                 convertDate(assignment?.dateAssignment, false)
         }
-
 
 
         val db = FirebaseFirestore.getInstance()
@@ -325,41 +341,43 @@ loadAssignment()
                 "users"
             }
         val userId =
-            if(user == "pro users"){
+            if (user == "pro users") {
                 assignment?.userId
-            }
-            else{
+            } else {
                 assignment?.proUserId
             }
         val userInv =
-            if(user == "pro users"){
+            if (user == "pro users") {
                 "users"
-            }
-            else{
+            } else {
                 "pro users"
             }
         db.collection(userInv).document(userId.toString()).collection("rating")
-            .whereEqualTo("assignmentsId",assignmentId)
+            .whereEqualTo("assignmentsId", assignmentId)
             .get()
             .addOnSuccessListener { documents ->
-                if (documents.size()==0){
+                if (documents.size() == 0) {
                     //not rated
-                    activity_assignment_detail_more_information_textview.text = getString(R.string.not_rated)
+                    activity_assignment_detail_more_information_textview.text =
+                        getString(R.string.not_rated)
                     activity_assignment_detail_rating_button.visibility = View.VISIBLE
                     activity_assignment_detail_rating_button.setOnClickListener {
 
-                        val intent = Intent(this,
-                            RatingActivity::class.java)
-                        intent.putExtra("user",user)
+                        val intent = Intent(
+                            this,
+                            RatingActivity::class.java
+                        )
+                        intent.putExtra("user", user)
                         intent.putExtra("userId", userId)
-                        intent.putExtra("assignment",assignmentId)
+                        intent.putExtra("assignment", assignmentId)
                         startActivity(intent)
                     }
                     //Toast.makeText(this,"pas noté",Toast.LENGTH_SHORT).show()
-                }else{
+                } else {
                     //rated
                     activity_assignment_detail_rating_button.visibility = View.GONE
-                    activity_assignment_detail_more_information_textview.text =getString(R.string.assignment_finish)
+                    activity_assignment_detail_more_information_textview.text =
+                        getString(R.string.assignment_finish)
                     //Toast.makeText(this,"déja noté",Toast.LENGTH_SHORT).show()
                 }
 
@@ -372,14 +390,14 @@ loadAssignment()
 
     private fun cancel() {
         activity_assignment_detail_cancel_assignment_button.visibility = View.GONE
-        activity_assignment_detail_finish_assignment_button.visibility =View.GONE
+        activity_assignment_detail_finish_assignment_button.visibility = View.GONE
         activity_assignment_detail_created_date_textview.text =
             convertDate(assignment?.dateCreated, false)
         activity_assignment_detail_intervention_date_linearlayout.visibility = View.GONE
 
         activity_assignment_detail_more_information_linearlayout.visibility = View.VISIBLE
 
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy",Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val date = dateFormat.format(assignment?.dateEnd).toString()
         if (sharedPreferences.getBoolean("isPro", false)) {
             activity_assignment_detail_more_information_textview.text = "Mission annulé le $date"
@@ -388,7 +406,9 @@ loadAssignment()
         }
     }
 
-    private fun convertDate(date: Date?, whithHour: Boolean): String {
+
+    //formating date
+    fun convertDate(date: Date?, whithHour: Boolean): String {
         var dateFormatDay: SimpleDateFormat
         dateFormatDay = if (whithHour) {
             SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
@@ -400,6 +420,7 @@ loadAssignment()
         return dateFormatDay.format(date).toString()
     }
 
+    //pick date and update in db
     private fun pickDateTime() {
         val currentDateTime = Calendar.getInstance()
         val startYear = currentDateTime.get(Calendar.YEAR)
@@ -416,23 +437,38 @@ loadAssignment()
                 val db = FirebaseFirestore.getInstance()
                 db.collection("assignments").document(assignmentId)
                     .update("dateAssignment", pickedDateTime.time)
-                    .addOnSuccessListener { Log.d("update date", "DocumentSnapshot successfully updated!")
-                        val idReceiver = if(sharedPreferences.getBoolean("isPro", false)) assignment?.userId else assignment?.proUserId
-                        Notification.createNotificationInDb(userType,
+                    .addOnSuccessListener {
+                        Log.d("update date", "DocumentSnapshot successfully updated!")
+                        val idReceiver = if (sharedPreferences.getBoolean(
+                                "isPro",
+                                false
+                            )
+                        ) assignment?.userId else assignment?.proUserId
+                        Notification.createNotificationInDb(
+                            userType,
                             idReceiver.toString(),
                             FirebaseAuth.getInstance().currentUser?.uid!!,
                             assignmentId,
-                            "Nouvelle date d'intervention",
-                            "Une nouvelle date d'intervention vient d'être ajouté à votre mission",
-                            "add date assignment")
-                        loadAssignment()}
-                    .addOnFailureListener { e -> Log.w("update date", "Error updating document", e) }
+                            getString(R.string.new_date_title_notif),
+                            getString(R.string.new_date_text_notif),
+                            "add date assignment"
+                        )
+                        loadAssignment()
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(
+                            "update date",
+                            "Error updating document",
+                            e
+                        )
+                    }
 
             }, startHour, startMinute, DateFormat.is24HourFormat(this)).show()
         }, startYear, startMonth, startDay).show()
     }
 
-    private fun cancelAssignment(){
+    //request confirmation and save in db if user confirm
+    private fun cancelAssignment() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.cancel_assignment))
         builder.setMessage(getString(R.string.cancel_assignment_question))
@@ -442,22 +478,31 @@ loadAssignment()
             val db = FirebaseFirestore.getInstance()
             db.collection("assignments").document(assignmentId)
                 .update("status", "cancel")
-                .addOnSuccessListener { Log.d("update status", "DocumentSnapshot successfully updated!")
-                    val idReceiver = if(sharedPreferences.getBoolean("isPro", false)) assignment?.userId else assignment?.proUserId
-                    Notification.createNotificationInDb(userType,
+                .addOnSuccessListener {
+                    Log.d("update status", "DocumentSnapshot successfully updated!")
+                    val idReceiver = if (sharedPreferences.getBoolean(
+                            "isPro",
+                            false
+                        )
+                    ) assignment?.userId else assignment?.proUserId
+                    Notification.createNotificationInDb(
+                        userType,
                         idReceiver.toString(),
                         FirebaseAuth.getInstance().currentUser?.uid!!,
                         assignmentId,
-                        "Mission Annulée",
-                        "Votre mission a été annulée",
-                        "status update cancel")
-                    }
+                        getString(R.string.cancel_assignment_title_notif),
+                        getString(R.string.cancel_assignment_notif_text),
+                        "status update cancel"
+                    )
+                }
                 .addOnFailureListener { e -> Log.w("update status", "Error updating document", e) }
 
             db.collection("assignments").document(assignmentId)
                 .update("dateEnd", FieldValue.serverTimestamp())
-                .addOnSuccessListener { Log.d("update date", "DocumentSnapshot successfully updated!")
-                    loadAssignment()}
+                .addOnSuccessListener {
+                    Log.d("update date", "DocumentSnapshot successfully updated!")
+                    loadAssignment()
+                }
                 .addOnFailureListener { e -> Log.w("update date", "Error updating document", e) }
         }
 
@@ -469,16 +514,19 @@ loadAssignment()
         builder.show()
     }
 
-    private fun openGoogleMap(){
+    //open google map with position of assignment's user
+    private fun openGoogleMap() {
 
-        val intent = Intent(android.content.Intent.ACTION_VIEW,
-        Uri.parse("https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}"));
+        val intent = Intent(
+            android.content.Intent.ACTION_VIEW,
+            Uri.parse("https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}")
+        );
         startActivity(intent);
 
 
     }
 
-    private fun finishAssignmentDialog(){
+    private fun finishAssignmentDialog() {
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.finish_assignment))
@@ -489,22 +537,31 @@ loadAssignment()
             val db = FirebaseFirestore.getInstance()
             db.collection("assignments").document(assignmentId)
                 .update("status", "finish")
-                .addOnSuccessListener { Log.d("update status", "DocumentSnapshot successfully updated!")
-                    val idReceiver = if(sharedPreferences.getBoolean("isPro", false)) assignment?.userId else assignment?.proUserId
-                    Notification.createNotificationInDb(userType,
+                .addOnSuccessListener {
+                    Log.d("update status", "DocumentSnapshot successfully updated!")
+                    val idReceiver = if (sharedPreferences.getBoolean(
+                            "isPro",
+                            false
+                        )
+                    ) assignment?.userId else assignment?.proUserId
+                    Notification.createNotificationInDb(
+                        userType,
                         idReceiver.toString(),
                         FirebaseAuth.getInstance().currentUser?.uid!!,
                         assignmentId,
-                        "Mission Terminée",
-                        "Votre mission a été terminée",
-                        "status update finish")
+                        getString(R.string.end_assignment_title_notif),
+                        getString(R.string.end_assignment_notif_text),
+                        "status update finish"
+                    )
                 }
                 .addOnFailureListener { e -> Log.w("update status", "Error updating document", e) }
 
             db.collection("assignments").document(assignmentId)
                 .update("dateEnd", FieldValue.serverTimestamp())
-                .addOnSuccessListener { Log.d("update date", "DocumentSnapshot successfully updated!")
-                    loadAssignment()}
+                .addOnSuccessListener {
+                    Log.d("update date", "DocumentSnapshot successfully updated!")
+                    loadAssignment()
+                }
                 .addOnFailureListener { e -> Log.w("update date", "Error updating document", e) }
         }
 
@@ -515,6 +572,11 @@ loadAssignment()
 
         builder.show()
     }
+
+
+    //configure Toolbar and button
+
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.assignment_detail_toolbar, menu)
 
@@ -529,7 +591,7 @@ loadAssignment()
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title = "Description"
+        actionBar?.title = getString(R.string.toolbar_title_describe)
 
 
     }
@@ -541,10 +603,18 @@ loadAssignment()
         if (itemid == R.id.action_open_chat) {
             when (assignment?.status) {
                 "pending" -> {
-                    Toast.makeText(this,getString(R.string.chat_restrict_pending),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        getString(R.string.chat_restrict_pending),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 "refuse" -> {
-                    Toast.makeText(this,getString(R.string.chat_restrict_refuse),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        getString(R.string.chat_restrict_refuse),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 else -> {
                     val intent = Intent(this, ChatActivity::class.java)
@@ -560,12 +630,14 @@ loadAssignment()
         return super.onOptionsItemSelected(item)
     }
 
+
+    //check internet connexion
     override fun onResume() {
         super.onResume()
-        if(Internet.isInternetAvailable(this)){
-loadAssignment()
-        }else{
-            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+        if (Internet.isInternetAvailable(this)) {
+            loadAssignment()
+        } else {
+            Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
     }

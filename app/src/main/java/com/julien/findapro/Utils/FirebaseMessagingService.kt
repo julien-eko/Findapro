@@ -1,4 +1,4 @@
-package com.julien.findapro
+package com.julien.findapro.Utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,12 +11,14 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.julien.findapro.R
 import com.julien.findapro.controller.activity.AssignmentDetailActivity
 import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
 import com.julien.findapro.controller.activity.ChatActivity
 
 class FirebaseMessagingService: FirebaseMessagingService() {
 
+    //when notification create for user in firebase
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d(TAG, "From: ${remoteMessage.from}")
 
@@ -26,32 +28,17 @@ class FirebaseMessagingService: FirebaseMessagingService() {
 
         }
 
+        //send notification
         createNotification(applicationContext,remoteMessage.data["titleNotification"].toString(),remoteMessage.data["textNotification"].toString(),remoteMessage.data["cause"].toString(),remoteMessage.data["assignmentId"].toString())
     }
 
     override fun onNewToken(token: String) {
         Log.d(TAG, "Refreshed token: $token")
 
-        //le token est update dans la db a chaque connexion
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
         sendRegistrationToServer(token)
     }
     private fun sendRegistrationToServer(token: String?) {
 
-/*
-        val db = FirebaseFirestore.getInstance()
-
-        db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).update("token",token)
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
-            .addOnFailureListener {
-                db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).update("token",token)
-                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
-                .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) } }
-
-
- */
         Log.d(TAG, "sendRegistrationTokenToServer($token)")
     }
 
@@ -65,12 +52,6 @@ class FirebaseMessagingService: FirebaseMessagingService() {
     ) {
 
         val intent:Intent?
-
-
-
-         //intent = Intent(this, ChatActivity::class.java).apply {
-            //flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
-        //intentChat.putExtra("assignment",assignmentId)
 
 
         when (cause) {

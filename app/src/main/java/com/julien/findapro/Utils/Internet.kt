@@ -6,7 +6,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.widget.Toast
 
-
+//check internet connexion
 class Internet {
 
     companion object{

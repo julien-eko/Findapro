@@ -29,6 +29,7 @@ class InformationForm : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_information_form)
 
+        //token value
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -67,6 +68,7 @@ class InformationForm : AppCompatActivity() {
 
         }
 
+        //check internet if is ok update or create user information in db
         if(Internet.isInternetAvailable(this)){
             if (intent.getBooleanExtra("edit",false)){
                 information_form_linear_layout_statut.visibility = View.GONE
@@ -104,7 +106,7 @@ class InformationForm : AppCompatActivity() {
                 }
             }
         }else{
-            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
 
 
@@ -113,6 +115,7 @@ class InformationForm : AppCompatActivity() {
 
     }
 
+    //check if edit text are ok
     private fun validateForm():Boolean{
         if(information_form_adress.text.toString().trim() != "" &&
                 information_form_city.text.toString().trim() != "" &&
@@ -146,6 +149,7 @@ class InformationForm : AppCompatActivity() {
     }
 
 
+    //create user information in db
     private fun addInDatabase(){
         val db = FirebaseFirestore.getInstance()
         val rating:Float? = null
@@ -224,6 +228,7 @@ class InformationForm : AppCompatActivity() {
 
     }
 
+    //read user info in db and update view
     private fun loadDatabase(){
         val db = FirebaseFirestore.getInstance()
 
@@ -259,6 +264,7 @@ class InformationForm : AppCompatActivity() {
 
     }
 
+    //edit user info in db
     private fun editDatabase(){
         val db = FirebaseFirestore.getInstance()
 
@@ -333,6 +339,7 @@ class InformationForm : AppCompatActivity() {
 
     }
 
+    //check if adress' user is good
     private fun isGoodAdress(fullAdress:String):Boolean{
 
         var geocoder = Geocoder(this)
@@ -354,12 +361,13 @@ class InformationForm : AppCompatActivity() {
     }
 
 
-    fun alertDialogWrongAdress() {
+    //alert dialog if user adress is not good
+    private fun alertDialogWrongAdress() {
         val builder = AlertDialog.Builder(this)
 
-        builder.setTitle("L'adresse n'est pas valide")
+        builder.setTitle(getString(R.string.adress_not_found))
 
-        builder.setMessage("Vous devez entrer une adresse valide")
+        builder.setMessage(getString(R.string.change_your_adress))
 
         builder.setPositiveButton("OK") { dialog, which ->
 

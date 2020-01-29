@@ -59,8 +59,10 @@ class ChatActivity : AppCompatActivity() {
 
         this.imageViewPreview =  activity_chat_image_chosen_preview
 
+        //send message button
         activity_chat_send_button.setOnClickListener {
             if(!TextUtils.isEmpty(activity_chat_message_edit_text.text) && FirebaseAuth.getInstance().currentUser != null){
+                //message with image or not
                 if(this.imageViewPreview.drawable == null){
                     MessageHelper.createMessageForChat(activity_chat_message_edit_text.text.toString(),FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),FirebaseAuth.getInstance().currentUser?.uid!!,assignmentId)
                     createNotification(true,activity_chat_message_edit_text.text.toString())
@@ -75,10 +77,12 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
+        //check if permission read image is ok
         activity_chat_add_file_button.setOnClickListener{
             checkPermition()
         }
     }
+
 
 
     private fun configureRecyclerView(){
@@ -99,7 +103,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
 
-    fun checkPermition() {
+    private fun checkPermition() {
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -177,7 +181,7 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    // 4 - Handle activity response (after user has chosen or not a picture)
+    // Handle activity response (after user has chosen or not a picture)
     private fun handleResponse(requestCode: Int, resultCode: Int, data: Intent) {
         if (requestCode == RC_CHOOSE_PHOTO) {
             if (resultCode == Activity.RESULT_OK) { //SUCCESS
@@ -242,7 +246,7 @@ class ChatActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title = "Chat"
+        actionBar?.title = getString(R.string.tootlbar_title_chat_activity)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -266,6 +270,7 @@ class ChatActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    //add notification in db
     private fun createNotification(isTextMessage:Boolean,message: String?){
         val db = FirebaseFirestore.getInstance()
         val docRef = db.collection("assignments").document(assignmentId)
@@ -278,7 +283,7 @@ class ChatActivity : AppCompatActivity() {
                             document[userId].toString(),
                             FirebaseAuth.getInstance().currentUser?.uid!!,
                             assignmentId,
-                            "Nouveau message",
+                            getString(R.string.new_message_notification_title),
                             message,
                             "new message")
                     }else{
@@ -286,8 +291,8 @@ class ChatActivity : AppCompatActivity() {
                             document[userId].toString(),
                             FirebaseAuth.getInstance().currentUser?.uid!!,
                             assignmentId,
-                            "Nouvelle image",
-                            "Vous avez reçu une nouvelle image",
+                            getString(R.string.new_image_message_notif_title),
+                            getString(R.string.new_image_notif_text),
                             "new image")
                     }
 

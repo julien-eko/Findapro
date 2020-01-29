@@ -29,8 +29,7 @@ class SearchUserFragment : DialogFragment() {
 
             comm = activity as Communicator
 
-            //configureButtonDate(view)
-
+            //seekbar
             view.fragment_search_user_seekBar.setOnSeekBarChangeListener(object :
                 SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(
@@ -48,10 +47,12 @@ class SearchUserFragment : DialogFragment() {
                 }
             })
 
+            //ratingbar
             view.fragment_search_user_ratingbar.setOnRatingBarChangeListener { ratingBar, fl, b ->
                 view.fragment_search_user_rating_textview.text = ratingBar.rating.toString() + "/5"
             }
 
+            //start search and update recycler view
             view.fragment_search_user_button.setOnClickListener {
                 comm.passDataUserList(
                     view.fragment__search_user_spinner.selectedItem.toString(),

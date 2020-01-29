@@ -28,9 +28,9 @@ import kotlinx.coroutines.launch
 
 class NotificationListActivity : AppCompatActivity() {
 
-    private lateinit var userType:String
+    private lateinit var userType: String
     private lateinit var sharedPreferences: SharedPreferences
-    private var notificationList:ArrayList<Notification> = ArrayList()
+    private var notificationList: ArrayList<Notification> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,30 +38,32 @@ class NotificationListActivity : AppCompatActivity() {
         configureToolbar()
 
         sharedPreferences = getSharedPreferences("isPro", 0)
-        userType = if(sharedPreferences.getBoolean("isPro", false)) "pro users" else "users"
+        userType = if (sharedPreferences.getBoolean("isPro", false)) "pro users" else "users"
 
-        if(Internet.isInternetAvailable(this)){
+        if (Internet.isInternetAvailable(this)) {
             loadRecyclerView()
 
             GlobalScope.launch {
                 delay(2000)
-                if (notificationList.isEmpty()){
+                if (notificationList.isEmpty()) {
                     this@NotificationListActivity.runOnUiThread(java.lang.Runnable {
                         activity_planning_list_no_item.visibility = View.VISIBLE
                     })
 
-                }}
-        }else{
-            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            Toast.makeText(this, "Pas de connexion internet", Toast.LENGTH_SHORT).show()
         }
-
 
 
     }
 
-    private fun loadRecyclerView(){
+    //read db and add in list every notification's user
+    private fun loadRecyclerView() {
         val db = FirebaseFirestore.getInstance()
-        db.collection(userType).document(FirebaseAuth.getInstance().currentUser?.uid!!).collection("notification").orderBy("dateCreated",Query.Direction.DESCENDING)
+        db.collection(userType).document(FirebaseAuth.getInstance().currentUser?.uid!!)
+            .collection("notification").orderBy("dateCreated", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
@@ -70,8 +72,15 @@ class NotificationListActivity : AppCompatActivity() {
                 }
 
                 recycler_view_notification_list_activity.layoutManager = LinearLayoutManager(this)
-                recycler_view_notification_list_activity.adapter = NotificationListAdapter(notificationList,
-                    { notificationItem : Notification,isProfil:Boolean ->notificationItemClicked(notificationItem,isProfil) },userType)
+                recycler_view_notification_list_activity.adapter =
+                    NotificationListAdapter(notificationList,
+                        { notificationItem: Notification, isProfil: Boolean ->
+                            notificationItemClicked(
+                                notificationItem,
+                                isProfil
+                            )
+                        }, userType
+                    )
             }
 
             .addOnFailureListener { exception ->
@@ -86,7 +95,7 @@ class NotificationListActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title = "Notification"
+        actionBar?.title = getString(R.string.Toolbar_title_notification_activity)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -94,29 +103,33 @@ class NotificationListActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun notificationItemClicked(notificationItem : Notification,isProfil:Boolean) {
+
+    //click on notification
+    private fun notificationItemClicked(notificationItem: Notification, isProfil: Boolean) {
 
 
-        if (isProfil){
+        if (isProfil) {
             val intent = Intent(this, ProfilActivity::class.java)
-            intent.putExtra("id",notificationItem.otherUserId)
+            intent.putExtra("id", notificationItem.otherUserId)
             startActivity(intent)
-        }else{
+        } else {
             when (notificationItem.cause) {
                 "new message" -> {
                     val intent = Intent(this, ChatActivity::class.java)
-                    intent.putExtra("assignment",notificationItem.assignmentId)
+                    intent.putExtra("assignment", notificationItem.assignmentId)
                     startActivity(intent)
                 }
                 "new assignment created" -> {
-                    val intent = Intent(this,
-                        AssignmentsChoiceActivity::class.java)
-                    intent.putExtra("id",notificationItem.assignmentId)
+                    val intent = Intent(
+                        this,
+                        AssignmentsChoiceActivity::class.java
+                    )
+                    intent.putExtra("id", notificationItem.assignmentId)
                     startActivity(intent)
                 }
                 else -> {
                     val intent = Intent(this, AssignmentDetailActivity::class.java)
-                    intent.putExtra("id",notificationItem.assignmentId)
+                    intent.putExtra("id", notificationItem.assignmentId)
                     startActivity(intent)
                 }
             }
@@ -125,7 +138,7 @@ class NotificationListActivity : AppCompatActivity() {
 
     }
 
-    companion object{
+    companion object {
         private const val TAG = "NotificationList"
     }
 }

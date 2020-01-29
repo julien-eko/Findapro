@@ -28,15 +28,15 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
 
         val db = FirebaseFirestore.getInstance()
 
+        //check internet connexion
         if(Internet.isInternetAvailable(this)){
             loadData(db)
         }else{
-            Toast.makeText(this,"Pas de connexion internet", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
 
-
-
+        //accept button, update statut in db and create new notification
         assignments_choice_activity_accept_button.setOnClickListener {
             if(Internet.isInternetAvailable(this)){
                 db.collection("assignments").document(intent.getStringExtra("id"))
@@ -50,8 +50,8 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                                         document["userId"].toString(),
                                         FirebaseAuth.getInstance().currentUser?.uid!!,
                                         intent.getStringExtra("id"),
-                                        "Mission acceptée",
-                                        "Votre mission a été acceptée",
+                                        getString(R.string.accept_assignment_notification_title),
+                                        getString(R.string.acept_assignment_text_notification),
                                         "status update in progress")
                                 }
 
@@ -74,7 +74,7 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
 
                 finish()
             }else{
-                Toast.makeText(this,"Pas de connexion internet", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -96,8 +96,8 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                                             document["userId"].toString(),
                                             FirebaseAuth.getInstance().currentUser?.uid!!,
                                             intent.getStringExtra("id"),
-                                            "Mission refusée",
-                                            "Votre mission a été refusée",
+                                            getString(R.string.assignment_refuse_notification_title),
+                                            getString(R.string.assignment_refuse_text_notification),
                                             "status update refuse")
                                     }
                                 }
@@ -108,7 +108,7 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                             finish()
                         }
                 }else{
-                    Toast.makeText(this,"Pas de connexion internet", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
                 }
 
 
@@ -156,7 +156,7 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title = "Proposition de mission"
+        actionBar?.title = getString(R.string.toolbar_title_assignment_choice)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

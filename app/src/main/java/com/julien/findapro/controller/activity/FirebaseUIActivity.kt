@@ -27,8 +27,9 @@ class FirebaseUIActivity : AppCompatActivity() {
         }
     }
 
+
+    //sign in with google
     private fun createSignInIntent() {
-        // [START auth_fui_create_intent]
         // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build())
@@ -42,7 +43,6 @@ class FirebaseUIActivity : AppCompatActivity() {
                 .build(),
             RC_SIGN_IN
         )
-        // [END auth_fui_create_intent]
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -52,11 +52,7 @@ class FirebaseUIActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                // Successfully signed in
-                //val user = FirebaseAuth.getInstance().currentUser
-                //val intent = Intent(this,MainActivity::class.java)
                 val db = FirebaseFirestore.getInstance()
-                //startActivity(intent)
 
                 FirebaseInstanceId.getInstance().instanceId
                     .addOnCompleteListener(OnCompleteListener { task ->
@@ -68,6 +64,7 @@ class FirebaseUIActivity : AppCompatActivity() {
                         // Get new Instance ID token
                         val token = task.result?.token
 
+                        //update token in db
                         db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).update("token",token)
                             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
                             .addOnFailureListener {
@@ -113,10 +110,7 @@ class FirebaseUIActivity : AppCompatActivity() {
                     Log.e("db","get fail with",exeption)
                 }
             } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
+                // Sign in failed. If response is null the user canceled
             }
         }
     }

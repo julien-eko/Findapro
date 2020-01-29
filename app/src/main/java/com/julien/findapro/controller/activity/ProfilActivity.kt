@@ -35,17 +35,16 @@ class ProfilActivity : AppCompatActivity() {
 
         configureToolbar()
 
+        //check internet connexion
         if(Internet.isInternetAvailable(this)){
             displayInformation()
         }else{
-            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
 
-
-
-        //load()
     }
 
+    //read information user in db and update view
     private fun displayInformation(){
         val db =FirebaseFirestore.getInstance()
 
@@ -100,6 +99,7 @@ class ProfilActivity : AppCompatActivity() {
 
     }
 
+    //read all rate and add in list for display recycler view
     private fun load(userRater:String,userType:String){
         val db =FirebaseFirestore.getInstance()
 
@@ -148,7 +148,7 @@ class ProfilActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title = "Profil"
+        actionBar?.title = getString(R.string.toolbar_title_profil_activity)
 
 
     }
@@ -173,7 +173,7 @@ class ProfilActivity : AppCompatActivity() {
 
             }
         }else{
-            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
 
 

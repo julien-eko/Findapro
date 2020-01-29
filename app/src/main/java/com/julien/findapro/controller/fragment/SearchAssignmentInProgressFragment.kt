@@ -32,10 +32,7 @@ class SearchAssignmentInProgressFragment : DialogFragment() {
 
             comm = activity as Communicator
 
-            //configureButtonDate(view)
-
-
-
+            //start search and update recycler view
             view.fragment_search_assignment_inprogress_button.setOnClickListener {
                 comm.passDataAssignmentInProgressList(
                     view.fragment_search_assignment_inprogress_spinner.selectedItem.toString()

@@ -50,5 +50,31 @@
     <string name="add_comment">Ajouté un commentaire</string>
     <string name="chat_restrict_pending">Le chat n\'est pas disponible pour les missions en attente</string>
     <string name="chat_restrict_refuse">Le chat n\'est pas disponible pour les missions refusées</string>
+    <string name="no_connexion">Pas de connexion internet</string>
+    <string name="wait_date">En attente d\'une date</string>
+    <string name="new_date_title_notif">Nouvelle date d\'intervention</string>
+    <string name="new_date_text_notif">Une nouvelle date d\'intervention vient d\'être ajouté à votre mission</string>
+    <string name="cancel_assignment_title_notif">Mission Annulée</string>
+    <string name="cancel_assignment_notif_text">Votre mission a été annulée</string>
+    <string name="end_assignment_title_notif">Mission Terminée</string>
+    <string name="end_assignment_notif_text">Votre mission a été terminée</string>
+    <string name="new_assignment_title_notif">Nouvelle mission</string>
+    <string name="new_assignment_text_notif">Vous avez une nouvelle mission en attente</string>
+    <string name="toolbar_title_describe">Description</string>
+    <string name="title_toolbar_assignment_activity">Demande d\'intervention</string>
+    <string name="toolbar_title_assignment_choice">Proposition de mission</string>
+    <string name="accept_assignment_notification_title">Mission acceptée</string>
+    <string name="acept_assignment_text_notification">Votre mission a été acceptée</string>
+    <string name="assignment_refuse_notification_title">Mission refusée</string>
+    <string name="assignment_refuse_text_notification">Votre mission a été refusée</string>
+    <string name="tootlbar_title_chat_activity">Chat</string>
+    <string name="new_message_notification_title">Nouveau message</string>
+    <string name="new_image_message_notif_title">Nouvelle image</string>
+    <string name="new_image_notif_text">Vous avez reçu une nouvelle image</string>
+    <string name="adress_not_found">L\'adresse n\'est pas valide</string>
+    <string name="change_your_adress">Vous devez entrer une adresse valide</string>
+    <string name="Toolbar_title_notification_activity">Notification</string>
+    <string name="toolbar_title_profil_activity">Profil</string>
+    <string name="toolbar_title_ratin_activity">Notation</string>
 
 </resources>

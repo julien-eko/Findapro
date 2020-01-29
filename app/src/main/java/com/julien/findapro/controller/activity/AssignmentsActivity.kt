@@ -23,13 +23,15 @@ class AssignmentsActivity : AppCompatActivity() {
 
         configureToolbar()
 
+        //check internet connexion
         if(Internet.isInternetAvailable(this)){
             loadDb()
         }else{
-            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
 
 
+        //button save in db if edit text is not empty
         assignments_save_button.setOnClickListener {
             if(activity_assignments_describe_edit_text.text.toString().trim() == ""){
                 Toast.makeText(this,getString(R.string.no_blank_field),Toast.LENGTH_SHORT).show()
@@ -37,7 +39,7 @@ class AssignmentsActivity : AppCompatActivity() {
                 if(Internet.isInternetAvailable(this)){
                     saveInDb()
                 }else{
-                    Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -47,6 +49,8 @@ class AssignmentsActivity : AppCompatActivity() {
         }
     }
 
+
+    //load user info in db and update view
     private fun loadDb(){
         val db = FirebaseFirestore.getInstance()
 
@@ -73,19 +77,13 @@ class AssignmentsActivity : AppCompatActivity() {
                 Log.d("load document pro user", "get failed with ", exception)
             }
     }
+
+    //create new assignment and notification in db
     private fun saveInDb(){
         val db = FirebaseFirestore.getInstance()
 
         val assignments = Assignment(FirebaseAuth.getInstance().currentUser?.uid!!,intent.getStringExtra("proId"),"pending", activity_assignments_describe_edit_text.text.toString(),null)
-        /*
-        val assignments = hashMapOf(
-            "dateCreated" to
-            "user id" to FirebaseAuth.getInstance().currentUser?.uid!!,
-            "pro user id" to intent.getStringExtra("proId"),
-            "describe" to activity_assignments_describe_edit_text.text.toString(),
-            "status" to "pending"
-        )
-*/
+
         val uuid = UUID.randomUUID()
         db.collection("assignments").document(uuid.toString()).set(assignments)
 
@@ -95,8 +93,8 @@ class AssignmentsActivity : AppCompatActivity() {
                     assignments.proUserId.toString(),
                     FirebaseAuth.getInstance().currentUser?.uid!!,
                     uuid.toString(),
-                    "Nouvelle mission",
-                    "Vous avez une nouvelle mission en attente",
+                    getString(R.string.new_assignment_title_notif),
+                    getString(R.string.new_assignment_text_notif),
                     "new assignment created")
 
             }
@@ -106,13 +104,15 @@ class AssignmentsActivity : AppCompatActivity() {
         finish()
     }
 
+
+    //configure toolbar
     private fun configureToolbar() {
         setSupportActionBar(activity_assignements_toolbar)
 
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.setTitle("Demande d'intervention")
+        actionBar?.setTitle(getString(R.string.title_toolbar_assignment_activity))
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

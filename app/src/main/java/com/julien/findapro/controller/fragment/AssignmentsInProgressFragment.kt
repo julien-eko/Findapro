@@ -50,17 +50,19 @@ class AssignmentsInProgressFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         sharedPreferences = activity!!.getSharedPreferences("isPro",0)
 
+        //search button
         fragment_assignment_inprogress_list_cancel_search_button.setOnClickListener {
             fragment_assignment_inprogress_list_cancel_search_button.visibility = View.GONE
             assigmentsList.clear()
             if(Internet.isInternetAvailable(context)){
                 loadData()
             }else{
-                Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
             }
 
         }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_activity_toolbar, menu)
@@ -82,6 +84,7 @@ class AssignmentsInProgressFragment : Fragment() {
     }
 
 
+    //load data of db and display recycler view
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
         val user:String = if(sharedPreferences.getBoolean("isPro",false)) "users" else "pro users"
@@ -166,6 +169,7 @@ class AssignmentsInProgressFragment : Fragment() {
             }
     }
 
+    //update recycler view with search filter
     private fun searchByStatus(status:String){
 
         val statusAssignment:Any = when (status) {
@@ -275,20 +279,24 @@ class AssignmentsInProgressFragment : Fragment() {
                 Log.w("access db", "Error getting data", exception)
             }
     }
+
+    //click listerner on item recycler view
     private fun assignmentItemClicked(assignmentItem : HashMap<String,Any?>,isProfil:Boolean) {
         if(Internet.isInternetAvailable(context)){
             if (isProfil){
+                //open profil
                 val intent = Intent(context,
                     ProfilActivity::class.java)
                 intent.putExtra("id",assignmentItem["idUser"].toString())
                 startActivity(intent)
             }else{
+                //oppen detail activity
                 val intent = Intent(context, AssignmentDetailActivity::class.java)
                 intent.putExtra("id",assignmentItem["id"].toString())
                 startActivity(intent)
             }
         }else{
-            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
 
 
@@ -304,18 +312,15 @@ class AssignmentsInProgressFragment : Fragment() {
 
     override fun onResume() {
 
+        //check internet
         if(Internet.isInternetAvailable(context)){
             if (arguments != null) {
-                //fragment_user_list_cancel_search_button.visibility = View.VISIBLE
                 fragment_assignment_inprogress_list_cancel_search_button.visibility = View.VISIBLE
-                //assigmentsList.clear()
-                //Toast.makeText(context,arguments?.getString("status"),Toast.LENGTH_SHORT).show()
                 assigmentsList.clear()
                 searchByStatus(arguments?.getString("status")!!)
 
             } else {
                 fragment_assignment_inprogress_list_cancel_search_button.visibility = View.GONE
-                //fragment_user_list_cancel_search_button.visibility = View.GONE
                 assigmentsList.clear()
                 loadData()
                 GlobalScope.launch {
@@ -330,7 +335,7 @@ class AssignmentsInProgressFragment : Fragment() {
                 }
             }
         }else{
-            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
 
 

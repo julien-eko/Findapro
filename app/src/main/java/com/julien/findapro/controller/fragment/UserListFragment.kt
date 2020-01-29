@@ -54,7 +54,7 @@ class UserListFragment : Fragment() {
                 userList.clear()
                 nearUserList(30000f)
             }else{
-                Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -79,6 +79,7 @@ class UserListFragment : Fragment() {
         }
     }
 
+    /*
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
 
@@ -123,9 +124,12 @@ class UserListFragment : Fragment() {
     }
 
 
+     */
+    //click on item
     private fun userItemClicked(userItem: HashMap<String, String>, isProfil: Boolean) {
         if(Internet.isInternetAvailable(context)){
             if (isProfil) {
+                //open profil
                 val intent = Intent(
                     context,
                     ProfilActivity::class.java
@@ -133,6 +137,7 @@ class UserListFragment : Fragment() {
                 intent.putExtra("id", userItem["uid"])
                 startActivity(intent)
             } else {
+                //open assignment activity
                 val intent = Intent(
                     context,
                     AssignmentsActivity::class.java
@@ -141,12 +146,13 @@ class UserListFragment : Fragment() {
                 startActivity(intent)
             }
         }else{
-            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
 
 
     }
 
+    //add in list users which are within a predefined radius
     private fun nearUserList(radiusInMetters: Float) {
         val db = FirebaseFirestore.getInstance()
 
@@ -204,6 +210,7 @@ class UserListFragment : Fragment() {
 
     }
 
+    //search in db user with job and minimum rating
     private fun searchUserList(radiusInMetters: Float, job: String, minRating: Double) {
         val db = FirebaseFirestore.getInstance()
 
@@ -291,7 +298,7 @@ class UserListFragment : Fragment() {
                 }
             }
         }else{
-            Toast.makeText(context,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
 
 

@@ -26,7 +26,7 @@ class RatingActivity : AppCompatActivity() {
         if(Internet.isInternetAvailable(this)){
             load()
         }else{
-            Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
 
         activity_rating_button.setOnClickListener {
@@ -34,11 +34,13 @@ class RatingActivity : AppCompatActivity() {
             if(Internet.isInternetAvailable(this)){
                 addRating()
             }else{
-                Toast.makeText(this,"Pas de connexion internet",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+
+    //read in db user information and update view
     private fun load(){
         val db = FirebaseFirestore.getInstance()
         val user = if(intent.getStringExtra("user") == "users") "pro users" else "users"
@@ -61,6 +63,8 @@ class RatingActivity : AppCompatActivity() {
                     Log.d("load user data", "get failed with ", exception)
                 }
     }
+
+    //create new rate in db
     private fun addRating(){
         val db = FirebaseFirestore.getInstance()
 
@@ -72,6 +76,7 @@ class RatingActivity : AppCompatActivity() {
         updateRatingUser()
     }
 
+    //update rating user in db
     private fun updateRatingUser(){
         val db = FirebaseFirestore.getInstance()
 
@@ -118,7 +123,7 @@ class RatingActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title = "Notation"
+        actionBar?.title = getString(R.string.toolbar_title_ratin_activity)
 
 
     }
