@@ -69,7 +69,7 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                         Log.w("update status", "Error updating document", e)
                     }
 
-                val message = Message("debut","bot")
+                val message = Message(getString(R.string.first_message_in_chat),"bot")
                 db.collection("assignments").document(intent.getStringExtra("id")).collection("chat").add(message)
 
                 finish()

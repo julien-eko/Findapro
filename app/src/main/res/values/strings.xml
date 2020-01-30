@@ -76,5 +76,6 @@
     <string name="Toolbar_title_notification_activity">Notification</string>
     <string name="toolbar_title_profil_activity">Profil</string>
     <string name="toolbar_title_ratin_activity">Notation</string>
+    <string name="first_message_in_chat">Nouvelle mission</string>
 
 </resources>
