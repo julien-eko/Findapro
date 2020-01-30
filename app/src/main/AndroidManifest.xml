@@ -21,7 +21,8 @@
         <activity android:name=".controller.activity.AssignmentsActivity" />
         <activity android:name=".controller.activity.InformationForm" />
         <activity android:name=".controller.activity.FirebaseUIActivity" />
-        <activity android:name=".controller.activity.MainActivity">
+        <activity android:name=".controller.activity.MainActivity"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
