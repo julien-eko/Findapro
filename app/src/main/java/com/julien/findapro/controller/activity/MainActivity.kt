@@ -22,7 +22,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
-import com.julien.findapro.Notification
 import com.julien.findapro.R
 import com.julien.findapro.Utils.CircleTransform
 import com.julien.findapro.Utils.Communicator

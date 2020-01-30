@@ -101,12 +101,16 @@ class AssignmentsListFragment : Fragment() {
                         .addOnFailureListener { exception ->
                             Log.w("access db", "Error getting data", exception)
                         }
-                        .addOnCompleteListener {recycler_view_assignments_list_fragment.layoutManager = LinearLayoutManager(context)
-                            recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
-                                assigmentsList,
-                                context!!,
-                                { assignmentItem: HashMap<String, String>,isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) })
-                        }
+                        .addOnCompleteListener {
+                            if(context != null){
+                                recycler_view_assignments_list_fragment.layoutManager = LinearLayoutManager(context)
+                                recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
+                                    assigmentsList,
+                                    context!!,
+                                    { assignmentItem: HashMap<String, String>,isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) })
+                            }
+                            }
+
 
                 }
 
@@ -162,7 +166,8 @@ class AssignmentsListFragment : Fragment() {
                                 .addOnFailureListener { exception ->
                                     Log.w("access db", "Error getting data", exception)
                                 }
-                                .addOnCompleteListener {  recycler_view_assignments_list_fragment.layoutManager = LinearLayoutManager(context)
+                                .addOnCompleteListener {
+                                    recycler_view_assignments_list_fragment.layoutManager = LinearLayoutManager(context)
                                     recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
                                         assigmentsList,
                                         context!!,

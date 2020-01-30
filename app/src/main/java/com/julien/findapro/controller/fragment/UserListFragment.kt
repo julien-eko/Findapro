@@ -187,18 +187,21 @@ class UserListFragment : Fragment() {
 
                         }
 
+                        if (context != null){
+                            recycler_view_users_list_fragment.layoutManager =
+                                LinearLayoutManager(context)
+                            recycler_view_users_list_fragment.adapter = UserListAdapater(
+                                userList,
+                                context!!,
+                                { userItem: HashMap<String, String>, isProfil: Boolean ->
+                                    userItemClicked(
+                                        userItem,
+                                        isProfil
+                                    )
+                                })
+                        }
 
-                        recycler_view_users_list_fragment.layoutManager =
-                            LinearLayoutManager(context)
-                        recycler_view_users_list_fragment.adapter = UserListAdapater(
-                            userList,
-                            context!!,
-                            { userItem: HashMap<String, String>, isProfil: Boolean ->
-                                userItemClicked(
-                                    userItem,
-                                    isProfil
-                                )
-                            })
+
                     }
                     .addOnFailureListener { exception ->
                         Log.w("access db", "Error getting data", exception)

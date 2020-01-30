@@ -48,16 +48,16 @@ class AssignmentsInProgressFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sharedPreferences = activity!!.getSharedPreferences("isPro",0)
+        sharedPreferences = activity!!.getSharedPreferences("isPro", 0)
 
         //search button
         fragment_assignment_inprogress_list_cancel_search_button.setOnClickListener {
             fragment_assignment_inprogress_list_cancel_search_button.visibility = View.GONE
             assigmentsList.clear()
-            if(Internet.isInternetAvailable(context)){
+            if (Internet.isInternetAvailable(context)) {
                 loadData()
-            }else{
-                Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -87,23 +87,28 @@ class AssignmentsInProgressFragment : Fragment() {
     //load data of db and display recycler view
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
-        val user:String = if(sharedPreferences.getBoolean("isPro",false)) "users" else "pro users"
-        val userId:String = if(sharedPreferences.getBoolean("isPro",false)) "userId" else "proUserId"
-        val userType:String = if (sharedPreferences.getBoolean("isPro",false)) "proUserId" else "userId"
-        db.collection("assignments").whereEqualTo(userType, FirebaseAuth.getInstance().currentUser?.uid!!).get()
+        val user: String =
+            if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
+        val userId: String =
+            if (sharedPreferences.getBoolean("isPro", false)) "userId" else "proUserId"
+        val userType: String =
+            if (sharedPreferences.getBoolean("isPro", false)) "proUserId" else "userId"
+        db.collection("assignments")
+            .whereEqualTo(userType, FirebaseAuth.getInstance().currentUser?.uid!!).get()
             .addOnSuccessListener { documents ->
 
                 for (document in documents) {
                     db.collection(user).document(document[userId].toString()).get()
                         .addOnSuccessListener { data ->
-                            if(document["status"].toString() == "finish") {
-                                db.collection(user).document(document[userId].toString()).collection("rating")
-                                    .whereEqualTo("assignmentsId",document.id)
+                            if (document["status"].toString() == "finish") {
+                                db.collection(user).document(document[userId].toString())
+                                    .collection("rating")
+                                    .whereEqualTo("assignmentsId", document.id)
                                     .get()
                                     .addOnSuccessListener { documents ->
-                                        if (documents.size()==0){
+                                        if (documents.size() == 0) {
                                             //not rated
-                                            val assignment:HashMap<String,Any?> = hashMapOf(
+                                            val assignment: HashMap<String, Any?> = hashMapOf(
                                                 "full name" to data["full name"].toString(),
                                                 "photo" to data["photo"].toString(),
                                                 "status" to "notRated",
@@ -116,9 +121,9 @@ class AssignmentsInProgressFragment : Fragment() {
                                             diplayRecyclerView()
 
                                             //Toast.makeText(this,"pas noté",Toast.LENGTH_SHORT).show()
-                                        }else{
+                                        } else {
                                             //rated
-                                            val assignment:HashMap<String,Any?> = hashMapOf(
+                                            val assignment: HashMap<String, Any?> = hashMapOf(
                                                 "full name" to data["full name"].toString(),
                                                 "photo" to data["photo"].toString(),
                                                 "status" to document["status"].toString(),
@@ -136,8 +141,8 @@ class AssignmentsInProgressFragment : Fragment() {
 
                                         Log.w("rating", "Error getting documents: ", exception)
                                     }
-                            }else{
-                                val assignment:HashMap<String,Any?> = hashMapOf(
+                            } else {
+                                val assignment: HashMap<String, Any?> = hashMapOf(
                                     "full name" to data["full name"].toString(),
                                     "photo" to data["photo"].toString(),
                                     "status" to document["status"].toString(),
@@ -151,15 +156,12 @@ class AssignmentsInProgressFragment : Fragment() {
                             }
 
 
-
-
-
                         }
                         .addOnFailureListener { exception ->
                             Log.w("access db", "Error getting data", exception)
                         }
-                        .addOnCompleteListener {  recycler_view_assignments_in_progress_fragment.layoutManager = LinearLayoutManager(context)
-                            }
+                        .addOnCompleteListener {
+                        }
 
                 }
 
@@ -170,9 +172,9 @@ class AssignmentsInProgressFragment : Fragment() {
     }
 
     //update recycler view with search filter
-    private fun searchByStatus(status:String){
+    private fun searchByStatus(status: String) {
 
-        val statusAssignment:Any = when (status) {
+        val statusAssignment: Any = when (status) {
             "Fini" -> {
                 "finish"
             }
@@ -194,27 +196,32 @@ class AssignmentsInProgressFragment : Fragment() {
         }
 
 
-
         val db = FirebaseFirestore.getInstance()
-        val user:String = if(sharedPreferences.getBoolean("isPro",false)) "users" else "pro users"
-        val userId:String = if(sharedPreferences.getBoolean("isPro",false)) "userId" else "proUserId"
-        val userType:String = if (sharedPreferences.getBoolean("isPro",false)) "proUserId" else "userId"
-        db.collection("assignments").whereEqualTo(userType, FirebaseAuth.getInstance().currentUser?.uid!!).whereEqualTo("status",statusAssignment).get()
+        val user: String =
+            if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
+        val userId: String =
+            if (sharedPreferences.getBoolean("isPro", false)) "userId" else "proUserId"
+        val userType: String =
+            if (sharedPreferences.getBoolean("isPro", false)) "proUserId" else "userId"
+        db.collection("assignments")
+            .whereEqualTo(userType, FirebaseAuth.getInstance().currentUser?.uid!!)
+            .whereEqualTo("status", statusAssignment).get()
             .addOnSuccessListener { documents ->
 
                 for (document in documents) {
                     db.collection(user).document(document[userId].toString()).get()
                         .addOnSuccessListener { data ->
 
-                            if(document["status"].toString() == "finish") {
-                                db.collection(user).document(document[userId].toString()).collection("rating")
-                                    .whereEqualTo("assignmentsId",document.id)
+                            if (document["status"].toString() == "finish") {
+                                db.collection(user).document(document[userId].toString())
+                                    .collection("rating")
+                                    .whereEqualTo("assignmentsId", document.id)
                                     .get()
                                     .addOnSuccessListener { documents ->
-                                        if (documents.size()==0 ){
+                                        if (documents.size() == 0) {
                                             //not rated
 
-                                            val assignment:HashMap<String,Any?> = hashMapOf(
+                                            val assignment: HashMap<String, Any?> = hashMapOf(
                                                 "full name" to data["full name"].toString(),
                                                 "photo" to data["photo"].toString(),
                                                 "status" to "notRated",
@@ -227,9 +234,9 @@ class AssignmentsInProgressFragment : Fragment() {
                                             diplayRecyclerView()
 
                                             //Toast.makeText(this,"pas noté",Toast.LENGTH_SHORT).show()
-                                        }else{
+                                        } else {
                                             //rated
-                                            val assignment:HashMap<String,Any?> = hashMapOf(
+                                            val assignment: HashMap<String, Any?> = hashMapOf(
                                                 "full name" to data["full name"].toString(),
                                                 "photo" to data["photo"].toString(),
                                                 "status" to document["status"].toString(),
@@ -247,8 +254,8 @@ class AssignmentsInProgressFragment : Fragment() {
 
                                         Log.w("rating", "Error getting documents: ", exception)
                                     }
-                            }else{
-                                val assignment:HashMap<String,Any?> = hashMapOf(
+                            } else {
+                                val assignment: HashMap<String, Any?> = hashMapOf(
                                     "full name" to data["full name"].toString(),
                                     "photo" to data["photo"].toString(),
                                     "status" to document["status"].toString(),
@@ -262,14 +269,11 @@ class AssignmentsInProgressFragment : Fragment() {
                             }
 
 
-
-
-
                         }
                         .addOnFailureListener { exception ->
                             Log.w("access db", "Error getting data", exception)
                         }
-                        .addOnCompleteListener {  recycler_view_assignments_in_progress_fragment.layoutManager = LinearLayoutManager(context)
+                        .addOnCompleteListener {
                         }
 
                 }
@@ -281,39 +285,51 @@ class AssignmentsInProgressFragment : Fragment() {
     }
 
     //click listerner on item recycler view
-    private fun assignmentItemClicked(assignmentItem : HashMap<String,Any?>,isProfil:Boolean) {
-        if(Internet.isInternetAvailable(context)){
-            if (isProfil){
+    private fun assignmentItemClicked(assignmentItem: HashMap<String, Any?>, isProfil: Boolean) {
+        if (Internet.isInternetAvailable(context)) {
+            if (isProfil) {
                 //open profil
-                val intent = Intent(context,
-                    ProfilActivity::class.java)
-                intent.putExtra("id",assignmentItem["idUser"].toString())
+                val intent = Intent(
+                    context,
+                    ProfilActivity::class.java
+                )
+                intent.putExtra("id", assignmentItem["idUser"].toString())
                 startActivity(intent)
-            }else{
+            } else {
                 //oppen detail activity
                 val intent = Intent(context, AssignmentDetailActivity::class.java)
-                intent.putExtra("id",assignmentItem["id"].toString())
+                intent.putExtra("id", assignmentItem["id"].toString())
                 startActivity(intent)
             }
-        }else{
-            Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
 
     }
 
-    private fun diplayRecyclerView(){
-        recycler_view_assignments_in_progress_fragment.adapter = AssignmentsInProgressAdapter(
-            assigmentsList,
-            context!!,
-            { assignmentItem: HashMap<String, Any?>,isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) })
+    private fun diplayRecyclerView() {
+        if(context != null ){
+            recycler_view_assignments_in_progress_fragment.layoutManager =
+                LinearLayoutManager(context)
+            recycler_view_assignments_in_progress_fragment.adapter = AssignmentsInProgressAdapter(
+                assigmentsList,
+                context!!,
+                { assignmentItem: HashMap<String, Any?>, isProfil: Boolean ->
+                    assignmentItemClicked(
+                        assignmentItem,
+                        isProfil
+                    )
+                })
+        }
+
 
     }
 
     override fun onResume() {
 
         //check internet
-        if(Internet.isInternetAvailable(context)){
+        if (Internet.isInternetAvailable(context)) {
             if (arguments != null) {
                 fragment_assignment_inprogress_list_cancel_search_button.visibility = View.VISIBLE
                 assigmentsList.clear()
@@ -325,7 +341,7 @@ class AssignmentsInProgressFragment : Fragment() {
                 loadData()
                 GlobalScope.launch {
                     delay(2000)
-                    if (assigmentsList.isEmpty()){
+                    if (assigmentsList.isEmpty()) {
                         activity?.runOnUiThread(java.lang.Runnable {
                             fragment_assignment_in_progress_list_no_item.visibility = View.VISIBLE
                         })
@@ -334,8 +350,8 @@ class AssignmentsInProgressFragment : Fragment() {
 
                 }
             }
-        }else{
-            Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
 

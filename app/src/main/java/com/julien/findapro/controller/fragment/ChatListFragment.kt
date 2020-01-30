@@ -226,17 +226,19 @@ class ChatListFragment : Fragment() {
                     chatList.sortedWith(compareByDescending { it["createdDate"] as Comparable<*>? })
 
 
+                if(context != null){
+                    recycler_view_chat_list_fragment.layoutManager = LinearLayoutManager(context)
+                    recycler_view_chat_list_fragment.adapter = ChatListAdapter(
+                        sortList,
+                        context!!,
+                        { chatItem: HashMap<String, Any?>, isProfil: Boolean ->
+                            chatItemClicked(
+                                chatItem,
+                                isProfil
+                            )
+                        })
+                }
 
-                recycler_view_chat_list_fragment.layoutManager = LinearLayoutManager(context)
-                recycler_view_chat_list_fragment.adapter = ChatListAdapter(
-                    sortList,
-                    context!!,
-                    { chatItem: HashMap<String, Any?>, isProfil: Boolean ->
-                        chatItemClicked(
-                            chatItem,
-                            isProfil
-                        )
-                    })
 
 
             }
