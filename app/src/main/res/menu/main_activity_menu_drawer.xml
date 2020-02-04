@@ -6,21 +6,21 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/activity_main_drawer_notification"
-            android:title="Notification"
+            android:title="@string/notification"
             android:icon="@drawable/baseline_notifications_white_24"/>
 
         <item
             android:id="@+id/activity_main_drawer_planning"
-            android:title="Planning"
+            android:title="@string/planning"
             android:icon="@drawable/baseline_calendar_today_white_24"/>
         <item
             android:id="@+id/activity_main_drawer_information"
-            android:title="Information personnelle"
+            android:title="@string/personel_information"
             android:icon="@drawable/baseline_person_white_24"/>
 
         <item
             android:id="@+id/activity_main_drawer_signout"
-            android:title="Déconnexion"
+            android:title="@string/sign_out"
             android:icon="@drawable/baseline_power_settings_new_white_24"/>
 
 

@@ -6,17 +6,17 @@
         android:enabled="true"
         android:icon="@drawable/baseline_format_list_bulleted_white_24"
         app:showAsAction="ifRoom"
-        android:title="Missions" />
+        android:title="@string/assignment" />
     <item
         android:id="@+id/action_planning"
         android:enabled="true"
         android:icon="@drawable/baseline_format_list_bulleted_white_24"
         app:showAsAction="ifRoom"
-        android:title="Mes missions" />
+        android:title="@string/my_assignments" />
     <item
         android:id="@+id/action_message"
         android:enabled="true"
         android:icon="@drawable/baseline_mail_white_24"
         app:showAsAction="ifRoom"
-        android:title="Chat" />
+        android:title="@string/chat" />
 </menu>

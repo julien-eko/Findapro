@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,10 +17,14 @@ import com.julien.findapro.view.AssignmentListAdaptater
 import com.julien.findapro.view.ProfilAdaptater
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_assignment_detail.*
+import kotlinx.android.synthetic.main.activity_planning.*
 import kotlinx.android.synthetic.main.activity_profil.*
 import kotlinx.android.synthetic.main.fragment_assignments_in_progress.*
 import kotlinx.android.synthetic.main.fragment_assignments_list.*
 import kotlinx.android.synthetic.main.fragment_users_list_item.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ProfilActivity : AppCompatActivity() {
 
@@ -38,6 +43,16 @@ class ProfilActivity : AppCompatActivity() {
         //check internet connexion
         if(Internet.isInternetAvailable(this)){
             displayInformation()
+
+            GlobalScope.launch {
+                delay(2000)
+                if (profilList.isEmpty()) {
+                    this@ProfilActivity.runOnUiThread(java.lang.Runnable {
+                        activity_profil_no_item.visibility = View.VISIBLE
+                    })
+
+                }
+            }
         }else{
             Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
         }
@@ -123,7 +138,10 @@ class ProfilActivity : AppCompatActivity() {
                                 )
                                 profilList.add(profil)
                                 recycler_view_user_profil_activity.layoutManager = LinearLayoutManager(this)
+                                val controller = AnimationUtils.loadLayoutAnimation(this,R.anim.layout_animation_fall_down)
+                                recycler_view_user_profil_activity.layoutAnimation = controller
                                 recycler_view_user_profil_activity.adapter = ProfilAdaptater(profilList,{ userItem : HashMap<String,String>,isProfil:Boolean -> userItemClicked(userItem,isProfil) })
+                                recycler_view_user_profil_activity.scheduleLayoutAnimation()
                             } else {
                                 Log.d("user profil", "No such document")
                             }

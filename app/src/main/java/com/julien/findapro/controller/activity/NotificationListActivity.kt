@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +22,7 @@ import com.julien.findapro.view.UserListAdapater
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.activity_notification_list.*
 import kotlinx.android.synthetic.main.activity_planning.*
+import kotlinx.android.synthetic.main.fragment_assignments_list.*
 import kotlinx.android.synthetic.main.fragment_users_list.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -72,6 +74,8 @@ class NotificationListActivity : AppCompatActivity() {
                 }
 
                 recycler_view_notification_list_activity.layoutManager = LinearLayoutManager(this)
+                val controller = AnimationUtils.loadLayoutAnimation(this,R.anim.layout_animation_fall_down)
+                recycler_view_notification_list_activity.layoutAnimation = controller
                 recycler_view_notification_list_activity.adapter =
                     NotificationListAdapter(notificationList,
                         { notificationItem: Notification, isProfil: Boolean ->
@@ -81,6 +85,7 @@ class NotificationListActivity : AppCompatActivity() {
                             )
                         }, userType
                     )
+                recycler_view_notification_list_activity.scheduleLayoutAnimation()
             }
 
             .addOnFailureListener { exception ->

@@ -6,6 +6,7 @@ import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -104,10 +105,13 @@ class AssignmentsListFragment : Fragment() {
                         .addOnCompleteListener {
                             if(context != null){
                                 recycler_view_assignments_list_fragment.layoutManager = LinearLayoutManager(context)
+                                val controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_fall_down)
+                                recycler_view_assignments_list_fragment.layoutAnimation = controller
                                 recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
                                     assigmentsList,
                                     context!!,
                                     { assignmentItem: HashMap<String, String>,isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) })
+                                recycler_view_assignments_list_fragment.scheduleLayoutAnimation()
                             }
                             }
 
@@ -168,10 +172,13 @@ class AssignmentsListFragment : Fragment() {
                                 }
                                 .addOnCompleteListener {
                                     recycler_view_assignments_list_fragment.layoutManager = LinearLayoutManager(context)
+                                    val controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_fall_down)
+                                    recycler_view_assignments_list_fragment.layoutAnimation = controller
                                     recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
                                         assigmentsList,
                                         context!!,
                                         { assignmentItem: HashMap<String, String>,isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) })
+                                    recycler_view_assignments_list_fragment.scheduleLayoutAnimation()
                                 }
 
 

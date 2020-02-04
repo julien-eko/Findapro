@@ -16,7 +16,7 @@
     android:textStyle="bold"
     android:layout_margin="@dimen/default_margin"
     android:layout_gravity="center_horizontal"
-    android:text="Aucune conversation"/>
+    android:text="@string/no_chat"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_chat_list_fragment"

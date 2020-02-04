@@ -10,7 +10,8 @@
         android:id="@+id/activity_chat_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        app:titleTextColor="@android:color/white"
+        app:subtitleTextColor="@android:color/black"
         app:theme="@style/ToolBarStyle" />
 
         <!-- RECYCLER VIEW -->

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
@@ -20,6 +21,7 @@ import com.julien.findapro.Utils.Internet
 import com.julien.findapro.controller.activity.ChatActivity
 import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.ChatListAdapter
+import kotlinx.android.synthetic.main.fragment_assignments_list.*
 import kotlinx.android.synthetic.main.fragment_chat_list.*
 import kotlinx.android.synthetic.main.fragment_chat_list_item.view.*
 import kotlinx.coroutines.GlobalScope
@@ -226,8 +228,10 @@ class ChatListFragment : Fragment() {
                     chatList.sortedWith(compareByDescending { it["createdDate"] as Comparable<*>? })
 
 
-                if(context != null){
+                    if(context != null){
                     recycler_view_chat_list_fragment.layoutManager = LinearLayoutManager(context)
+                    val controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_fall_down)
+                    recycler_view_chat_list_fragment.layoutAnimation = controller
                     recycler_view_chat_list_fragment.adapter = ChatListAdapter(
                         sortList,
                         context!!,
@@ -237,6 +241,7 @@ class ChatListFragment : Fragment() {
                                 isProfil
                             )
                         })
+                        recycler_view_chat_list_fragment.scheduleLayoutAnimation()
                 }
 
 

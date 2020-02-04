@@ -6,6 +6,7 @@ import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.julien.findapro.Utils.Internet
 import com.julien.findapro.controller.activity.AssignmentsActivity
 import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.UserListAdapater
+import kotlinx.android.synthetic.main.fragment_assignments_list.*
 import kotlinx.android.synthetic.main.fragment_chat_list.*
 import kotlinx.android.synthetic.main.fragment_users_list.*
 import kotlinx.coroutines.GlobalScope
@@ -190,6 +192,8 @@ class UserListFragment : Fragment() {
                         if (context != null){
                             recycler_view_users_list_fragment.layoutManager =
                                 LinearLayoutManager(context)
+                            val controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_fall_down)
+                            recycler_view_users_list_fragment.layoutAnimation = controller
                             recycler_view_users_list_fragment.adapter = UserListAdapater(
                                 userList,
                                 context!!,
@@ -199,6 +203,7 @@ class UserListFragment : Fragment() {
                                         isProfil
                                     )
                                 })
+                            recycler_view_users_list_fragment.scheduleLayoutAnimation()
                         }
 
 
@@ -252,6 +257,8 @@ class UserListFragment : Fragment() {
 
                         recycler_view_users_list_fragment.layoutManager =
                             LinearLayoutManager(context)
+                        val controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_fall_down)
+                        recycler_view_users_list_fragment.layoutAnimation = controller
                         recycler_view_users_list_fragment.adapter = UserListAdapater(
                             userList,
                             context!!,
@@ -261,6 +268,7 @@ class UserListFragment : Fragment() {
                                     isProfil
                                 )
                             })
+                        recycler_view_users_list_fragment.scheduleLayoutAnimation()
                     }
                     .addOnFailureListener { exception ->
                         Log.w("access db", "Error getting data", exception)

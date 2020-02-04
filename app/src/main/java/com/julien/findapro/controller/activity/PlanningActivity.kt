@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -94,6 +95,8 @@ class PlanningActivity : AppCompatActivity() {
 
                                     recycler_view_planning_activity.layoutManager =
                                         LinearLayoutManager(this)
+                                    val controller = AnimationUtils.loadLayoutAnimation(this,R.anim.layout_animation_fall_down)
+                                    recycler_view_planning_activity.layoutAnimation = controller
                                     recycler_view_planning_activity.adapter = PlanningAdapter(
                                         planningList,
 
@@ -103,6 +106,7 @@ class PlanningActivity : AppCompatActivity() {
                                                 button
                                             )
                                         })
+                                    recycler_view_planning_activity.scheduleLayoutAnimation()
                                 }
 
 

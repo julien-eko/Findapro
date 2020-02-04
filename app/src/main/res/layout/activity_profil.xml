@@ -11,9 +11,9 @@
         android:id="@+id/activity_profil_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ToolBarStyle"
         app:titleTextColor="@android:color/white"
-        app:subtitleTextColor="@android:color/black"/>
+        app:subtitleTextColor="@android:color/black"
+        android:theme="@style/ToolBarStyle"/>
 
     <LinearLayout
         android:id="@+id/activity_profil_information_linearlayout"
@@ -57,7 +57,7 @@
 
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
-                android:text="Ville : "/>
+                android:text="@string/city"/>
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:id="@+id/activity_profil_city_textview"
@@ -93,14 +93,24 @@
             android:layout_gravity="center_horizontal"
             android:id="@+id/activity_profil_nb_rate_textview"
             android:textStyle="bold"
-            android:text="19 avis"/>
+            android:text="0 avis"/>
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/activity_profil_no_item"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_margin="@dimen/default_margin"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/activity_profil_no_item"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_user_profil_activity"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_margin="@dimen/default_margin"
         android:layout_height="wrap_content"/>
 

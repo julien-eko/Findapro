@@ -11,8 +11,9 @@
         android:id="@+id/activity_assignment_choice_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:theme="@style/ToolBarStyle" />
+        app:titleTextColor="@android:color/white"
+        app:subtitleTextColor="@android:color/black"
+        android:theme="@style/ToolBarStyle" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,11 +25,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Nom : "/>
+            android:text="@string/name"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:text="test"
             android:id="@+id/activity_assignements_choice_full_name_text_view"/>
 
@@ -44,11 +46,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Adresse : "/>
+            android:text="@string/adress"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:text="test"
             android:id="@+id/activity_assignements_choice_adress_text_view"/>
 
@@ -64,11 +67,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Ville : "/>
+            android:text="@string/city"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:text="test"
             android:id="@+id/activity_assignements_choice_city_text_view"/>
 
@@ -84,12 +88,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Avis  "/>
+            android:text="@string/avis"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(3) :"
+            android:text="(0) :"
             android:id="@+id/activity_assignements_choice_nb_rating_text_view"/>
         <RatingBar
             android:layout_width="wrap_content"
@@ -112,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Description du problème de  l'utilisateur : "
+            android:text="@string/describe_user_assignment_problem"
             android:layout_marginLeft="@dimen/default_margin"/>
 
         <TextView
@@ -140,18 +144,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
-        android:background="@color/refuseColor"
-        android:textColor="@color/white"
-        android:text="Refuser"/>
+        android:text="@string/refuse_button"/>
 
     <Button
         android:id="@+id/assignments_choice_activity_accept_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
-        android:background="@color/acceptColor"
-        android:textColor="@color/white"
-        android:text="Accepter"/>
+        android:text="@string/accept_button"/>
 
 </LinearLayout>
 

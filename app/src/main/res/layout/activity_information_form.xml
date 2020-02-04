@@ -1,42 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".controller.activity.InformationForm"
+    android:orientation="vertical">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_information_form_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:titleTextColor="@android:color/white"
+        app:subtitleTextColor="@android:color/black"
+        app:theme="@style/ToolBarStyle" />
+
+<ScrollView
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".controller.activity.InformationForm">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints">
 
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:clipToPadding="false"
         android:orientation="vertical">
+
+
 
         <LinearLayout
             android:id="@+id/information_form_linear_layout_statut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Profession : "/>
+                android:text="@string/user_type" />
 
             <Spinner
                 android:id="@+id/spinner_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:entries="@array/statut_arrays"
-                />
+                android:entries="@array/statut_arrays" />
 
         </LinearLayout>
 
@@ -44,141 +59,156 @@
             android:id="@+id/information_form_linear_layout_pro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:orientation="horizontal"
-            android:visibility="gone"
-            android:layout_margin="10dp">
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Profession : "/>
+                android:text="@string/job_choice" />
 
             <Spinner
                 android:id="@+id/spinner_job"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:entries="@array/job_arrays"
-                />
+                android:entries="@array/job_arrays" />
 
         </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorTextAppearance="@style/MyErrorText"
-            app:errorEnabled="true">
-            <EditText
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/MyErrorText">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/information_form_full_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
+                android:hint="@string/full_name"
                 android:inputType="textAutoComplete"
-                android:theme="@style/MyEditText"
                 android:textSize="18sp"
-                android:hint="Nom et prénom"/>
+                android:theme="@style/MyEditText" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorTextAppearance="@style/MyErrorText"
-            app:errorEnabled="true">
-            <EditText
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/MyErrorText">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/information_form_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="sans-serif-light"
-                android:imeOptions="actionNext"
                 android:digits="0123456789"
-                android:theme="@style/MyEditText"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/phone_number"
+                android:imeOptions="actionNext"
                 android:inputType="numberDecimal"
                 android:textSize="18sp"
-                android:hint="Numéro de téléphone"/>
+                android:theme="@style/MyEditText" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorTextAppearance="@style/MyErrorText"
-            app:errorEnabled="true">
-            <EditText
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/MyErrorText">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/information_form_adress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
+                android:hint="@string/adress_information_form"
                 android:inputType="textAutoComplete"
-                android:theme="@style/MyEditText"
                 android:textSize="18sp"
-                android:hint="Adresse"/>
+                android:theme="@style/MyEditText" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorTextAppearance="@style/MyErrorText"
-            app:errorEnabled="true">
-        <EditText
-            android:id="@+id/information_form_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:inputType="textAutoComplete"
-            android:theme="@style/MyEditText"
-            android:textSize="18sp"
-            android:layout_weight="1"
-            android:hint="Ville"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/MyErrorText">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/information_form_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/city_information_form"
+                android:inputType="textAutoComplete"
+                android:textSize="18sp"
+                android:theme="@style/MyEditText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:errorTextAppearance="@style/MyErrorText"
-        app:errorEnabled="true">
-        <EditText
-            android:id="@+id/information_postal_code"
+        android:orientation="horizontal">
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:fontFamily="sans-serif-light"
-            android:imeOptions="actionNext"
-            android:theme="@style/MyEditText"
-            android:digits="0123456789"
-            android:inputType="numberDecimal"
-            android:textSize="18sp"
-            android:hint="Code postal"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight=".5"
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/MyErrorText">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/information_postal_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:digits="0123456789"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/postal_code"
+                android:imeOptions="actionNext"
+                android:inputType="numberDecimal"
+                android:textSize="18sp"
+                android:theme="@style/MyEditText" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorTextAppearance="@style/MyErrorText"
-            app:errorEnabled="true">
-            <EditText
+            app:errorEnabled="true"
+            android:layout_weight=".5"
+            app:errorTextAppearance="@style/MyErrorText">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/information_form_country"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                android:inputType="textAutoComplete"
-                android:imeOptions="actionDone"
-                android:theme="@style/MyEditText"
-                android:textSize="18sp"
                 android:layout_weight="1"
-                android:hint="Pays"/>
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/country"
+                android:imeOptions="actionDone"
+                android:inputType="textAutoComplete"
+                android:textSize="18sp"
+                android:theme="@style/MyEditText" />
         </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
 
 
         <Button
             android:id="@+id/information_form_save_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Save"/>
+            android:layout_marginTop="16dp"
+            android:layout_gravity="end"
+            android:text="@string/save" />
 
     </LinearLayout>
 
-    </ScrollView>
+</ScrollView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

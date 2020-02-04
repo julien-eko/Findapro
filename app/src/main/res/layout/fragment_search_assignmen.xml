@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin"
-            android:text="Distance max : "/>
+            android:text="@string/max_distance"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin"
-            android:text="Note minimal : "/>
+            android:text="@string/min_rate"/>
 
         <TextView
             android:layout_width="wrap_content"

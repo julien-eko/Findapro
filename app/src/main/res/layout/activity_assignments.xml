@@ -12,8 +12,9 @@
         android:id="@+id/activity_assignements_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:theme="@style/ToolBarStyle" />
+        app:titleTextColor="@android:color/white"
+        app:subtitleTextColor="@android:color/black"
+        android:theme="@style/ToolBarStyle"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,11 +26,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Nom : "/>
+            android:text="@string/name"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:text="test"
             android:id="@+id/activity_assignements_full_name_text_view"/>
 
@@ -45,11 +47,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Spécialité : "/>
+            android:text="@string/job"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:text="test"
             android:id="@+id/activity_assignements_job_text_view"/>
 
@@ -66,12 +69,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="Avis  "/>
+            android:text="@string/avis"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(3) :"
+            android:text="(0) :"
             android:id="@+id/activity_assignements_nb_rating_text_view"/>
         <RatingBar
             android:layout_width="wrap_content"
@@ -88,7 +91,7 @@
         android:layout_margin="@dimen/default_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Veullier détaille votre demande pour le professionnel ci-dessus. Vous recevrez une réponse dans les plus brefs délais."/>
+        android:text="@string/describe_your_assignment"/>
 
     <!-- TEXT MESSAGE EDIT TEXT-->
     <com.google.android.material.textfield.TextInputEditText
@@ -98,7 +101,7 @@
         android:imeOptions="actionDone"
         android:textSize="@dimen/default_text_size"
         android:inputType="textMultiLine"
-        android:hint="Composer votre demande ici"/>
+        android:hint="@string/describe_here"/>
 
 <LinearLayout
     android:layout_width="wrap_content"
@@ -112,7 +115,7 @@
         android:id="@+id/assignments_finish_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Annuler"
+        android:text="@string/cancel"
         android:layout_margin="@dimen/default_margin"
         tools:ignore="MissingConstraints" />
 
@@ -121,7 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
-        android:text="Envoyer la demande"
+        android:text="@string/send_assignment_button"
         tools:ignore="MissingConstraints" />
 
 </LinearLayout>

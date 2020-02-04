@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -312,6 +313,8 @@ class AssignmentsInProgressFragment : Fragment() {
         if(context != null ){
             recycler_view_assignments_in_progress_fragment.layoutManager =
                 LinearLayoutManager(context)
+            val controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_fall_down)
+            recycler_view_assignments_in_progress_fragment.layoutAnimation = controller
             recycler_view_assignments_in_progress_fragment.adapter = AssignmentsInProgressAdapter(
                 assigmentsList,
                 context!!,
@@ -321,6 +324,7 @@ class AssignmentsInProgressFragment : Fragment() {
                         isProfil
                     )
                 })
+            recycler_view_assignments_in_progress_fragment.scheduleLayoutAnimation()
         }
 
 

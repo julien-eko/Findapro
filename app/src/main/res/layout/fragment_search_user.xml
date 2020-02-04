@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Profession recherchée: "/>
+            android:text="@string/job_search"/>
 
         <Spinner
             android:id="@+id/fragment__search_user_spinner"
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin"
-            android:text="Distance max : "/>
+            android:text="@string/max_distance"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -77,7 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin"
-            android:text="Note minimal : "/>
+            android:text="@string/min_rate"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
     android:layout_gravity="center_horizontal"
     android:id="@+id/fragment_search_user_button"
     android:layout_height="wrap_content"
-    android:text="Rechercher"/>
+    android:text="@string/search"/>
 
 
 

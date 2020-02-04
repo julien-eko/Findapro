@@ -19,15 +19,15 @@
                 android:textStyle="bold"
                 android:layout_margin="@dimen/default_margin"/>
 
-        <Button
-            android:id="@+id/auth_google_button"
+        <androidx.appcompat.widget.AppCompatButton
             style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
+            android:id="@+id/auth_google_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_gravity="center_horizontal"
-            android:text="Connexion"
-            tools:ignore="MissingConstraints" />
+            android:text="@string/sign_in_button"
+            />
 
 
 </LinearLayout>

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Annuler le filtre"
+        android:text="@string/cancel_filter_button"
         android:id="@+id/fragment_assignment_list_cancel_search_button"
         android:visibility="gone"/>
 
@@ -24,7 +24,7 @@
         android:textStyle="bold"
         android:layout_margin="@dimen/default_margin"
         android:layout_gravity="center_horizontal"
-        android:text="Aucune Mission"/>
+        android:text="@string/no_assignment"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_assignments_list_fragment"

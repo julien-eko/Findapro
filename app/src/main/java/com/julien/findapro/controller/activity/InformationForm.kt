@@ -7,6 +7,7 @@ import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
@@ -17,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.julien.findapro.R
 import com.julien.findapro.Utils.Internet
+import kotlinx.android.synthetic.main.activity_assignments.*
 import kotlinx.android.synthetic.main.activity_information_form.*
 
 class InformationForm : AppCompatActivity() {
@@ -28,6 +30,8 @@ class InformationForm : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_information_form)
+
+        configureToolbar()
 
         //token value
         FirebaseInstanceId.getInstance().instanceId
@@ -378,5 +382,20 @@ class InformationForm : AppCompatActivity() {
         val dialog: AlertDialog = builder.create()
 
         dialog.show()
+    }
+
+    //configure toolbar
+    private fun configureToolbar() {
+        setSupportActionBar(activity_information_form_toolbar)
+
+        val actionBar = supportActionBar
+        actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.setTitle(getString(R.string.information_form_toolbar_title))
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        onBackPressed()
+        return super.onOptionsItemSelected(item)
     }
 }
