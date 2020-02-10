@@ -105,7 +105,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                         "isPro",
                         false
                     )
-                ) assignment?.proUserId else assignment?.userId
+                ) assignment?.userId else assignment?.proUserId
                 val intent = Intent(
                     this,
                     ProfilActivity::class.java
