@@ -33,8 +33,7 @@
     <string name="popup_title_permission_files_access">Cette application a besoin de permission pour fonctionner.</string>
     <string name="toast_title_no_image_chosen">Aucune image choisie&#8230;</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="no_blank_field">Veuillez décrire votre demande</string>
     <string name="pro_refuse_assignment">Vous avez refusé la mission</string>
     <string name="user_refuse_assignment">Votre demande d\'intervention est refusé</string>
@@ -86,7 +85,7 @@
     <string name="reply_assignment_button">Répondre à la mission</string>
     <string name="finish_mission">Terminer la mission</string>
     <string name="job">Spécialité :</string>
-    <string name="describe_your_assignment">Veullier détaille votre demande pour le professionnel ci-dessus. Vous recevrez une réponse dans les plus brefs délais.</string>
+    <string name="describe_your_assignment">Veuillez détailler votre demande pour le professionnel ci-dessus. Vous recevrez une réponse dans les plus brefs délais.</string>
     <string name="describe_here">Composer votre demande ici</string>
     <string name="cancel">Annuler</string>
     <string name="send_assignment_button">Envoyer la demande</string>
