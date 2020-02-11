@@ -197,7 +197,7 @@ class InformationForm : AppCompatActivity() {
 
             val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
             val editor = sharedPref.edit()
-            editor.putBoolean("isPro",true)
+            editor.putBoolean("isPro",false)
             editor.apply()
 
             val user = hashMapOf(
