@@ -49,7 +49,7 @@ class NotificationListActivity : AppCompatActivity() {
                 delay(2000)
                 if (notificationList.isEmpty()) {
                     this@NotificationListActivity.runOnUiThread(java.lang.Runnable {
-                        activity_planning_list_no_item.visibility = View.VISIBLE
+                        activity_notification_list_no_item.visibility = View.VISIBLE
                     })
 
                 }
