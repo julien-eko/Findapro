@@ -11,8 +11,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
 import com.julien.findapro.utils.Internet
-import com.julien.findapro.utils.Message
-import com.julien.findapro.utils.Notification
+import com.julien.findapro.model.Message
+import com.julien.findapro.model.Notification
 import kotlinx.android.synthetic.main.activity_assignments_choice.*
 
 class AssignmentsChoiceActivity : AppCompatActivity() {
@@ -27,34 +27,36 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
 
         //check internet connexion
-        if(Internet.isInternetAvailable(this)){
+        if (Internet.isInternetAvailable(this)) {
             loadData(db)
-        }else{
-            Toast.makeText(this,getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
 
         //accept button, update statut in db and create new notification
         assignments_choice_activity_accept_button.setOnClickListener {
-            if(Internet.isInternetAvailable(this)){
+            if (Internet.isInternetAvailable(this)) {
                 db.collection("assignments").document(intent.getStringExtra("id")!!)
                     .update("status", "inProgress")
                     .addOnSuccessListener {
 
                         db.collection("assignments").document(intent.getStringExtra("id")!!).get()
                             .addOnSuccessListener { document ->
-                                if (document.data != null){
-                                    Notification.createNotificationInDb("users",
+                                if (document.data != null) {
+                                    Notification.createNotificationInDb(
+                                        "users",
                                         document["userId"].toString(),
                                         FirebaseAuth.getInstance().currentUser?.uid!!,
                                         intent.getStringExtra("id")!!,
                                         getString(R.string.accept_assignment_notification_title),
                                         getString(R.string.acept_assignment_text_notification),
-                                        "status update in progress")
+                                        "status update in progress"
+                                    )
                                 }
 
-                            }.addOnFailureListener{exeption ->
-                                Log.e("db","get fail with",exeption)
+                            }.addOnFailureListener { exeption ->
+                                Log.e("db", "get fail with", exeption)
                             }
 
 
@@ -67,85 +69,101 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                         Log.w("update status", "Error updating document", e)
                     }
 
-                val message = Message(getString(R.string.first_message_in_chat),null,"bot",null,null)
-                db.collection("assignments").document(intent.getStringExtra("id")!!).collection("chat").add(message)
+                val message = Message(
+                    getString(R.string.first_message_in_chat),
+                    null,
+                    "bot",
+                    null,
+                    null
+                )
+                db.collection("assignments").document(intent.getStringExtra("id")!!)
+                    .collection("chat").add(message)
 
                 finish()
-            }else{
-                Toast.makeText(this,getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
             }
 
         }
 
-            assignments_choice_activity_decline_button.setOnClickListener {
-                if(Internet.isInternetAvailable(this)){
-                    db.collection("assignments").document(intent.getStringExtra("id")!!)
-                        .update("status", "refuse")
-                        .addOnSuccessListener {
-                            Log.d(
-                                "update status",
-                                "DocumentSnapshot successfully updated!"
-                            )
+        assignments_choice_activity_decline_button.setOnClickListener {
+            if (Internet.isInternetAvailable(this)) {
+                db.collection("assignments").document(intent.getStringExtra("id")!!)
+                    .update("status", "refuse")
+                    .addOnSuccessListener {
+                        Log.d(
+                            "update status",
+                            "DocumentSnapshot successfully updated!"
+                        )
 
-                            db.collection("assignments").document(intent.getStringExtra("id")!!).get()
-                                .addOnSuccessListener { document ->
-                                    if (document.data != null){
-                                        Notification.createNotificationInDb("users",
-                                            document["userId"].toString(),
-                                            FirebaseAuth.getInstance().currentUser?.uid!!,
-                                            intent.getStringExtra("id")!!,
-                                            getString(R.string.assignment_refuse_notification_title),
-                                            getString(R.string.assignment_refuse_text_notification),
-                                            "status update refuse")
-                                    }
+                        db.collection("assignments").document(intent.getStringExtra("id")!!).get()
+                            .addOnSuccessListener { document ->
+                                if (document.data != null) {
+                                    Notification.createNotificationInDb(
+                                        "users",
+                                        document["userId"].toString(),
+                                        FirebaseAuth.getInstance().currentUser?.uid!!,
+                                        intent.getStringExtra("id")!!,
+                                        getString(R.string.assignment_refuse_notification_title),
+                                        getString(R.string.assignment_refuse_text_notification),
+                                        "status update refuse"
+                                    )
                                 }
-                                .addOnFailureListener { e ->
-                                    Log.w("update status", "Error updating document", e)
-                                }
-
-                            finish()
-                        }
-                }else{
-                    Toast.makeText(this,getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
-                }
-
-
-    }}
-
-
-
-    private fun loadData(db:FirebaseFirestore){
-        db.collection("assignments").document(intent.getStringExtra("id")!!).get()
-            .addOnSuccessListener { document ->
-            if (document.data != null){
-                assignments_choice_activity_describe_textview.text = document["describe"].toString()
-                db.collection("users").document(document["userId"].toString()).get()
-                    .addOnSuccessListener { document2 ->
-                        if (document2.data != null){
-                            activity_assignements_choice_full_name_text_view.text = document2["full name"].toString()
-                            activity_assignements_choice_adress_text_view.text = document2["adress"].toString()
-                            activity_assignements_choice_city_text_view.text = document2["city"].toString()
-
-                            if (document2["rating"] != null){
-                                val nbRating:String = "(" + document2["ratingNb"].toString() + ") : "
-                                activity_assignements_choice_nb_rating_text_view.text = nbRating
-                                activity_assignment_choice_ratingbar.rating = document2["rating"].toString().toFloat()
-                            }else{
-                                activity_assignment_choice_ratingbar_linearlayout.visibility = View.GONE
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("update status", "Error updating document", e)
                             }
 
-                        }else{
-                            Log.e("db", "no document")
-                        }
-                    }.addOnFailureListener{exeption ->
-                        Log.e("db","get fail with",exeption)
+                        finish()
                     }
-            }else{
-                Log.e("db", "no document")
+            } else {
+                Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
             }
-        }.addOnFailureListener{exeption ->
-            Log.e("db","get fail with",exeption)
+
+
         }
+    }
+
+
+    private fun loadData(db: FirebaseFirestore) {
+        db.collection("assignments").document(intent.getStringExtra("id")!!).get()
+            .addOnSuccessListener { document ->
+                if (document.data != null) {
+                    assignments_choice_activity_describe_textview.text =
+                        document["describe"].toString()
+                    db.collection("users").document(document["userId"].toString()).get()
+                        .addOnSuccessListener { document2 ->
+                            if (document2.data != null) {
+                                activity_assignements_choice_full_name_text_view.text =
+                                    document2["full name"].toString()
+                                activity_assignements_choice_adress_text_view.text =
+                                    document2["adress"].toString()
+                                activity_assignements_choice_city_text_view.text =
+                                    document2["city"].toString()
+
+                                if (document2["rating"] != null) {
+                                    val nbRating: String =
+                                        "(" + document2["ratingNb"].toString() + ") : "
+                                    activity_assignements_choice_nb_rating_text_view.text = nbRating
+                                    activity_assignment_choice_ratingbar.rating =
+                                        document2["rating"].toString().toFloat()
+                                } else {
+                                    activity_assignment_choice_ratingbar_linearlayout.visibility =
+                                        View.GONE
+                                }
+
+                            } else {
+                                Log.e("db", "no document")
+                            }
+                        }.addOnFailureListener { exeption ->
+                            Log.e("db", "get fail with", exeption)
+                        }
+                } else {
+                    Log.e("db", "no document")
+                }
+            }.addOnFailureListener { exeption ->
+                Log.e("db", "get fail with", exeption)
+            }
     }
 
     private fun configureToolbar() {

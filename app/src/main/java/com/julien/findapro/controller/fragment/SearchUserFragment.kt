@@ -12,7 +12,6 @@ import com.julien.findapro.utils.Communicator
 import kotlinx.android.synthetic.main.fragment_search_user.view.*
 
 
-
 class SearchUserFragment : DialogFragment() {
 
     @SuppressLint("InflateParams", "SetTextI18n")
@@ -71,8 +70,6 @@ class SearchUserFragment : DialogFragment() {
 
 
     }
-
-
 
 
 }

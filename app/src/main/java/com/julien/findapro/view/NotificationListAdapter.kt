@@ -4,9 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
-import com.julien.findapro.utils.Notification
+import com.julien.findapro.model.Notification
 
-class NotificationListAdapter(private var notificationList: ArrayList<Notification>, val clickListener:(Notification, isProfil:Boolean)->Unit, private val userType:String):
+class NotificationListAdapter(
+    private var notificationList: ArrayList<Notification>,
+    val clickListener: (Notification, isProfil: Boolean) -> Unit,
+    private val userType: String
+) :
     RecyclerView.Adapter<NotificationListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationListViewHolder {
@@ -18,11 +22,9 @@ class NotificationListAdapter(private var notificationList: ArrayList<Notificati
 
 
     override fun onBindViewHolder(holder: NotificationListViewHolder, position: Int) {
-        holder.update(notificationList[position],clickListener,userType)
+        holder.update(notificationList[position], clickListener, userType)
 
     }
-
-
 
 
     override fun getItemCount() = notificationList.size

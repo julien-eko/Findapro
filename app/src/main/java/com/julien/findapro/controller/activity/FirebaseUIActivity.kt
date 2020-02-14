@@ -22,7 +22,7 @@ class FirebaseUIActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_firebase_ui)
 
-        auth_google_button.setOnClickListener{
+        auth_google_button.setOnClickListener {
             createSignInIntent()
         }
     }
@@ -32,14 +32,15 @@ class FirebaseUIActivity : AppCompatActivity() {
     private fun createSignInIntent() {
         // Choose authentication providers
         val providers = arrayListOf(
-            AuthUI.IdpConfig.GoogleBuilder().build())
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
 
         // Create and launch sign-in intent
         startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setIsSmartLockEnabled(false,true)
+                .setIsSmartLockEnabled(false, true)
                 .build(),
             RC_SIGN_IN
         )
@@ -65,55 +66,84 @@ class FirebaseUIActivity : AppCompatActivity() {
                         val token = task.result?.token
 
                         //update token in db
-                        db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).update("token",token)
-                            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+                        db.collection("users")
+                            .document(FirebaseAuth.getInstance().currentUser?.uid!!)
+                            .update("token", token)
+                            .addOnSuccessListener {
+                                Log.d(
+                                    TAG,
+                                    "DocumentSnapshot successfully updated!"
+                                )
+                            }
                             .addOnFailureListener {
-                                db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).update("token",token)
-                                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
-                                    .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) } }
+                                db.collection("pro users")
+                                    .document(FirebaseAuth.getInstance().currentUser?.uid!!)
+                                    .update("token", token)
+                                    .addOnSuccessListener {
+                                        Log.d(
+                                            TAG,
+                                            "DocumentSnapshot successfully updated!"
+                                        )
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(
+                                            TAG,
+                                            "Error updating document",
+                                            e
+                                        )
+                                    }
+                            }
 
                     })
 
 
 
 
-                db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+                db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
+                    .addOnSuccessListener { document ->
 
-                    if (document.data != null){
-                        val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
-                        val editor = sharedPref.edit()
-                        editor.putBoolean("isPro",false)
-                        editor.apply()
-                        val intent = Intent(this,
-                            MainActivity::class.java)
-                        startActivity(intent)
-                    }else{
-                        db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { documentPro ->
-                            if (documentPro.data != null){
-                                val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
-                                val editor = sharedPref.edit()
-                                editor.putBoolean("isPro",true)
-                                editor.apply()
-                                val intent = Intent(this,
-                                    MainActivity::class.java)
-                                startActivity(intent)
-                            }else{
-                                val intent = Intent(this,
-                                    InformationForm::class.java)
-                                startActivity(intent)
+                        if (document.data != null) {
+                            val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
+                            val editor = sharedPref.edit()
+                            editor.putBoolean("isPro", false)
+                            editor.apply()
+                            val intent = Intent(
+                                this,
+                                MainActivity::class.java
+                            )
+                            startActivity(intent)
+                        } else {
+                            db.collection("pro users")
+                                .document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
+                                .addOnSuccessListener { documentPro ->
+                                    if (documentPro.data != null) {
+                                        val sharedPref: SharedPreferences =
+                                            getSharedPreferences("isPro", 0)
+                                        val editor = sharedPref.edit()
+                                        editor.putBoolean("isPro", true)
+                                        editor.apply()
+                                        val intent = Intent(
+                                            this,
+                                            MainActivity::class.java
+                                        )
+                                        startActivity(intent)
+                                    } else {
+                                        val intent = Intent(
+                                            this,
+                                            InformationForm::class.java
+                                        )
+                                        startActivity(intent)
+                                    }
+                                }.addOnFailureListener { exeption ->
+                                Log.e("db", "get fail with", exeption)
                             }
-                        }.addOnFailureListener{exeption ->
-                            Log.e("db","get fail with",exeption)
                         }
-                    }
-                }.addOnFailureListener{exeption ->
-                    Log.e("db","get fail with",exeption)
+                    }.addOnFailureListener { exeption ->
+                    Log.e("db", "get fail with", exeption)
                 }
             }
         }
     }
-
-
 
 
     companion object {

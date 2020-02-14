@@ -16,7 +16,7 @@ import com.julien.findapro.controller.activity.AssignmentDetailActivity
 import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
 import com.julien.findapro.controller.activity.ChatActivity
 
-class FirebaseMessagingService: FirebaseMessagingService() {
+class FirebaseMessagingService : FirebaseMessagingService() {
 
     //when notification create for user in firebase
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -29,7 +29,13 @@ class FirebaseMessagingService: FirebaseMessagingService() {
         }
 
         //send notification
-        createNotification(applicationContext,remoteMessage.data["titleNotification"].toString(),remoteMessage.data["textNotification"].toString(),remoteMessage.data["cause"].toString(),remoteMessage.data["assignmentId"].toString())
+        createNotification(
+            applicationContext,
+            remoteMessage.data["titleNotification"].toString(),
+            remoteMessage.data["textNotification"].toString(),
+            remoteMessage.data["cause"].toString(),
+            remoteMessage.data["assignmentId"].toString()
+        )
     }
 
     override fun onNewToken(token: String) {
@@ -37,6 +43,7 @@ class FirebaseMessagingService: FirebaseMessagingService() {
 
         sendRegistrationToServer(token)
     }
+
     private fun sendRegistrationToServer(token: String?) {
 
         Log.d(TAG, "sendRegistrationTokenToServer($token)")
@@ -47,11 +54,11 @@ class FirebaseMessagingService: FirebaseMessagingService() {
         context: Context,
         notificationTitle: String,
         notificationDescription: String,
-        cause:String,
-        assignmentId:String
+        cause: String,
+        assignmentId: String
     ) {
 
-        val intent:Intent?
+        val intent: Intent?
 
 
         when (cause) {
@@ -59,7 +66,7 @@ class FirebaseMessagingService: FirebaseMessagingService() {
                 intent = Intent(this, ChatActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
-                intent.putExtra("assignment",assignmentId)
+                intent.putExtra("assignment", assignmentId)
             }
             "new assignment created" -> {
                 intent = Intent(
@@ -68,13 +75,13 @@ class FirebaseMessagingService: FirebaseMessagingService() {
                 ).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
-                intent.putExtra("id",assignmentId)
+                intent.putExtra("id", assignmentId)
             }
             else -> {
                 intent = Intent(this, AssignmentDetailActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
-                intent.putExtra("id",assignmentId)
+                intent.putExtra("id", assignmentId)
             }
         }
 
@@ -106,7 +113,7 @@ class FirebaseMessagingService: FirebaseMessagingService() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name ="chanelName"
+            val name = "chanelName"
             val descriptionText = "test description"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {

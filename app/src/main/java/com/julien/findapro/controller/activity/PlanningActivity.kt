@@ -89,7 +89,10 @@ class PlanningActivity : AppCompatActivity() {
 
                                     recycler_view_planning_activity.layoutManager =
                                         LinearLayoutManager(this)
-                                    val controller = AnimationUtils.loadLayoutAnimation(this,R.anim.layout_animation_fall_down)
+                                    val controller = AnimationUtils.loadLayoutAnimation(
+                                        this,
+                                        R.anim.layout_animation_fall_down
+                                    )
                                     recycler_view_planning_activity.layoutAnimation = controller
                                     recycler_view_planning_activity.adapter = PlanningAdapter(
                                         planningList

@@ -1,7 +1,6 @@
 package com.julien.findapro.view
 
 
-
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.RelativeLayout
@@ -9,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
 import com.julien.findapro.utils.CircleTransform
-import com.julien.findapro.utils.Message
+import com.julien.findapro.model.Message
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_chat_item.view.*
 import java.text.DateFormat
@@ -23,7 +22,7 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val rootView = itemView.activity_chat_item_root_view
 
     //profile container
-    private val profileContainer= itemView.activity_chat_item_profile_container
+    private val profileContainer = itemView.activity_chat_item_profile_container
     private val imageViewProfile = itemView.activity_chat_item_profile_container_profile_image
 
     //Message container
@@ -31,17 +30,20 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val messageContainer = itemView.activity_chat_item_message_container
 
     //Image sender container
-    private val cardViewImageSent = itemView.activity_chat_item_message_container_image_sent_cardview
+    private val cardViewImageSent =
+        itemView.activity_chat_item_message_container_image_sent_cardview
     private val imageSent = itemView.activity_chat_item_message_container_image_sent_cardview_image
 
     //text message container
-    private val textMessageContainer = itemView.activity_chat_item_message_container_text_message_container
-    private val textViewMessage = itemView.activity_chat_item_message_container_text_message_container_text_view
+    private val textMessageContainer =
+        itemView.activity_chat_item_message_container_text_message_container
+    private val textViewMessage =
+        itemView.activity_chat_item_message_container_text_message_container_text_view
 
     //Dare text
     private val textViewDate = itemView.activity_chat_item_message_container_text_view_date
 
-    private val colorCurrentUser =ContextCompat.getColor(itemView.context, R.color.colorChat1)
+    private val colorCurrentUser = ContextCompat.getColor(itemView.context, R.color.colorChat1)
     private val colorRemoteUser = ContextCompat.getColor(itemView.context, R.color.colorChat2)
 
     //bot message
@@ -49,49 +51,49 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val botMessage = itemView.activity_chat_item_bot_message
 
 
+    fun updateWithMessage(message: Message, currentUserId: String) {
 
-    fun updateWithMessage(message: Message, currentUserId:String){
-
-        if(message.userSender == "bot"){
+        if (message.userSender == "bot") {
             this.botMessage.text = message.message
 
-            imageViewProfile.visibility =View.GONE
-            messageContainer.visibility =View.GONE
-            profileContainer.visibility =View.GONE
-            cardViewImageSent.visibility =View.GONE
-            imageSent.visibility =View.GONE
-            textMessageContainer.visibility =View.GONE
-            textViewMessage.visibility =View.GONE
-            textViewDate.visibility =View.GONE
+            imageViewProfile.visibility = View.GONE
+            messageContainer.visibility = View.GONE
+            profileContainer.visibility = View.GONE
+            cardViewImageSent.visibility = View.GONE
+            imageSent.visibility = View.GONE
+            textMessageContainer.visibility = View.GONE
+            textViewMessage.visibility = View.GONE
+            textViewDate.visibility = View.GONE
 
-        }else{
+        } else {
             // Check if current user is the sender
-            val isCurrentUser:Boolean = message.userSender.equals(currentUserId)
+            val isCurrentUser: Boolean = message.userSender.equals(currentUserId)
 
             //Update message text view
             this.textViewMessage.text = message.message
-            this.textViewMessage.textAlignment = if (isCurrentUser) View.TEXT_ALIGNMENT_TEXT_END else View.TEXT_ALIGNMENT_TEXT_START
-
+            this.textViewMessage.textAlignment =
+                if (isCurrentUser) View.TEXT_ALIGNMENT_TEXT_END else View.TEXT_ALIGNMENT_TEXT_START
 
 
             //update date text view
-            if(message.dateCreated != null){
+            if (message.dateCreated != null) {
                 this.textViewDate.text = this.convertDateToHour(message.dateCreated!!)
             }
 
             //update profile picture image view
 
-            if(message.urlImageSender != null){
-                Picasso.get().load(message.urlImageSender).transform(CircleTransform()).into(imageViewProfile)
+            if (message.urlImageSender != null) {
+                Picasso.get().load(message.urlImageSender).transform(CircleTransform())
+                    .into(imageViewProfile)
             }
 
 
 
-            if(message.urlImageMessage != null){
+            if (message.urlImageMessage != null) {
                 Picasso.get().load(message.urlImageMessage).into(imageSent)
-                this.imageSent.visibility=View.VISIBLE
-            }else{
-                this.imageSent.visibility=View.GONE
+                this.imageSent.visibility = View.VISIBLE
+            } else {
+                this.imageSent.visibility = View.GONE
             }
 
             //Update Message Bubble Color Background
@@ -104,7 +106,7 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
 
-    private  fun updateDesignDependingUser(isSender: Boolean){
+    private fun updateDesignDependingUser(isSender: Boolean) {
 
         // PROFILE CONTAINER
         val paramsLayoutHeader = RelativeLayout.LayoutParams(
@@ -112,7 +114,8 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             RelativeLayout.LayoutParams.WRAP_CONTENT
         )
         paramsLayoutHeader.addRule(
-            if (isSender) RelativeLayout.ALIGN_PARENT_RIGHT else RelativeLayout.ALIGN_PARENT_LEFT)
+            if (isSender) RelativeLayout.ALIGN_PARENT_RIGHT else RelativeLayout.ALIGN_PARENT_LEFT
+        )
         this.profileContainer.layoutParams = paramsLayoutHeader
 
 
@@ -123,7 +126,8 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         )
         paramsLayoutContent.addRule(
             if (isSender) RelativeLayout.LEFT_OF else RelativeLayout.RIGHT_OF,
-            R.id.activity_chat_item_profile_container)
+            R.id.activity_chat_item_profile_container
+        )
         this.messageContainer.layoutParams = paramsLayoutContent
 
         // CARDVIEW IMAGE SEND

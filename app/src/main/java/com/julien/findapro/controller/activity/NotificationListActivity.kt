@@ -15,7 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.julien.findapro.R
 import com.julien.findapro.utils.Internet
-import com.julien.findapro.utils.Notification
+import com.julien.findapro.model.Notification
 import com.julien.findapro.view.NotificationListAdapter
 import kotlinx.android.synthetic.main.activity_notification_list.*
 import kotlinx.coroutines.GlobalScope
@@ -68,10 +68,12 @@ class NotificationListActivity : AppCompatActivity() {
                 }
 
                 recycler_view_notification_list_activity.layoutManager = LinearLayoutManager(this)
-                val controller = AnimationUtils.loadLayoutAnimation(this,R.anim.layout_animation_fall_down)
+                val controller =
+                    AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_fall_down)
                 recycler_view_notification_list_activity.layoutAnimation = controller
                 recycler_view_notification_list_activity.adapter =
-                    NotificationListAdapter(notificationList,
+                    NotificationListAdapter(
+                        notificationList,
                         { notificationItem: Notification, isProfil: Boolean ->
                             notificationItemClicked(
                                 notificationItem,

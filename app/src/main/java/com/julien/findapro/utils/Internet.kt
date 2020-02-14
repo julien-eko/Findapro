@@ -5,11 +5,11 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 
+
 //check internet connexion
-@Suppress("DEPRECATION")
 class Internet {
 
-    companion object{
+    companion object {
 
 
         fun isInternetAvailable(context: Context?): Boolean {
@@ -26,6 +26,7 @@ class Internet {
                     }
                 }
             } else {
+                // < 23 5Android M)
                 cm?.run {
                     cm.activeNetworkInfo?.run {
                         if (type == ConnectivityManager.TYPE_WIFI) {
@@ -40,8 +41,6 @@ class Internet {
         }
 
     }
-
-
 
 
 }

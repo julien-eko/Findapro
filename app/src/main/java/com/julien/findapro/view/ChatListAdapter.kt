@@ -6,9 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
 
-class ChatListAdapter (private var chatList: List<HashMap<String,Any?>>, val context: Context, val clickListener: (HashMap<String,Any?>, isProfil:Boolean) -> Unit):
+class ChatListAdapter(
+    private var chatList: List<HashMap<String, Any?>>,
+    val context: Context,
+    val clickListener: (HashMap<String, Any?>, isProfil: Boolean) -> Unit
+) :
     RecyclerView.Adapter<ChatListViewHolder>() {
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatListViewHolder {
@@ -20,11 +23,9 @@ class ChatListAdapter (private var chatList: List<HashMap<String,Any?>>, val con
 
 
     override fun onBindViewHolder(holder: ChatListViewHolder, position: Int) {
-        holder.update(chatList[position],clickListener)
+        holder.update(chatList[position], clickListener)
 
     }
-
-
 
 
     override fun getItemCount() = chatList.size

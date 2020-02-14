@@ -1,4 +1,4 @@
-package com.julien.findapro.utils
+package com.julien.findapro.model
 
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.*

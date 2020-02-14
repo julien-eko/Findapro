@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
 
-class PlanningAdapter(private var planningList: List<HashMap<String,Any?>>, val clickListener: (HashMap<String,Any?>, button:String) -> Unit):
+class PlanningAdapter(
+    private var planningList: List<HashMap<String, Any?>>,
+    val clickListener: (HashMap<String, Any?>, button: String) -> Unit
+) :
     RecyclerView.Adapter<PlanningViewHolder>() {
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanningViewHolder {
@@ -19,11 +21,9 @@ class PlanningAdapter(private var planningList: List<HashMap<String,Any?>>, val 
 
 
     override fun onBindViewHolder(holder: PlanningViewHolder, position: Int) {
-        holder.update(planningList[position],clickListener)
+        holder.update(planningList[position], clickListener)
 
     }
-
-
 
 
     override fun getItemCount() = planningList.size

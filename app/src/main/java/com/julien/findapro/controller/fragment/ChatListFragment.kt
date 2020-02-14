@@ -145,13 +145,15 @@ class ChatListFragment : Fragment() {
                 chatList.add(chat)
 
 
-                val sortList: List<HashMap<String, Any?>> =
-                    chatList.sortedWith(compareByDescending { it["createdDate"] as Comparable<*>? })
+                val sortList: List<HashMap<String, Any?>> = sortListByDate(chatList)
 
 
-                    if(context != null){
+                if (context != null) {
                     recycler_view_chat_list_fragment.layoutManager = LinearLayoutManager(context)
-                    val controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_fall_down)
+                    val controller = AnimationUtils.loadLayoutAnimation(
+                        context,
+                        R.anim.layout_animation_fall_down
+                    )
                     recycler_view_chat_list_fragment.layoutAnimation = controller
                     recycler_view_chat_list_fragment.adapter = ChatListAdapter(
                         sortList,
@@ -162,9 +164,8 @@ class ChatListFragment : Fragment() {
                             isProfil
                         )
                     }
-                        recycler_view_chat_list_fragment.scheduleLayoutAnimation()
+                    recycler_view_chat_list_fragment.scheduleLayoutAnimation()
                 }
-
 
 
             }
@@ -176,6 +177,11 @@ class ChatListFragment : Fragment() {
 
     }
 
+
+    fun sortListByDate(listSort: ArrayList<HashMap<String, Any?>>): List<HashMap<String, Any?>> {
+
+        return listSort.sortedWith(compareByDescending { it["createdDate"] as Comparable<*>? })
+    }
 
     //refresh recycler view with last message
     override fun onResume() {

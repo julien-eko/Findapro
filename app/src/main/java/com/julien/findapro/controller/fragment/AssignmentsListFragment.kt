@@ -42,14 +42,15 @@ class AssignmentsListFragment : Fragment() {
         fragment_assignment_list_cancel_search_button.setOnClickListener {
             fragment_assignment_list_cancel_search_button.visibility = View.GONE
             assigmentsList.clear()
-            if(Internet.isInternetAvailable(context)){
+            if (Internet.isInternetAvailable(context)) {
                 loadData()
-            }else{
-                Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
             }
         }
 
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_activity_toolbar, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -72,10 +73,12 @@ class AssignmentsListFragment : Fragment() {
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("assignments").whereEqualTo("proUserId",FirebaseAuth.getInstance().currentUser?.uid!!).whereEqualTo("status","pending").get()
+        db.collection("assignments")
+            .whereEqualTo("proUserId", FirebaseAuth.getInstance().currentUser?.uid!!)
+            .whereEqualTo("status", "pending").get()
             .addOnSuccessListener { documents ->
 
-                    for (document in documents) {
+                for (document in documents) {
                     db.collection("users").document(document["userId"].toString()).get()
                         .addOnSuccessListener { data ->
 
@@ -90,23 +93,32 @@ class AssignmentsListFragment : Fragment() {
                             assigmentsList.add(assignment)
 
 
-
-                             }
+                        }
                         .addOnFailureListener { exception ->
                             Log.w("access db", "Error getting data", exception)
                         }
                         .addOnCompleteListener {
-                            if(context != null){
-                                recycler_view_assignments_list_fragment.layoutManager = LinearLayoutManager(context)
-                                val controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_fall_down)
+                            if (context != null) {
+                                recycler_view_assignments_list_fragment.layoutManager =
+                                    LinearLayoutManager(context)
+                                val controller = AnimationUtils.loadLayoutAnimation(
+                                    context,
+                                    R.anim.layout_animation_fall_down
+                                )
                                 recycler_view_assignments_list_fragment.layoutAnimation = controller
-                                recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
-                                    assigmentsList,
-                                    context!!
-                                ) { assignmentItem: HashMap<String, String>, isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) }
+                                recycler_view_assignments_list_fragment.adapter =
+                                    AssignmentListAdaptater(
+                                        assigmentsList,
+                                        context!!
+                                    ) { assignmentItem: HashMap<String, String>, isProfil: Boolean ->
+                                        assignmentItemClicked(
+                                            assignmentItem,
+                                            isProfil
+                                        )
+                                    }
                                 recycler_view_assignments_list_fragment.scheduleLayoutAnimation()
                             }
-                            }
+                        }
 
 
                 }
@@ -118,12 +130,15 @@ class AssignmentsListFragment : Fragment() {
     }
 
     //update recycler view with filter choose by user
-    private fun searchAssignment(minRating:Double,maxDistance:Float){
+    private fun searchAssignment(minRating: Double, maxDistance: Float) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("assignments").whereEqualTo("proUserId",FirebaseAuth.getInstance().currentUser?.uid!!).whereEqualTo("status","pending").get()
+        db.collection("assignments")
+            .whereEqualTo("proUserId", FirebaseAuth.getInstance().currentUser?.uid!!)
+            .whereEqualTo("status", "pending").get()
             .addOnSuccessListener { documents ->
-                db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
+                db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
+                    .get()
                     .addOnSuccessListener { dataProUser ->
 
                         val myLocation = Location("")
@@ -132,20 +147,23 @@ class AssignmentsListFragment : Fragment() {
                         for (document in documents) {
 
 
-
                             db.collection("users").document(document["userId"].toString()).get()
                                 .addOnSuccessListener { dataUser ->
 
 
                                     val locationUser = Location("")
-                                    locationUser.latitude = dataUser["latitude"].toString().toDouble()
-                                    locationUser.longitude = dataUser["longitude"].toString().toDouble()
+                                    locationUser.latitude =
+                                        dataUser["latitude"].toString().toDouble()
+                                    locationUser.longitude =
+                                        dataUser["longitude"].toString().toDouble()
 
-                                    val distanceInMeters: Float = myLocation.distanceTo(locationUser)
+                                    val distanceInMeters: Float =
+                                        myLocation.distanceTo(locationUser)
 
-                                    val rating:Double = if (dataUser["rating"] == null) -1.0 else dataUser["rating"].toString().toDouble()
+                                    val rating: Double =
+                                        if (dataUser["rating"] == null) -1.0 else dataUser["rating"].toString().toDouble()
 
-                                    if (distanceInMeters < maxDistance * 1000 && rating > minRating){
+                                    if (distanceInMeters < maxDistance * 1000 && rating > minRating) {
                                         val assignment = hashMapOf(
                                             "full name" to dataUser["full name"].toString(),
                                             "photo" to dataUser["photo"].toString(),
@@ -158,25 +176,34 @@ class AssignmentsListFragment : Fragment() {
                                     }
 
 
-
                                 }
                                 .addOnFailureListener { exception ->
                                     Log.w("access db", "Error getting data", exception)
                                 }
                                 .addOnCompleteListener {
-                                    recycler_view_assignments_list_fragment.layoutManager = LinearLayoutManager(context)
-                                    val controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_fall_down)
-                                    recycler_view_assignments_list_fragment.layoutAnimation = controller
-                                    recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
-                                        assigmentsList,
-                                        context!!
-                                    ) { assignmentItem: HashMap<String, String>, isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) }
+                                    recycler_view_assignments_list_fragment.layoutManager =
+                                        LinearLayoutManager(context)
+                                    val controller = AnimationUtils.loadLayoutAnimation(
+                                        context,
+                                        R.anim.layout_animation_fall_down
+                                    )
+                                    recycler_view_assignments_list_fragment.layoutAnimation =
+                                        controller
+                                    recycler_view_assignments_list_fragment.adapter =
+                                        AssignmentListAdaptater(
+                                            assigmentsList,
+                                            context!!
+                                        ) { assignmentItem: HashMap<String, String>, isProfil: Boolean ->
+                                            assignmentItemClicked(
+                                                assignmentItem,
+                                                isProfil
+                                            )
+                                        }
                                     recycler_view_assignments_list_fragment.scheduleLayoutAnimation()
                                 }
 
 
                         }
-
 
 
                     }
@@ -192,23 +219,27 @@ class AssignmentsListFragment : Fragment() {
     }
 
     //clik on item recycler view
-    private fun assignmentItemClicked(assignmentItem : HashMap<String,String>,isProfil:Boolean) {
-        if(Internet.isInternetAvailable(context)){
-            if (isProfil){
+    private fun assignmentItemClicked(assignmentItem: HashMap<String, String>, isProfil: Boolean) {
+        if (Internet.isInternetAvailable(context)) {
+            if (isProfil) {
                 //open profil when click on image
-                val intent = Intent(context,
-                    ProfilActivity::class.java)
-                intent.putExtra("id",assignmentItem["userId"])
+                val intent = Intent(
+                    context,
+                    ProfilActivity::class.java
+                )
+                intent.putExtra("id", assignmentItem["userId"])
                 startActivity(intent)
-            }else{
+            } else {
                 //else open choice activity
-                val intent = Intent(context,
-                    AssignmentsChoiceActivity::class.java)
-                intent.putExtra("id",assignmentItem["id"])
+                val intent = Intent(
+                    context,
+                    AssignmentsChoiceActivity::class.java
+                )
+                intent.putExtra("id", assignmentItem["id"])
                 startActivity(intent)
             }
-        }else{
-            Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
 
@@ -216,14 +247,14 @@ class AssignmentsListFragment : Fragment() {
 
     override fun onResume() {
 
-        if(Internet.isInternetAvailable(context)){
+        if (Internet.isInternetAvailable(context)) {
             if (arguments != null) {
                 fragment_assignment_list_cancel_search_button.visibility = View.VISIBLE
                 assigmentsList.clear()
                 val rating: Double =
                     if (arguments?.getDouble("rating") == null) 0.0 else arguments?.getDouble("rating")!!
 
-                searchAssignment(rating,arguments?.getFloat("maxDistance")!!)
+                searchAssignment(rating, arguments?.getFloat("maxDistance")!!)
 
             } else {
                 fragment_assignment_list_cancel_search_button.visibility = View.GONE
@@ -241,16 +272,14 @@ class AssignmentsListFragment : Fragment() {
                 }
 
 
-
             }
-        }else{
-            Toast.makeText(context,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
         super.onResume()
 
     }
-
 
 
 }

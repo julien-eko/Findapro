@@ -4,7 +4,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.julien.findapro.utils.Message
+import com.julien.findapro.model.Message
 
 class MessageHelper {
 
@@ -23,7 +23,13 @@ class MessageHelper {
             assignmentsId: String
         ): Task<DocumentReference> {
             val db = FirebaseFirestore.getInstance()
-            val message = Message(textMessage, null, userSender, urlImageSender, null)
+            val message = Message(
+                textMessage,
+                null,
+                userSender,
+                urlImageSender,
+                null
+            )
 
             return db.collection("assignments").document(assignmentsId).collection("chat")
                 .add(message)
@@ -37,7 +43,13 @@ class MessageHelper {
             urlImageMessage: String
         ): Task<DocumentReference> {
             val db = FirebaseFirestore.getInstance()
-            val message = Message(textMessage, null, userSender, urlImageSender, urlImageMessage)
+            val message = Message(
+                textMessage,
+                null,
+                userSender,
+                urlImageSender,
+                urlImageMessage
+            )
 
             return db.collection("assignments").document(assignmentsId).collection("chat")
                 .add(message)

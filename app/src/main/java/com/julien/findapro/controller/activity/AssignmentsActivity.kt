@@ -9,9 +9,9 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
-import com.julien.findapro.utils.Assignment
+import com.julien.findapro.model.Assignment
 import com.julien.findapro.utils.Internet
-import com.julien.findapro.utils.Notification
+import com.julien.findapro.model.Notification
 import kotlinx.android.synthetic.main.activity_assignments.*
 import java.util.*
 
@@ -24,22 +24,23 @@ class AssignmentsActivity : AppCompatActivity() {
         configureToolbar()
 
         //check internet connexion
-        if(Internet.isInternetAvailable(this)){
+        if (Internet.isInternetAvailable(this)) {
             loadDb()
-        }else{
-            Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
 
         //button save in db if edit text is not empty
         assignments_save_button.setOnClickListener {
-            if(activity_assignments_describe_edit_text.text.toString().trim() == ""){
-                Toast.makeText(this,getString(R.string.no_blank_field),Toast.LENGTH_SHORT).show()
-            }else{
-                if(Internet.isInternetAvailable(this)){
+            if (activity_assignments_describe_edit_text.text.toString().trim() == "") {
+                Toast.makeText(this, getString(R.string.no_blank_field), Toast.LENGTH_SHORT).show()
+            } else {
+                if (Internet.isInternetAvailable(this)) {
                     checkValidateRequest()
-                }else{
-                    Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
@@ -51,21 +52,23 @@ class AssignmentsActivity : AppCompatActivity() {
 
 
     //load user info in db and update view
-    private fun loadDb(){
+    private fun loadDb() {
         val db = FirebaseFirestore.getInstance()
         db.collection("pro users").document(intent.getStringExtra("proId")!!).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    activity_assignements_full_name_text_view.text = document["full name"].toString()
+                    activity_assignements_full_name_text_view.text =
+                        document["full name"].toString()
                     activity_assignements_job_text_view.text = document["job"].toString()
 
-                    if (document["rating"] != null){
-                        activity_assignment_ratingbar.rating = document["rating"].toString().toFloat()
+                    if (document["rating"] != null) {
+                        activity_assignment_ratingbar.rating =
+                            document["rating"].toString().toFloat()
 
-                        val nbRating:String = "(" + document["ratingNb"].toString() + ") : "
+                        val nbRating: String = "(" + document["ratingNb"].toString() + ") : "
                         activity_assignements_nb_rating_text_view.text = nbRating
-                    }else{
-                        activity_assignment_ratingbar_linearlayout.visibility =View.GONE
+                    } else {
+                        activity_assignment_ratingbar_linearlayout.visibility = View.GONE
                     }
 
                 } else {
@@ -78,23 +81,33 @@ class AssignmentsActivity : AppCompatActivity() {
     }
 
     //create new assignment and notification in db
-    private fun saveInDb(){
+    private fun saveInDb() {
         val db = FirebaseFirestore.getInstance()
 
-        val assignments = Assignment(null,null,FirebaseAuth.getInstance().currentUser?.uid!!,intent.getStringExtra("proId"),"pending", activity_assignments_describe_edit_text.text.toString(),null)
+        val assignments = Assignment(
+            null,
+            null,
+            FirebaseAuth.getInstance().currentUser?.uid!!,
+            intent.getStringExtra("proId"),
+            "pending",
+            activity_assignments_describe_edit_text.text.toString(),
+            null
+        )
 
         val uuid = UUID.randomUUID()
         db.collection("assignments").document(uuid.toString()).set(assignments)
 
             .addOnSuccessListener {
                 Log.d("addDB", "DocumentSnapshot added ")
-                Notification.createNotificationInDb("pro users",
+                Notification.createNotificationInDb(
+                    "pro users",
                     assignments.proUserId.toString(),
                     FirebaseAuth.getInstance().currentUser?.uid!!,
                     uuid.toString(),
                     getString(R.string.new_assignment_title_notif),
                     getString(R.string.new_assignment_text_notif),
-                    "new assignment created")
+                    "new assignment created"
+                )
 
             }
             .addOnFailureListener { e ->
@@ -103,15 +116,21 @@ class AssignmentsActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun checkValidateRequest(){
+    private fun checkValidateRequest() {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("assignments").whereEqualTo("status","pending").whereEqualTo("proUserId",intent.getStringExtra("proId")).whereEqualTo("userId",FirebaseAuth.getInstance().currentUser?.uid!!)
-        .get()
+        db.collection("assignments").whereEqualTo("status", "pending")
+            .whereEqualTo("proUserId", intent.getStringExtra("proId"))
+            .whereEqualTo("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
+            .get()
             .addOnSuccessListener { documents ->
-                if(documents.size() > 0){
-                 Toast.makeText(this,getString(R.string.imposible_already_request),Toast.LENGTH_SHORT).show()
-                }else{
+                if (documents.size() > 0) {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.imposible_already_request),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
                     saveInDb()
                 }
             }

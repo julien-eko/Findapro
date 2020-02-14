@@ -299,10 +299,11 @@ class AssignmentsInProgressFragment : Fragment() {
     }
 
     private fun diplayRecyclerView() {
-        if(context != null ){
+        if (context != null) {
             recycler_view_assignments_in_progress_fragment.layoutManager =
                 LinearLayoutManager(context)
-            val controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_fall_down)
+            val controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down)
             recycler_view_assignments_in_progress_fragment.layoutAnimation = controller
             recycler_view_assignments_in_progress_fragment.adapter = AssignmentsInProgressAdapter(
                 assigmentsList,

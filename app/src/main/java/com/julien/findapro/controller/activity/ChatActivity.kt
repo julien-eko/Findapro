@@ -24,8 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.julien.findapro.R
-import com.julien.findapro.utils.Message
-import com.julien.findapro.utils.Notification
+import com.julien.findapro.model.Message
+import com.julien.findapro.model.Notification
 import com.julien.findapro.api.MessageHelper
 import com.julien.findapro.view.ChatAdapter
 import com.squareup.picasso.Picasso

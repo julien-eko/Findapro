@@ -19,10 +19,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
-import com.julien.findapro.utils.Assignment
+import com.julien.findapro.model.Assignment
 import com.julien.findapro.utils.CircleTransform
 import com.julien.findapro.utils.Internet
-import com.julien.findapro.utils.Notification
+import com.julien.findapro.model.Notification
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_assignment_detail.*
 import java.text.SimpleDateFormat
@@ -356,13 +356,11 @@ class AssignmentDetailActivity : AppCompatActivity() {
                         intent.putExtra("assignment", assignmentId)
                         startActivity(intent)
                     }
-                    //Toast.makeText(this,"pas noté",Toast.LENGTH_SHORT).show()
                 } else {
                     //rated
                     activity_assignment_detail_rating_button.visibility = View.GONE
                     activity_assignment_detail_more_information_textview.text =
                         getString(R.string.assignment_finish)
-                    //Toast.makeText(this,"déja noté",Toast.LENGTH_SHORT).show()
                 }
 
             }

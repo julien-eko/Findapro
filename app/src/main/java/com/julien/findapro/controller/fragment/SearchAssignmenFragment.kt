@@ -46,7 +46,8 @@ class SearchAssignmenFragment : DialogFragment() {
 
             //ratingbar
             view.fragment_search_assignment_ratingbar.setOnRatingBarChangeListener { ratingBar, _, _ ->
-                view.fragment_search_assignment_rating_textview.text = ratingBar.rating.toString() + "/5"
+                view.fragment_search_assignment_rating_textview.text =
+                    ratingBar.rating.toString() + "/5"
             }
 
             //start search and update recycler view

@@ -6,11 +6,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
 
-class AssignmentsInProgressAdapter(private var assignmentList: ArrayList<HashMap<String,Any?>>, val context: Context, val clickListener: (HashMap<String,Any?>, isProfil:Boolean) -> Unit):
+class AssignmentsInProgressAdapter(
+    private var assignmentList: ArrayList<HashMap<String, Any?>>,
+    val context: Context,
+    val clickListener: (HashMap<String, Any?>, isProfil: Boolean) -> Unit
+) :
     RecyclerView.Adapter<AssignmentsInProgressViewHolder>() {
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssignmentsInProgressViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): AssignmentsInProgressViewHolder {
         val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_assignments_in_progress_item, parent, false)
         return AssignmentsInProgressViewHolder(v)
@@ -19,11 +26,9 @@ class AssignmentsInProgressAdapter(private var assignmentList: ArrayList<HashMap
 
 
     override fun onBindViewHolder(holder: AssignmentsInProgressViewHolder, position: Int) {
-        holder.update(assignmentList[position],clickListener)
+        holder.update(assignmentList[position], clickListener)
 
     }
-
-
 
 
     override fun getItemCount() = assignmentList.size

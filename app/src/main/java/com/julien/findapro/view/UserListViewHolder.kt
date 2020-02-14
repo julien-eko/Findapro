@@ -9,9 +9,10 @@ import kotlinx.android.synthetic.main.fragment_users_list_item.view.*
 class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
-
-
-    fun update(user:HashMap<String,String>,clickListener: (HashMap<String,String>,isProfil:Boolean) -> Unit) {
+    fun update(
+        user: HashMap<String, String>,
+        clickListener: (HashMap<String, String>, isProfil: Boolean) -> Unit
+    ) {
 
 
         itemView.fragment_users_list_item_job_textview.text = user["full name"]
@@ -19,20 +20,31 @@ class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.fragment_users_list_item_city_textview.text = user["city"]
 
 
-        if(user["rating"] != "null"){
+        if (user["rating"] != "null") {
             itemView.fragment_user_list_item_ratingbar.rating = user["rating"]!!.toFloat()
-        }else{
+        } else {
             itemView.fragment_user_list_item_ratingbar.visibility = View.GONE
             itemView.fragment_user_list_item_no_rating.visibility = View.VISIBLE
         }
 
-        Picasso.get().load(user["photo"]).transform(CircleTransform()).into(itemView.fragment_users_list_item_photo_imageview)
+        Picasso.get().load(user["photo"]).transform(CircleTransform())
+            .into(itemView.fragment_users_list_item_photo_imageview)
 
 
 
-        itemView.fragment_users_list_item_photo_imageview.setOnClickListener{clickListener(user,true)}
+        itemView.fragment_users_list_item_photo_imageview.setOnClickListener {
+            clickListener(
+                user,
+                true
+            )
+        }
 
-        itemView.fragment_users_list_item_click_linearlayout.setOnClickListener{clickListener(user,false)}
+        itemView.fragment_users_list_item_click_linearlayout.setOnClickListener {
+            clickListener(
+                user,
+                false
+            )
+        }
 
     }
 }

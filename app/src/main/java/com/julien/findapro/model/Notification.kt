@@ -1,4 +1,4 @@
-package com.julien.findapro.utils
+package com.julien.findapro.model
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,7 +12,8 @@ class Notification(
     var assignmentId: String? = null,
     var titleNotification: String? = null,
     var textNotification: String? = null,
-    var cause: String? = null
+    var cause: String? = null,
+    var token: String? = null
 ) {
 
 
@@ -33,14 +34,16 @@ class Notification(
             db.collection(userType).document(idUserRecieve).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        val notification = Notification(
-                            null,
-                            otherUserId,
-                            assignmentId,
-                            titleNotification,
-                            textNotification,
-                            cause
-                        )
+                        val notification =
+                            Notification(
+                                null,
+                                otherUserId,
+                                assignmentId,
+                                titleNotification,
+                                textNotification,
+                                cause,
+                                document["token"].toString()
+                            )
 
                         db.collection(userType).document(idUserRecieve).collection("notification")
                             .document().set(notification)

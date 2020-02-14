@@ -25,7 +25,7 @@ class ProfilActivity : AppCompatActivity() {
 
     private lateinit var userId: String
     private val profilList: ArrayList<HashMap<String, String>> = ArrayList()
-    private var typeUser:String = ""
+    private var typeUser: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,7 @@ class ProfilActivity : AppCompatActivity() {
         configureToolbar()
 
         //check internet connexion
-        if(Internet.isInternetAvailable(this)){
+        if (Internet.isInternetAvailable(this)) {
             displayInformation()
 
             GlobalScope.launch {
@@ -48,52 +48,59 @@ class ProfilActivity : AppCompatActivity() {
 
                 }
             }
-        }else{
-            Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
     }
 
     //read information user in db and update view
     @SuppressLint("SetTextI18n")
-    private fun displayInformation(){
-        val db =FirebaseFirestore.getInstance()
+    private fun displayInformation() {
+        val db = FirebaseFirestore.getInstance()
 
         db.collection("pro users").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document.data != null) {
                     typeUser = "pro users"
-                    Picasso.get().load(document["photo"].toString()).transform(CircleTransform()).into(activity_profil_photo_imageview)
+                    Picasso.get().load(document["photo"].toString()).transform(CircleTransform())
+                        .into(activity_profil_photo_imageview)
                     activity_profil_name_textview.text = document["full name"].toString()
                     activity_profil_job_textview.visibility = View.VISIBLE
                     activity_profil_job_textview.text = document["job"].toString()
                     activity_profil_city_textview.text = document["city"].toString()
 
-                    if (document["rating"] != null){
+                    if (document["rating"] != null) {
                         activity_profil_ratingbar.rating = document["rating"].toString().toFloat()
-                        activity_profil_nb_rate_textview.text = document["ratingNb"].toString() + " avis"
-                    }else{
+                        activity_profil_nb_rate_textview.text =
+                            document["ratingNb"].toString() + " avis"
+                    } else {
                         activity_profil_ratingbar_linearlayout.visibility = View.GONE
                     }
 
-                    load("users",typeUser)
+                    load("users", typeUser)
                 } else {
                     db.collection("users").document(userId).get()
                         .addOnSuccessListener { documentUser ->
                             if (documentUser.data != null) {
                                 typeUser = "users"
-                                Picasso.get().load(documentUser["photo"].toString()).transform(CircleTransform()).into(activity_profil_photo_imageview)
-                                activity_profil_name_textview.text = documentUser["full name"].toString()
+                                Picasso.get().load(documentUser["photo"].toString())
+                                    .transform(CircleTransform())
+                                    .into(activity_profil_photo_imageview)
+                                activity_profil_name_textview.text =
+                                    documentUser["full name"].toString()
                                 activity_profil_city_textview.text = documentUser["city"].toString()
 
 
-                                if (documentUser["rating"] != null){
-                                    activity_profil_ratingbar.rating = documentUser["rating"].toString().toFloat()
-                                    activity_profil_nb_rate_textview.text = documentUser["ratingNb"].toString() + " avis"
-                                }else{
+                                if (documentUser["rating"] != null) {
+                                    activity_profil_ratingbar.rating =
+                                        documentUser["rating"].toString().toFloat()
+                                    activity_profil_nb_rate_textview.text =
+                                        documentUser["ratingNb"].toString() + " avis"
+                                } else {
                                     activity_profil_ratingbar_linearlayout.visibility = View.GONE
                                 }
-                                load("pro users",typeUser)
+                                load("pro users", typeUser)
                             }
                         }
                         .addOnFailureListener { exception ->
@@ -109,8 +116,8 @@ class ProfilActivity : AppCompatActivity() {
     }
 
     //read all rate and add in list for display recycler view
-    private fun load(userRater:String,userType:String){
-        val db =FirebaseFirestore.getInstance()
+    private fun load(userRater: String, userType: String) {
+        val db = FirebaseFirestore.getInstance()
 
         db.collection(userType).document(userId).collection("rating").get()
             .addOnSuccessListener { documents ->
@@ -131,10 +138,20 @@ class ProfilActivity : AppCompatActivity() {
 
                                 )
                                 profilList.add(profil)
-                                recycler_view_user_profil_activity.layoutManager = LinearLayoutManager(this)
-                                val controller = AnimationUtils.loadLayoutAnimation(this,R.anim.layout_animation_fall_down)
+                                recycler_view_user_profil_activity.layoutManager =
+                                    LinearLayoutManager(this)
+                                val controller = AnimationUtils.loadLayoutAnimation(
+                                    this,
+                                    R.anim.layout_animation_fall_down
+                                )
                                 recycler_view_user_profil_activity.layoutAnimation = controller
-                                recycler_view_user_profil_activity.adapter = ProfilAdaptater(profilList) { userItem : HashMap<String,String>, isProfil:Boolean -> userItemClicked(userItem,isProfil) }
+                                recycler_view_user_profil_activity.adapter =
+                                    ProfilAdaptater(profilList) { userItem: HashMap<String, String>, isProfil: Boolean ->
+                                        userItemClicked(
+                                            userItem,
+                                            isProfil
+                                        )
+                                    }
                                 recycler_view_user_profil_activity.scheduleLayoutAnimation()
                             } else {
                                 Log.d("user profil", "No such document")
@@ -167,23 +184,25 @@ class ProfilActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 
-            onBackPressed()
+        onBackPressed()
 
 
         return super.onOptionsItemSelected(item!!)
     }
 
-    private fun userItemClicked(userItem : HashMap<String,String>,isProfil:Boolean) {
+    private fun userItemClicked(userItem: HashMap<String, String>, isProfil: Boolean) {
 
-        if(Internet.isInternetAvailable(this)){
-            if (isProfil){
-                val intent = Intent(this,
-                    ProfilActivity::class.java)
-                intent.putExtra("id",userItem["userId"])
+        if (Internet.isInternetAvailable(this)) {
+            if (isProfil) {
+                val intent = Intent(
+                    this,
+                    ProfilActivity::class.java
+                )
+                intent.putExtra("id", userItem["userId"])
                 startActivity(intent)
             }
-        }else{
-            Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
 
