@@ -1,15 +1,13 @@
 package com.julien.findapro.view
 
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Message
+import com.julien.findapro.utils.Message
 
-class ChatAdapter(options: FirestoreRecyclerOptions<Message>,val currentUserId:String):FirestoreRecyclerAdapter<Message,MessageViewHolder>(options) {
+class ChatAdapter(options: FirestoreRecyclerOptions<Message>, private val currentUserId:String):FirestoreRecyclerAdapter<Message,MessageViewHolder>(options) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         val view = LayoutInflater.from(parent.context)

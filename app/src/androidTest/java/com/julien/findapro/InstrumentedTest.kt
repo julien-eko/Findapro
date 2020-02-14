@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import androidx.test.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.julien.findapro.Utils.Internet
+import com.julien.findapro.utils.Internet
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,4 +28,6 @@ class InstrumentedTest {
         assertEquals(Internet.isInternetAvailable(appContext),networkInfo.isConnected)
 
     }
+
+
 }

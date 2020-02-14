@@ -1,13 +1,11 @@
 package com.julien.findapro.controller.activity
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateFormat
@@ -17,26 +15,18 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Assignment
-import com.julien.findapro.Utils.CircleTransform
-import com.julien.findapro.Utils.Internet
-import com.julien.findapro.Utils.Notification
+import com.julien.findapro.utils.Assignment
+import com.julien.findapro.utils.CircleTransform
+import com.julien.findapro.utils.Internet
+import com.julien.findapro.utils.Notification
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Picasso.LoadedFrom
-import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_assignment_detail.*
-import kotlinx.android.synthetic.main.activity_rating.*
-import kotlinx.android.synthetic.main.fragment_assignments_in_progress_item.view.*
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.xml.datatype.DatatypeConstants.MONTHS
 
 
 class AssignmentDetailActivity : AppCompatActivity() {
@@ -134,7 +124,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
     //read assignment in db
     private fun loadAssignment() {
         val db = FirebaseFirestore.getInstance()
-        val docRef = db.collection("assignments").document(intent.getStringExtra("id"))
+        val docRef = db.collection("assignments").document(intent.getStringExtra("id")!!)
         docRef.get().addOnSuccessListener { documentSnapshot ->
             assignment = documentSnapshot.toObject(Assignment::class.java)
 
@@ -142,9 +132,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
             displayDataUser(sharedPreferences.getBoolean("isPro", false))
 
-            val assignmentStatus = assignment?.status
-
-            when (assignmentStatus) {
+            when (assignment?.status) {
                 "inProgress" -> inProgressAssignment()
                 "cancel" -> cancel()
                 "refuse" -> refuseAssignment()
@@ -172,7 +160,6 @@ class AssignmentDetailActivity : AppCompatActivity() {
                             .into(activity_assignment_detail_photo_imageview)
                         activity_assignment_detail_name_textview.text =
                             document["full name"].toString()
-                        //activity_assignment_detail_adress_textview.text = document["adress"].toString()
                         activity_assignment_detail_city_textview.text = document["city"].toString()
                         activity_assignment_detail_postal_code_textview.text =
                             document["postal code"].toString()
@@ -261,7 +248,6 @@ class AssignmentDetailActivity : AppCompatActivity() {
                 activity_assignment_detail_intervention_date_button.visibility = View.VISIBLE
                 activity_assignment_detail_intervention_date_button.setBackgroundResource(R.drawable.baseline_add_circle_black_24)
             } else {
-                //activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
                 activity_assignment_detail_intervention_date_button.visibility = View.GONE
 
 
@@ -271,14 +257,12 @@ class AssignmentDetailActivity : AppCompatActivity() {
         } else {
             activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
             if (sharedPreferences.getBoolean("isPro", false)) {
-                //activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
                 activity_assignment_detail_intervention_date_button.visibility = View.VISIBLE
                 activity_assignment_detail_intervention_date_button.setBackgroundResource(R.drawable.baseline_edit_black_24)
 
                 activity_assignment_detail_intervention_date_textview.text =
                     convertDate(assignment?.dateAssignment, true)
             } else {
-                //activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
                 activity_assignment_detail_intervention_date_button.visibility = View.GONE
 
                 activity_assignment_detail_intervention_date_textview.text =
@@ -388,6 +372,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
             }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun cancel() {
         activity_assignment_detail_cancel_assignment_button.visibility = View.GONE
         activity_assignment_detail_finish_assignment_button.visibility = View.GONE
@@ -398,7 +383,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
         activity_assignment_detail_more_information_linearlayout.visibility = View.VISIBLE
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val date = dateFormat.format(assignment?.dateEnd).toString()
+        val date = dateFormat.format(assignment?.dateEnd!!).toString()
         if (sharedPreferences.getBoolean("isPro", false)) {
             activity_assignment_detail_more_information_textview.text = "Mission annulé le $date"
         } else {
@@ -409,15 +394,14 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
     //formating date
     fun convertDate(date: Date?, whithHour: Boolean): String {
-        var dateFormatDay: SimpleDateFormat
-        dateFormatDay = if (whithHour) {
+        val dateFormatDay: SimpleDateFormat = if (whithHour) {
             SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         } else {
             SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         }
 
 
-        return dateFormatDay.format(date).toString()
+        return dateFormatDay.format(date!!).toString()
     }
 
     //pick date and update in db
@@ -472,9 +456,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.cancel_assignment))
         builder.setMessage(getString(R.string.cancel_assignment_question))
-        //builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
-
-        builder.setPositiveButton("Oui") { dialog, which ->
+        builder.setPositiveButton("Oui") { _, _ ->
             val db = FirebaseFirestore.getInstance()
             db.collection("assignments").document(assignmentId)
                 .update("status", "cancel")
@@ -506,7 +488,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                 .addOnFailureListener { e -> Log.w("update date", "Error updating document", e) }
         }
 
-        builder.setNegativeButton("Non") { dialog, which ->
+        builder.setNegativeButton("Non") { _, _ ->
 
         }
 
@@ -518,10 +500,10 @@ class AssignmentDetailActivity : AppCompatActivity() {
     private fun openGoogleMap() {
 
         val intent = Intent(
-            android.content.Intent.ACTION_VIEW,
+            Intent.ACTION_VIEW,
             Uri.parse("https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}")
-        );
-        startActivity(intent);
+        )
+        startActivity(intent)
 
 
     }
@@ -531,9 +513,8 @@ class AssignmentDetailActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.finish_assignment))
         builder.setMessage(getString(R.string.finish_missio_question))
-        //builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
 
-        builder.setPositiveButton("Oui") { dialog, which ->
+        builder.setPositiveButton("Oui") { _, _ ->
             val db = FirebaseFirestore.getInstance()
             db.collection("assignments").document(assignmentId)
                 .update("status", "finish")
@@ -565,7 +546,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                 .addOnFailureListener { e -> Log.w("update date", "Error updating document", e) }
         }
 
-        builder.setNegativeButton("Non") { dialog, which ->
+        builder.setNegativeButton("Non") { _, _ ->
 
         }
 
@@ -597,7 +578,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        var itemid = item?.itemId
+        val itemid = item?.itemId
 
 
         if (itemid == R.id.action_open_chat) {
@@ -627,7 +608,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        return super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item!!)
     }
 
 

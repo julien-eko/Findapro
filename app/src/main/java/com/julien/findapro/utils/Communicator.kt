@@ -1,4 +1,4 @@
-package com.julien.findapro.Utils
+package com.julien.findapro.utils
 
 interface Communicator {
 

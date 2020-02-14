@@ -1,4 +1,4 @@
-package com.julien.findapro.Utils
+package com.julien.findapro.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

@@ -3,14 +3,11 @@ package com.julien.findapro.view
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.julien.findapro.Utils.CircleTransform
-import com.julien.findapro.Utils.Notification
+import com.julien.findapro.utils.CircleTransform
+import com.julien.findapro.utils.Notification
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_notification_list_item.view.*
-import kotlinx.android.synthetic.main.fragment_assignments_list_item.view.*
-import kotlinx.android.synthetic.main.fragment_chat_list_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -19,7 +16,6 @@ class NotificationListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
     fun update(notification:Notification,clickListener:(Notification,isProfil:Boolean)->Unit,userType:String) {
 
 
-        //itemView.activity_notification_list_date.text = "date"
         itemView.activity_notification_list_notufication_text_textview.text = notification.textNotification
         itemView.activity_notification_list_notufication_title_textview.text = notification.titleNotification
 
@@ -50,7 +46,7 @@ class NotificationListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
     }
 
     private fun dateFormat(notification: Notification){
-        var date:String?
+        val date:String?
         val dateCreatedDate  =notification.dateCreated
 
         val realDate = Date()
@@ -58,7 +54,7 @@ class NotificationListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
         val dateFormatDay = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
-        date = if ( dateFormatDay.format(dateCreatedDate).toString() == dateFormatDay.format(realDate).toString()){
+        date = if ( dateFormatDay.format(dateCreatedDate!!).toString() == dateFormatDay.format(realDate).toString()){
             dateFormat.format(dateCreatedDate).toString()
         }else{
             dateFormatDay.format(dateCreatedDate).toString()

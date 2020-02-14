@@ -3,15 +3,13 @@ package com.julien.findapro.view
 
 
 import android.graphics.drawable.GradientDrawable
-import android.os.Build
 import android.view.View
 import android.widget.RelativeLayout
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
-import com.julien.findapro.Utils.CircleTransform
-import com.julien.findapro.Utils.Message
+import com.julien.findapro.utils.CircleTransform
+import com.julien.findapro.utils.Message
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_chat_item.view.*
 import java.text.DateFormat
@@ -22,33 +20,33 @@ import java.util.*
 class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     //Root view
-    val rootView = itemView.activity_chat_item_root_view
+    private val rootView = itemView.activity_chat_item_root_view
 
     //profile container
-    val profileContainer = itemView.activity_chat_item_profile_container
-    val imageViewProfile = itemView.activity_chat_item_profile_container_profile_image
+    private val profileContainer= itemView.activity_chat_item_profile_container
+    private val imageViewProfile = itemView.activity_chat_item_profile_container_profile_image
 
     //Message container
 
-    val messageContainer = itemView.activity_chat_item_message_container
+    private val messageContainer = itemView.activity_chat_item_message_container
 
     //Image sender container
-    val cardViewImageSent = itemView.activity_chat_item_message_container_image_sent_cardview
-    val imageSent = itemView.activity_chat_item_message_container_image_sent_cardview_image
+    private val cardViewImageSent = itemView.activity_chat_item_message_container_image_sent_cardview
+    private val imageSent = itemView.activity_chat_item_message_container_image_sent_cardview_image
 
     //text message container
-    val textMessageContainer = itemView.activity_chat_item_message_container_text_message_container
-    val textViewMessage = itemView.activity_chat_item_message_container_text_message_container_text_view
+    private val textMessageContainer = itemView.activity_chat_item_message_container_text_message_container
+    private val textViewMessage = itemView.activity_chat_item_message_container_text_message_container_text_view
 
     //Dare text
-    val textViewDate = itemView.activity_chat_item_message_container_text_view_date
+    private val textViewDate = itemView.activity_chat_item_message_container_text_view_date
 
-    val colorCurrentUser =ContextCompat.getColor(itemView.context, R.color.colorChat1)
-    val colorRemoteUser = ContextCompat.getColor(itemView.context, R.color.colorChat2)
+    private val colorCurrentUser =ContextCompat.getColor(itemView.context, R.color.colorChat1)
+    private val colorRemoteUser = ContextCompat.getColor(itemView.context, R.color.colorChat2)
 
     //bot message
 
-    val botMessage = itemView.activity_chat_item_bot_message
+    private val botMessage = itemView.activity_chat_item_bot_message
 
 
 
@@ -87,8 +85,7 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 Picasso.get().load(message.urlImageSender).transform(CircleTransform()).into(imageViewProfile)
             }
 
-            //update image sent texview (not implemented atm
-           // this.imageSent.visibility=View.GONE
+
 
             if(message.urlImageMessage != null){
                 Picasso.get().load(message.urlImageMessage).into(imageSent)
@@ -97,7 +94,6 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 this.imageSent.visibility=View.GONE
             }
 
-            //Update Message Bubble Color Background
             //Update Message Bubble Color Background
             (textMessageContainer.background as GradientDrawable).setColor(if (isCurrentUser) colorCurrentUser else colorRemoteUser)
 
@@ -109,7 +105,7 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private  fun updateDesignDependingUser(isSender: Boolean){
-        // PROFILE CONTAINER
+
         // PROFILE CONTAINER
         val paramsLayoutHeader = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -121,7 +117,6 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
         // MESSAGE CONTAINER
-        // MESSAGE CONTAINER
         val paramsLayoutContent = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
@@ -131,7 +126,6 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             R.id.activity_chat_item_profile_container)
         this.messageContainer.layoutParams = paramsLayoutContent
 
-        // CARDVIEW IMAGE SEND
         // CARDVIEW IMAGE SEND
         val paramsImageView = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -147,7 +141,7 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun convertDateToHour(date: Date): String? {
-        val dfTime: DateFormat = SimpleDateFormat("HH:mm")
+        val dfTime: DateFormat = SimpleDateFormat("HH:mm", Locale.FRANCE)
         return dfTime.format(date)
     }
 

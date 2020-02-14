@@ -1,26 +1,20 @@
 package com.julien.findapro.controller.fragment
 
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.DialogFragment
-
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Communicator
+import com.julien.findapro.utils.Communicator
 import kotlinx.android.synthetic.main.fragment_search_assignmen.view.*
-import kotlinx.android.synthetic.main.fragment_search_user.view.*
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class SearchAssignmenFragment : DialogFragment() {
 
+    @SuppressLint("SetTextI18n", "InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         lateinit var comm: Communicator
 
@@ -40,7 +34,7 @@ class SearchAssignmenFragment : DialogFragment() {
                     seek: SeekBar,
                     progress: Int, fromUser: Boolean
                 ) {
-                    view.fragment_search_assignment_distance.text = seek.progress.toString() + " km"
+                    view.fragment_search_assignment_distance.text = "${seek.progress} km"
                 }
 
                 override fun onStartTrackingTouch(seek: SeekBar) {
@@ -51,7 +45,7 @@ class SearchAssignmenFragment : DialogFragment() {
             })
 
             //ratingbar
-            view.fragment_search_assignment_ratingbar.setOnRatingBarChangeListener { ratingBar, fl, b ->
+            view.fragment_search_assignment_ratingbar.setOnRatingBarChangeListener { ratingBar, _, _ ->
                 view.fragment_search_assignment_rating_textview.text = ratingBar.rating.toString() + "/5"
             }
 

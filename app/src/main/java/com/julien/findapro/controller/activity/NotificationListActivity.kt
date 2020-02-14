@@ -13,17 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.toObject
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Internet
-import com.julien.findapro.Utils.Notification
+import com.julien.findapro.utils.Internet
+import com.julien.findapro.utils.Notification
 import com.julien.findapro.view.NotificationListAdapter
-import com.julien.findapro.view.UserListAdapater
-import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.activity_notification_list.*
-import kotlinx.android.synthetic.main.activity_planning.*
-import kotlinx.android.synthetic.main.fragment_assignments_list.*
-import kotlinx.android.synthetic.main.fragment_users_list.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -48,9 +42,9 @@ class NotificationListActivity : AppCompatActivity() {
             GlobalScope.launch {
                 delay(2000)
                 if (notificationList.isEmpty()) {
-                    this@NotificationListActivity.runOnUiThread(java.lang.Runnable {
+                    this@NotificationListActivity.runOnUiThread {
                         activity_notification_list_no_item.visibility = View.VISIBLE
-                    })
+                    }
 
                 }
             }
@@ -103,7 +97,7 @@ class NotificationListActivity : AppCompatActivity() {
         actionBar?.title = getString(R.string.Toolbar_title_notification_activity)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         onBackPressed()
         return super.onOptionsItemSelected(item)
     }

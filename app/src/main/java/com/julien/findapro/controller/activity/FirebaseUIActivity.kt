@@ -49,7 +49,7 @@ class FirebaseUIActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
+            IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
                 val db = FirebaseFirestore.getInstance()
@@ -88,8 +88,8 @@ class FirebaseUIActivity : AppCompatActivity() {
                             MainActivity::class.java)
                         startActivity(intent)
                     }else{
-                        db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
-                            if (document.data != null){
+                        db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { documentPro ->
+                            if (documentPro.data != null){
                                 val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
                                 val editor = sharedPref.edit()
                                 editor.putBoolean("isPro",true)
@@ -109,31 +109,11 @@ class FirebaseUIActivity : AppCompatActivity() {
                 }.addOnFailureListener{exeption ->
                     Log.e("db","get fail with",exeption)
                 }
-            } else {
-                // Sign in failed. If response is null the user canceled
             }
         }
     }
 
-    private fun signOut() {
-        // [START auth_fui_signout]
-        AuthUI.getInstance()
-            .signOut(this)
-            .addOnCompleteListener {
-                // ...
-            }
-        // [END auth_fui_signout]
-    }
 
-    private fun delete() {
-        // [START auth_fui_delete]
-        AuthUI.getInstance()
-            .delete(this)
-            .addOnCompleteListener {
-                // ...
-            }
-        // [END auth_fui_delete]
-    }
 
 
     companion object {

@@ -3,10 +3,9 @@ package com.julien.findapro.view
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
-import com.julien.findapro.Utils.CircleTransform
+import com.julien.findapro.utils.CircleTransform
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_planning_item.view.*
-import kotlinx.android.synthetic.main.activity_profil_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -25,13 +24,11 @@ class PlanningViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         Picasso.get().load(planning["photo"].toString()).transform(CircleTransform()).into(itemView.activity_planning_clik_imageview)
 
 
-        var date:String?
+        val date:String?
         val dateCreatedTimestamp =planning["date"] as? Timestamp
         val dateCreatedDate:Date? = dateCreatedTimestamp?.toDate()
-        //val realDate = Date()
-
         val dateFormatDay = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        //val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+
 
 
         date = dateFormatDay.format(dateCreatedDate!!).toString()

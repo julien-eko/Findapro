@@ -1,23 +1,21 @@
 package com.julien.findapro.controller.fragment
 
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View.OnTouchListener
 import android.widget.SeekBar
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Communicator
+import com.julien.findapro.utils.Communicator
 import kotlinx.android.synthetic.main.fragment_search_user.view.*
 
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class SearchUserFragment : DialogFragment() {
 
+    @SuppressLint("InflateParams", "SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         lateinit var comm: Communicator
 
@@ -48,7 +46,7 @@ class SearchUserFragment : DialogFragment() {
             })
 
             //ratingbar
-            view.fragment_search_user_ratingbar.setOnRatingBarChangeListener { ratingBar, fl, b ->
+            view.fragment_search_user_ratingbar.setOnRatingBarChangeListener { ratingBar, _, _ ->
                 view.fragment_search_user_rating_textview.text = ratingBar.rating.toString() + "/5"
             }
 

@@ -17,27 +17,22 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Internet
+import com.julien.findapro.utils.Internet
 import com.julien.findapro.controller.activity.ChatActivity
 import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.ChatListAdapter
-import kotlinx.android.synthetic.main.fragment_assignments_list.*
 import kotlinx.android.synthetic.main.fragment_chat_list.*
-import kotlinx.android.synthetic.main.fragment_chat_list_item.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class ChatListFragment : Fragment() {
 
-    val chatList: ArrayList<HashMap<String, Any?>> = ArrayList()
+    private val chatList: ArrayList<HashMap<String, Any?>> = ArrayList()
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
@@ -118,87 +113,13 @@ class ChatListFragment : Fragment() {
 
     }
 
-    /*
-    private fun updateList() {
-        val db = FirebaseFirestore.getInstance()
-        val user: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
-        val userId: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "userId" else "proUserId"
-        val userType: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "proUserId" else "userId"
-
-
-        db.collection("assignments")
-            .whereEqualTo(userType, FirebaseAuth.getInstance().currentUser?.uid!!)
-            .addSnapshotListener { value, e ->
-                if (e != null) {
-                    Log.w("chat listener", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-
-
-                for (document in value!!) {
-                    db.collection("assignments").document(document.id).collection("chat")
-                        .get()
-                        .addOnSuccessListener { chatDocument ->
-
-                            if (chatDocument.size() > 0) {
-                                db.collection(user).document(document[userId].toString()).get()
-                                    .addOnSuccessListener { documentUser ->
-
-
-                                        if (documentUser != null) {
-                                            lastMessage(
-                                                document.id,
-                                                documentUser["full name"].toString(),
-                                                documentUser["photo"].toString(),
-                                                documentUser.id
-                                            )
-                                            /*
-                                            val chat = hashMapOf(
-                                                "full name" to documentUser["full name"].toString(),
-                                                "photo" to documentUser["photo"].toString(),
-                                                "idUser" to documentUser.id,
-                                                "id" to document.id
-                                            )
-
-                                            //chatList.add(chat)
-
-
-                                            //recycler_view_chat_list_fragment.layoutManager = LinearLayoutManager(context)
-                                            //recycler_view_chat_list_fragment.adapter = ChatListAdapter(chatList,context!!,{ chatItem : HashMap<String,String>,isProfil:Boolean -> chatItemClicked(chatItem,isProfil) })
- */
-                                        } else {
-                                            Log.d("", "No such document")
-                                        }
-                                    }
-                                    .addOnFailureListener { exception ->
-                                        Log.d("", "get failed with ", exception)
-                                    }
-                            }
-
-
-                        }
-                        .addOnFailureListener { exception ->
-                            Log.w("chatlist", "Error getting documents: ", exception)
-                        }
-
-                }
-
-            }
-
-    }
-
-
-     */
 
     //load last message send in conv
     private fun lastMessage(assignmentId: String, fullName: String, photo: String, userId: String) {
         val db = FirebaseFirestore.getInstance()
 
         var createdDate: Any? = Timestamp(Date())
-        var lastMessage: String = ""
+        var lastMessage = ""
 
 
         db.collection("assignments").document(assignmentId).collection("chat")
@@ -234,13 +155,13 @@ class ChatListFragment : Fragment() {
                     recycler_view_chat_list_fragment.layoutAnimation = controller
                     recycler_view_chat_list_fragment.adapter = ChatListAdapter(
                         sortList,
-                        context!!,
-                        { chatItem: HashMap<String, Any?>, isProfil: Boolean ->
-                            chatItemClicked(
-                                chatItem,
-                                isProfil
-                            )
-                        })
+                        context!!
+                    ) { chatItem: HashMap<String, Any?>, isProfil: Boolean ->
+                        chatItemClicked(
+                            chatItem,
+                            isProfil
+                        )
+                    }
                         recycler_view_chat_list_fragment.scheduleLayoutAnimation()
                 }
 
@@ -265,9 +186,9 @@ class ChatListFragment : Fragment() {
             GlobalScope.launch {
                 delay(2000)
                 if (chatList.isEmpty()) {
-                    activity?.runOnUiThread(java.lang.Runnable {
+                    activity?.runOnUiThread {
                         fragment_chat_list_no_item.visibility = View.VISIBLE
-                    })
+                    }
 
                 }
 

@@ -18,34 +18,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.julien.findapro.R
-import com.julien.findapro.Utils.CircleTransform
-import com.julien.findapro.Utils.Message
-import com.julien.findapro.Utils.Notification
+import com.julien.findapro.utils.Message
+import com.julien.findapro.utils.Notification
 import com.julien.findapro.api.MessageHelper
 import com.julien.findapro.view.ChatAdapter
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_assignments.*
 import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.android.synthetic.main.activity_chat_item.*
-import kotlinx.android.synthetic.main.activity_chat_item.view.*
 import java.util.*
 
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var uriImageSelected: Uri
-    private lateinit var  imageViewPreview:ImageView
+    private lateinit var imageViewPreview: ImageView
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var userType:String
-    private lateinit var assignmentId:String
+    private lateinit var userType: String
+    private lateinit var assignmentId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,22 +48,27 @@ class ChatActivity : AppCompatActivity() {
         configureRecyclerView()
         sharedPreferences = getSharedPreferences("isPro", 0)
 
-        userType = if(sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
-        assignmentId = intent.getStringExtra("assignment")
+        userType = if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
+        assignmentId = intent.getStringExtra("assignment")!!
 
-        this.imageViewPreview =  activity_chat_image_chosen_preview
+        this.imageViewPreview = activity_chat_image_chosen_preview
 
         //send message button
         activity_chat_send_button.setOnClickListener {
-            if(!TextUtils.isEmpty(activity_chat_message_edit_text.text) && FirebaseAuth.getInstance().currentUser != null){
+            if (!TextUtils.isEmpty(activity_chat_message_edit_text.text) && FirebaseAuth.getInstance().currentUser != null) {
                 //message with image or not
-                if(this.imageViewPreview.drawable == null){
-                    MessageHelper.createMessageForChat(activity_chat_message_edit_text.text.toString(),FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),FirebaseAuth.getInstance().currentUser?.uid!!,assignmentId)
-                    createNotification(true,activity_chat_message_edit_text.text.toString())
+                if (this.imageViewPreview.drawable == null) {
+                    MessageHelper.createMessageForChat(
+                        activity_chat_message_edit_text.text.toString(),
+                        FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),
+                        FirebaseAuth.getInstance().currentUser?.uid!!,
+                        assignmentId
+                    )
+                    createNotification(true, activity_chat_message_edit_text.text.toString())
                     activity_chat_message_edit_text.setText("")
-                }else{
+                } else {
                     this.uploadPhotoInFirebaseAndSendMessage(activity_chat_message_edit_text.text.toString())
-                    createNotification(false,null)
+                    createNotification(false, null)
                     activity_chat_message_edit_text.setText("")
                     this.imageViewPreview.setImageDrawable(null)
                 }
@@ -78,16 +77,21 @@ class ChatActivity : AppCompatActivity() {
         }
 
         //check if permission read image is ok
-        activity_chat_add_file_button.setOnClickListener{
+        activity_chat_add_file_button.setOnClickListener {
             checkPermition()
         }
     }
 
 
+    private fun configureRecyclerView() {
 
-    private fun configureRecyclerView(){
-
-        val chatAdapter = ChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessage(intent.getStringExtra("assignment")?:"default value")),FirebaseAuth.getInstance().currentUser?.uid!!)
+        val chatAdapter = ChatAdapter(
+            generateOptionsForAdapter(
+                MessageHelper.getAllMessage(
+                    intent.getStringExtra("assignment") ?: "default value"
+                )
+            ), FirebaseAuth.getInstance().currentUser?.uid!!
+        )
 
 
         recycler_view_chat_activity.layoutManager = LinearLayoutManager(this)
@@ -95,9 +99,9 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
-    private fun generateOptionsForAdapter(query: Query):FirestoreRecyclerOptions<Message>{
+    private fun generateOptionsForAdapter(query: Query): FirestoreRecyclerOptions<Message> {
         return FirestoreRecyclerOptions.Builder<Message>()
-            .setQuery(query,Message::class.java)
+            .setQuery(query, Message::class.java)
             .setLifecycleOwner(this)
             .build()
     }
@@ -113,54 +117,44 @@ class ChatActivity : AppCompatActivity() {
         ) {
 
             // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(
                     this,
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 )
             ) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
                 )
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         } else {
             // Permission has already been granted
 
-            val intent = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, RC_CHOOSE_PHOTO)
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
         when (requestCode) {
-            Companion.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
+            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
                 // If request is cancelled, the result arrays are empty.
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    val intent = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    val intent =
+                        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                     startActivityForResult(intent, RC_CHOOSE_PHOTO)
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    // permission was granted
                 }
                 return
             }
 
-            // Add other 'when' lines to check for other
-            // permissions this app might request.
+
             else -> {
                 // Ignore all other requests.
             }
@@ -169,10 +163,10 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // 6 - Calling the appropriate method after activity result
+        // Calling the appropriate method after activity result
         if (data != null) {
             this.handleResponse(requestCode, resultCode, data)
-        }else{
+        } else {
             Toast.makeText(
                 this,
                 "erreur",
@@ -198,23 +192,29 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadPhotoInFirebaseAndSendMessage(message:String){
-        val uuid =UUID.randomUUID().toString()
+    private fun uploadPhotoInFirebaseAndSendMessage(message: String) {
+        val uuid = UUID.randomUUID().toString()
 
         val mImageRef = FirebaseStorage.getInstance().getReference(uuid)
-        val uploadTask =mImageRef.putFile(this.uriImageSelected)
+        val uploadTask = mImageRef.putFile(this.uriImageSelected)
             .addOnFailureListener {
 
                 // Handle unsuccessful uploads
             }.addOnSuccessListener {
 
 
-                MessageHelper.createMessageWhithImageForChat(message,FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),FirebaseAuth.getInstance().currentUser?.uid!!,intent.getStringExtra("assignment"),it.toString())
-                // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+                MessageHelper.createMessageWhithImageForChat(
+                    message,
+                    FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),
+                    FirebaseAuth.getInstance().currentUser?.uid!!,
+                    intent.getStringExtra("assignment")!!,
+                    it.toString()
+                )
+
 
             }
 
-        val urlTask = uploadTask.continueWithTask { task ->
+        uploadTask.continueWithTask { task ->
             if (!task.isSuccessful) {
                 task.exception?.let {
                     throw it
@@ -224,11 +224,14 @@ class ChatActivity : AppCompatActivity() {
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val downloadUri = task.result
-                MessageHelper.createMessageWhithImageForChat(message,FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),FirebaseAuth.getInstance().currentUser?.uid!!,intent.getStringExtra("assignment"),downloadUri.toString())
+                MessageHelper.createMessageWhithImageForChat(
+                    message,
+                    FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),
+                    FirebaseAuth.getInstance().currentUser?.uid!!,
+                    intent.getStringExtra("assignment")!!,
+                    downloadUri.toString()
+                )
 
-            } else {
-                // Handle failures
-                // ...
             }
         }
     }
@@ -249,18 +252,17 @@ class ChatActivity : AppCompatActivity() {
         actionBar?.title = getString(R.string.tootlbar_title_chat_activity)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        var itemid = item?.itemId
+        val itemid = item.itemId
 
 
         if (itemid == R.id.action_open_assignment) {
 
 
             val intent = Intent(this, AssignmentDetailActivity::class.java)
-            intent.putExtra("id",assignmentId)
+            intent.putExtra("id", assignmentId)
             startActivity(intent)
-
 
 
         } else {
@@ -271,29 +273,33 @@ class ChatActivity : AppCompatActivity() {
     }
 
     //add notification in db
-    private fun createNotification(isTextMessage:Boolean,message: String?){
+    private fun createNotification(isTextMessage: Boolean, message: String?) {
         val db = FirebaseFirestore.getInstance()
         val docRef = db.collection("assignments").document(assignmentId)
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     val userId = if (userType == "pro users") "proUserId" else "userId"
-                    if(isTextMessage){
-                        Notification.createNotificationInDb(userType,
+                    if (isTextMessage) {
+                        Notification.createNotificationInDb(
+                            userType,
                             document[userId].toString(),
                             FirebaseAuth.getInstance().currentUser?.uid!!,
                             assignmentId,
                             getString(R.string.new_message_notification_title),
                             message,
-                            "new message")
-                    }else{
-                        Notification.createNotificationInDb(userType,
+                            "new message"
+                        )
+                    } else {
+                        Notification.createNotificationInDb(
+                            userType,
                             document[userId].toString(),
                             FirebaseAuth.getInstance().currentUser?.uid!!,
                             assignmentId,
                             getString(R.string.new_image_message_notif_title),
                             getString(R.string.new_image_notif_text),
-                            "new image")
+                            "new image"
+                        )
                     }
 
                 } else {

@@ -6,14 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
 
-class UserListAdapater(var userList: ArrayList<HashMap<String,String>>,val context: Context,val clickListener: (HashMap<String,String>,isProfil:Boolean) -> Unit):
+class UserListAdapater(private var userList: ArrayList<HashMap<String,String>>, val context: Context, val clickListener: (HashMap<String,String>, isProfil:Boolean) -> Unit):
     RecyclerView.Adapter<UserListViewHolder>() {
 
-    var listener: ((String) -> Unit)? = null
-    private var index: Int = -1
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
-        val v = LayoutInflater.from(parent?.context)
+        val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_users_list_item, parent, false)
         return UserListViewHolder(v)
 
@@ -21,7 +20,7 @@ class UserListAdapater(var userList: ArrayList<HashMap<String,String>>,val conte
 
 
     override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
-        holder.update(userList.get(position),clickListener)
+        holder.update(userList[position],clickListener)
 
     }
 

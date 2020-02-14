@@ -129,5 +129,6 @@
     <string name="sign_out">Déconnexion</string>
     <string name="activity_profil_no_item">Aucun avis</string>
     <string name="information_form_toolbar_title">Formulaire d\'information</string>
+    <string name="imposible_already_request">Impossible déjà une demande en attente avec ce pro</string>
 
 </resources>

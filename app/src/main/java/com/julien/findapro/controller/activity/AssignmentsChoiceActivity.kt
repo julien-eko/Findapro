@@ -1,6 +1,6 @@
 package com.julien.findapro.controller.activity
 
-import android.content.Intent
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,12 +9,10 @@ import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.iid.FirebaseInstanceId
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Internet
-import com.julien.findapro.Utils.Message
-import com.julien.findapro.Utils.Notification
-import kotlinx.android.synthetic.main.activity_assignments.*
+import com.julien.findapro.utils.Internet
+import com.julien.findapro.utils.Message
+import com.julien.findapro.utils.Notification
 import kotlinx.android.synthetic.main.activity_assignments_choice.*
 
 class AssignmentsChoiceActivity : AppCompatActivity() {
@@ -39,17 +37,17 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
         //accept button, update statut in db and create new notification
         assignments_choice_activity_accept_button.setOnClickListener {
             if(Internet.isInternetAvailable(this)){
-                db.collection("assignments").document(intent.getStringExtra("id"))
+                db.collection("assignments").document(intent.getStringExtra("id")!!)
                     .update("status", "inProgress")
                     .addOnSuccessListener {
 
-                        db.collection("assignments").document(intent.getStringExtra("id")).get()
+                        db.collection("assignments").document(intent.getStringExtra("id")!!).get()
                             .addOnSuccessListener { document ->
                                 if (document.data != null){
                                     Notification.createNotificationInDb("users",
                                         document["userId"].toString(),
                                         FirebaseAuth.getInstance().currentUser?.uid!!,
-                                        intent.getStringExtra("id"),
+                                        intent.getStringExtra("id")!!,
                                         getString(R.string.accept_assignment_notification_title),
                                         getString(R.string.acept_assignment_text_notification),
                                         "status update in progress")
@@ -69,8 +67,8 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                         Log.w("update status", "Error updating document", e)
                     }
 
-                val message = Message(getString(R.string.first_message_in_chat),"bot")
-                db.collection("assignments").document(intent.getStringExtra("id")).collection("chat").add(message)
+                val message = Message(getString(R.string.first_message_in_chat),null,"bot",null,null)
+                db.collection("assignments").document(intent.getStringExtra("id")!!).collection("chat").add(message)
 
                 finish()
             }else{
@@ -81,7 +79,7 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
 
             assignments_choice_activity_decline_button.setOnClickListener {
                 if(Internet.isInternetAvailable(this)){
-                    db.collection("assignments").document(intent.getStringExtra("id"))
+                    db.collection("assignments").document(intent.getStringExtra("id")!!)
                         .update("status", "refuse")
                         .addOnSuccessListener {
                             Log.d(
@@ -89,13 +87,13 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                                 "DocumentSnapshot successfully updated!"
                             )
 
-                            db.collection("assignments").document(intent.getStringExtra("id")).get()
+                            db.collection("assignments").document(intent.getStringExtra("id")!!).get()
                                 .addOnSuccessListener { document ->
                                     if (document.data != null){
                                         Notification.createNotificationInDb("users",
                                             document["userId"].toString(),
                                             FirebaseAuth.getInstance().currentUser?.uid!!,
-                                            intent.getStringExtra("id"),
+                                            intent.getStringExtra("id")!!,
                                             getString(R.string.assignment_refuse_notification_title),
                                             getString(R.string.assignment_refuse_text_notification),
                                             "status update refuse")
@@ -117,7 +115,7 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
 
 
     private fun loadData(db:FirebaseFirestore){
-        db.collection("assignments").document(intent.getStringExtra("id")).get()
+        db.collection("assignments").document(intent.getStringExtra("id")!!).get()
             .addOnSuccessListener { document ->
             if (document.data != null){
                 assignments_choice_activity_describe_textview.text = document["describe"].toString()
@@ -159,7 +157,7 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
         actionBar?.title = getString(R.string.toolbar_title_assignment_choice)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         onBackPressed()
         return super.onOptionsItemSelected(item)
     }

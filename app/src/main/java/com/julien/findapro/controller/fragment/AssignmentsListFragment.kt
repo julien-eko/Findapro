@@ -11,26 +11,20 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Internet
+import com.julien.findapro.utils.Internet
 
 import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
 import com.julien.findapro.controller.activity.ProfilActivity
 import com.julien.findapro.view.AssignmentListAdaptater
 import kotlinx.android.synthetic.main.fragment_assignments_list.*
-import kotlinx.android.synthetic.main.fragment_chat_list.*
-import kotlinx.android.synthetic.main.fragment_users_list.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class AssignmentsListFragment : Fragment() {
 
-    val assigmentsList: ArrayList<HashMap<String, String>> = ArrayList()
+    private val assigmentsList: ArrayList<HashMap<String, String>> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,13 +52,12 @@ class AssignmentsListFragment : Fragment() {
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_activity_toolbar, menu)
-        super.onCreateOptionsMenu(menu!!, inflater)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_search -> {
-                //Toast.makeText(context,"test",Toast.LENGTH_SHORT).show()
                 val searchAssignmenFragment = SearchAssignmenFragment()
                 val transaction = fragmentManager!!.beginTransaction()
                 searchAssignmenFragment.show(transaction, "")
@@ -109,8 +102,8 @@ class AssignmentsListFragment : Fragment() {
                                 recycler_view_assignments_list_fragment.layoutAnimation = controller
                                 recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
                                     assigmentsList,
-                                    context!!,
-                                    { assignmentItem: HashMap<String, String>,isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) })
+                                    context!!
+                                ) { assignmentItem: HashMap<String, String>, isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) }
                                 recycler_view_assignments_list_fragment.scheduleLayoutAnimation()
                             }
                             }
@@ -133,7 +126,7 @@ class AssignmentsListFragment : Fragment() {
                 db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
                     .addOnSuccessListener { dataProUser ->
 
-                        var myLocation = Location("")
+                        val myLocation = Location("")
                         myLocation.latitude = dataProUser["latitude"].toString().toDouble()
                         myLocation.longitude = dataProUser["longitude"].toString().toDouble()
                         for (document in documents) {
@@ -144,7 +137,7 @@ class AssignmentsListFragment : Fragment() {
                                 .addOnSuccessListener { dataUser ->
 
 
-                                    var locationUser = Location("")
+                                    val locationUser = Location("")
                                     locationUser.latitude = dataUser["latitude"].toString().toDouble()
                                     locationUser.longitude = dataUser["longitude"].toString().toDouble()
 
@@ -176,8 +169,8 @@ class AssignmentsListFragment : Fragment() {
                                     recycler_view_assignments_list_fragment.layoutAnimation = controller
                                     recycler_view_assignments_list_fragment.adapter = AssignmentListAdaptater(
                                         assigmentsList,
-                                        context!!,
-                                        { assignmentItem: HashMap<String, String>,isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) })
+                                        context!!
+                                    ) { assignmentItem: HashMap<String, String>, isProfil:Boolean -> assignmentItemClicked(assignmentItem,isProfil) }
                                     recycler_view_assignments_list_fragment.scheduleLayoutAnimation()
                                 }
 
@@ -240,9 +233,9 @@ class AssignmentsListFragment : Fragment() {
                 GlobalScope.launch {
                     delay(2000)
                     if (assigmentsList.isEmpty()) {
-                        activity?.runOnUiThread(java.lang.Runnable {
+                        activity?.runOnUiThread {
                             fragment_assignment_list_no_item.visibility = View.VISIBLE
-                        })
+                        }
 
                     }
                 }

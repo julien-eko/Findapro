@@ -1,15 +1,11 @@
 package com.julien.findapro.controller.activity
 
 import android.content.*
-import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -17,14 +13,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.firebase.ui.auth.AuthUI
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.iid.FirebaseInstanceId
 import com.julien.findapro.R
-import com.julien.findapro.Utils.CircleTransform
-import com.julien.findapro.Utils.Communicator
+import com.julien.findapro.utils.CircleTransform
+import com.julien.findapro.utils.Communicator
 import com.julien.findapro.controller.fragment.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
@@ -36,7 +29,6 @@ class MainActivity : AppCompatActivity(), Communicator,
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
-    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +49,6 @@ class MainActivity : AppCompatActivity(), Communicator,
 
 
                 if (sharedPreferences.getBoolean("isPro", false)) {
-                    //Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
                     replace(
                         R.id.main_activity_frame_layout,
                         AssignmentsListFragment()
@@ -87,7 +78,7 @@ class MainActivity : AppCompatActivity(), Communicator,
 
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
-        val itemid = p0?.itemId
+        val itemid = p0.itemId
 
         if (itemid == R.id.activity_main_drawer_notification) {
             val intent = Intent(
@@ -144,7 +135,7 @@ class MainActivity : AppCompatActivity(), Communicator,
     private fun configureDrawerLayout() {
         drawerLayout = findViewById(R.id.main_activity_drawer_layout)
         toolbar = findViewById(R.id.main_activity_toolbar)
-        var toggle = ActionBarDrawerToggle(
+        val toggle = ActionBarDrawerToggle(
             this,
             drawerLayout,
             toolbar,
@@ -203,8 +194,7 @@ class MainActivity : AppCompatActivity(), Communicator,
             }
         }
         if (item == R.id.action_planning) {
-            var user = ""
-            user = if (sharedPreferences.getBoolean("isPro", false)) {
+            val user: String = if (sharedPreferences.getBoolean("isPro", false)) {
                 "proUserId"
             } else {
                 "userId"
@@ -219,9 +209,7 @@ class MainActivity : AppCompatActivity(), Communicator,
 
         }
         if (item == R.id.action_message) {
-            //Toast.makeText(this,"3",Toast.LENGTH_SHORT).show()
-            var user = ""
-            user = if (sharedPreferences.getBoolean("isPro", false)) {
+            val user: String = if (sharedPreferences.getBoolean("isPro", false)) {
                 "proUserId"
             } else {
                 "userId"
@@ -238,7 +226,7 @@ class MainActivity : AppCompatActivity(), Communicator,
         return true
     }
 
-    inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Unit) {
+    private inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Unit) {
         val fragmentTransaction = beginTransaction()
         fragmentTransaction.func()
         fragmentTransaction.commit()

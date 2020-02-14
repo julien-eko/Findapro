@@ -1,14 +1,13 @@
-package com.julien.findapro.Utils;
+package com.julien.findapro.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Shader;
-
 import com.squareup.picasso.Transformation;
 
-//
+
 public class CircleTransform implements Transformation {
     @Override
     public Bitmap transform(Bitmap source) {

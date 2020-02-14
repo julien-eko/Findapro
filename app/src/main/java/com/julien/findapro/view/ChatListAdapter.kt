@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.julien.findapro.R
 
-class ChatListAdapter (var chatList: List<HashMap<String,Any?>>,val context: Context,val clickListener: (HashMap<String,Any?>,isProfil:Boolean) -> Unit):
+class ChatListAdapter (private var chatList: List<HashMap<String,Any?>>, val context: Context, val clickListener: (HashMap<String,Any?>, isProfil:Boolean) -> Unit):
     RecyclerView.Adapter<ChatListViewHolder>() {
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatListViewHolder {
-        val v = LayoutInflater.from(parent?.context)
+        val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_chat_list_item, parent, false)
         return ChatListViewHolder(v)
 
@@ -20,7 +20,7 @@ class ChatListAdapter (var chatList: List<HashMap<String,Any?>>,val context: Con
 
 
     override fun onBindViewHolder(holder: ChatListViewHolder, position: Int) {
-        holder.update(chatList.get(position),clickListener)
+        holder.update(chatList[position],clickListener)
 
     }
 

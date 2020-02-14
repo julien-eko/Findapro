@@ -17,8 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Internet
-import kotlinx.android.synthetic.main.activity_assignments.*
+import com.julien.findapro.utils.Internet
 import kotlinx.android.synthetic.main.activity_information_form.*
 
 class InformationForm : AppCompatActivity() {
@@ -187,7 +186,7 @@ class InformationForm : AppCompatActivity() {
 
             db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
                 .set(user)
-                .addOnSuccessListener { documentReference ->
+                .addOnSuccessListener {
                     Log.d("addDB", "DocumentSnapshot added ")
                 }
                 .addOnFailureListener { e ->
@@ -218,7 +217,7 @@ class InformationForm : AppCompatActivity() {
 
             db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
                 .set(user)
-                .addOnSuccessListener { documentReference ->
+                .addOnSuccessListener {
                     Log.d("addDB", "DocumentSnapshot added ")
                 }
                 .addOnFailureListener { e ->
@@ -245,14 +244,14 @@ class InformationForm : AppCompatActivity() {
                information_form_country.setText(document["country"].toString())
                information_form_adress.setText(document["adress"].toString())
            }else{
-               db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+               db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { documentPro ->
                    if (document.data != null){
-                       information_form_full_name.setText(document["full name"].toString())
-                       information_postal_code.setText(document["postal code"].toString())
-                       information_form_phone_number.setText(document["num"].toString())
-                       information_form_city.setText(document["city"].toString())
-                       information_form_country.setText(document["country"].toString())
-                       information_form_adress.setText(document["adress"].toString())
+                       information_form_full_name.setText(documentPro["full name"].toString())
+                       information_postal_code.setText(documentPro["postal code"].toString())
+                       information_form_phone_number.setText(documentPro["num"].toString())
+                       information_form_city.setText(documentPro["city"].toString())
+                       information_form_country.setText(documentPro["country"].toString())
+                       information_form_adress.setText(documentPro["adress"].toString())
                    }else{
                        Log.e("db", "no document")
                    }
@@ -293,7 +292,7 @@ class InformationForm : AppCompatActivity() {
 
                 db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
                     .set(user)
-                    .addOnSuccessListener { documentReference ->
+                    .addOnSuccessListener {
                         finish()
                         Log.d("addDB", "DocumentSnapshot added ")
                     }
@@ -301,7 +300,7 @@ class InformationForm : AppCompatActivity() {
                         Log.w("addDB", "Error adding document", e)
                     }
             }else{
-                db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener { document ->
+                db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnSuccessListener {
                     if (document.data != null){
                         val user = hashMapOf(
                             "full name" to information_form_full_name.text.toString(),
@@ -322,7 +321,7 @@ class InformationForm : AppCompatActivity() {
 
                         db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
                             .set(user)
-                            .addOnSuccessListener { documentReference ->
+                            .addOnSuccessListener {
                                 Log.d("addDB", "DocumentSnapshot added ")
                                 finish()
                             }
@@ -346,20 +345,18 @@ class InformationForm : AppCompatActivity() {
     //check if adress' user is good
     private fun isGoodAdress(fullAdress:String):Boolean{
 
-        var geocoder = Geocoder(this)
-        var listAdress: List<Address> = geocoder.getFromLocationName(fullAdress, 1)
+        val geocoder = Geocoder(this)
+        val listAdress: List<Address> = geocoder.getFromLocationName(fullAdress, 1)
 
-        if (listAdress.size > 0) {
+        return if (listAdress.isNotEmpty()) {
             latitude = listAdress[0].latitude
             longitude = listAdress[0].longitude
-            return true
-
-            //activity?.findViewById<Stepper>(R.id.Stepper)?.forward()
+            true
 
         } else {
             latitude = 0.0
             longitude = 0.0
-            return false
+            false
 
         }
     }
@@ -373,7 +370,7 @@ class InformationForm : AppCompatActivity() {
 
         builder.setMessage(getString(R.string.change_your_adress))
 
-        builder.setPositiveButton("OK") { dialog, which ->
+        builder.setPositiveButton("OK") { _, _ ->
 
         }
 
@@ -391,10 +388,10 @@ class InformationForm : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.setTitle(getString(R.string.information_form_toolbar_title))
+        actionBar?.title = getString(R.string.information_form_toolbar_title)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         onBackPressed()
         return super.onOptionsItemSelected(item)
     }

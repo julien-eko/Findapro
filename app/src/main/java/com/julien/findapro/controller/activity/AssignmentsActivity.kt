@@ -9,9 +9,9 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Assignment
-import com.julien.findapro.Utils.Internet
-import com.julien.findapro.Utils.Notification
+import com.julien.findapro.utils.Assignment
+import com.julien.findapro.utils.Internet
+import com.julien.findapro.utils.Notification
 import kotlinx.android.synthetic.main.activity_assignments.*
 import java.util.*
 
@@ -37,7 +37,7 @@ class AssignmentsActivity : AppCompatActivity() {
                 Toast.makeText(this,getString(R.string.no_blank_field),Toast.LENGTH_SHORT).show()
             }else{
                 if(Internet.isInternetAvailable(this)){
-                    saveInDb()
+                    checkValidateRequest()
                 }else{
                     Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()
                 }
@@ -53,8 +53,7 @@ class AssignmentsActivity : AppCompatActivity() {
     //load user info in db and update view
     private fun loadDb(){
         val db = FirebaseFirestore.getInstance()
-
-        db.collection("pro users").document(intent.getStringExtra("proId")).get()
+        db.collection("pro users").document(intent.getStringExtra("proId")!!).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     activity_assignements_full_name_text_view.text = document["full name"].toString()
@@ -82,12 +81,12 @@ class AssignmentsActivity : AppCompatActivity() {
     private fun saveInDb(){
         val db = FirebaseFirestore.getInstance()
 
-        val assignments = Assignment(FirebaseAuth.getInstance().currentUser?.uid!!,intent.getStringExtra("proId"),"pending", activity_assignments_describe_edit_text.text.toString(),null)
+        val assignments = Assignment(null,null,FirebaseAuth.getInstance().currentUser?.uid!!,intent.getStringExtra("proId"),"pending", activity_assignments_describe_edit_text.text.toString(),null)
 
         val uuid = UUID.randomUUID()
         db.collection("assignments").document(uuid.toString()).set(assignments)
 
-            .addOnSuccessListener { documentReference ->
+            .addOnSuccessListener {
                 Log.d("addDB", "DocumentSnapshot added ")
                 Notification.createNotificationInDb("pro users",
                     assignments.proUserId.toString(),
@@ -104,6 +103,22 @@ class AssignmentsActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun checkValidateRequest(){
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("assignments").whereEqualTo("status","pending").whereEqualTo("proUserId",intent.getStringExtra("proId")).whereEqualTo("userId",FirebaseAuth.getInstance().currentUser?.uid!!)
+        .get()
+            .addOnSuccessListener { documents ->
+                if(documents.size() > 0){
+                 Toast.makeText(this,getString(R.string.imposible_already_request),Toast.LENGTH_SHORT).show()
+                }else{
+                    saveInDb()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("access db", "Error getting data", exception)
+            }
+    }
 
     //configure toolbar
     private fun configureToolbar() {
@@ -112,10 +127,10 @@ class AssignmentsActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.setTitle(getString(R.string.title_toolbar_assignment_activity))
+        actionBar?.title = getString(R.string.title_toolbar_assignment_activity)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         onBackPressed()
         return super.onOptionsItemSelected(item)
     }

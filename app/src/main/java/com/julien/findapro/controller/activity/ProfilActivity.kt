@@ -1,5 +1,6 @@
 package com.julien.findapro.controller.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,17 +12,11 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
-import com.julien.findapro.Utils.CircleTransform
-import com.julien.findapro.Utils.Internet
-import com.julien.findapro.view.AssignmentListAdaptater
+import com.julien.findapro.utils.CircleTransform
+import com.julien.findapro.utils.Internet
 import com.julien.findapro.view.ProfilAdaptater
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_assignment_detail.*
-import kotlinx.android.synthetic.main.activity_planning.*
 import kotlinx.android.synthetic.main.activity_profil.*
-import kotlinx.android.synthetic.main.fragment_assignments_in_progress.*
-import kotlinx.android.synthetic.main.fragment_assignments_list.*
-import kotlinx.android.synthetic.main.fragment_users_list_item.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,8 +24,8 @@ import kotlinx.coroutines.launch
 class ProfilActivity : AppCompatActivity() {
 
     private lateinit var userId: String
-    val profilList: ArrayList<HashMap<String, String>> = ArrayList()
-    var typeUser:String = ""
+    private val profilList: ArrayList<HashMap<String, String>> = ArrayList()
+    private var typeUser:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +42,9 @@ class ProfilActivity : AppCompatActivity() {
             GlobalScope.launch {
                 delay(2000)
                 if (profilList.isEmpty()) {
-                    this@ProfilActivity.runOnUiThread(java.lang.Runnable {
+                    this@ProfilActivity.runOnUiThread {
                         activity_profil_no_item.visibility = View.VISIBLE
-                    })
+                    }
 
                 }
             }
@@ -60,6 +55,7 @@ class ProfilActivity : AppCompatActivity() {
     }
 
     //read information user in db and update view
+    @SuppressLint("SetTextI18n")
     private fun displayInformation(){
         val db =FirebaseFirestore.getInstance()
 
@@ -83,23 +79,21 @@ class ProfilActivity : AppCompatActivity() {
                     load("users",typeUser)
                 } else {
                     db.collection("users").document(userId).get()
-                        .addOnSuccessListener { document ->
-                            if (document.data != null) {
+                        .addOnSuccessListener { documentUser ->
+                            if (documentUser.data != null) {
                                 typeUser = "users"
-                                Picasso.get().load(document["photo"].toString()).transform(CircleTransform()).into(activity_profil_photo_imageview)
-                                activity_profil_name_textview.text = document["full name"].toString()
-                                activity_profil_city_textview.text = document["city"].toString()
+                                Picasso.get().load(documentUser["photo"].toString()).transform(CircleTransform()).into(activity_profil_photo_imageview)
+                                activity_profil_name_textview.text = documentUser["full name"].toString()
+                                activity_profil_city_textview.text = documentUser["city"].toString()
 
 
-                                if (document["rating"] != null){
-                                    activity_profil_ratingbar.rating = document["rating"].toString().toFloat()
-                                    activity_profil_nb_rate_textview.text = document["ratingNb"].toString() + " avis"
+                                if (documentUser["rating"] != null){
+                                    activity_profil_ratingbar.rating = documentUser["rating"].toString().toFloat()
+                                    activity_profil_nb_rate_textview.text = documentUser["ratingNb"].toString() + " avis"
                                 }else{
                                     activity_profil_ratingbar_linearlayout.visibility = View.GONE
                                 }
                                 load("pro users",typeUser)
-                            } else {
-
                             }
                         }
                         .addOnFailureListener { exception ->
@@ -140,7 +134,7 @@ class ProfilActivity : AppCompatActivity() {
                                 recycler_view_user_profil_activity.layoutManager = LinearLayoutManager(this)
                                 val controller = AnimationUtils.loadLayoutAnimation(this,R.anim.layout_animation_fall_down)
                                 recycler_view_user_profil_activity.layoutAnimation = controller
-                                recycler_view_user_profil_activity.adapter = ProfilAdaptater(profilList,{ userItem : HashMap<String,String>,isProfil:Boolean -> userItemClicked(userItem,isProfil) })
+                                recycler_view_user_profil_activity.adapter = ProfilAdaptater(profilList) { userItem : HashMap<String,String>, isProfil:Boolean -> userItemClicked(userItem,isProfil) }
                                 recycler_view_user_profil_activity.scheduleLayoutAnimation()
                             } else {
                                 Log.d("user profil", "No such document")
@@ -176,7 +170,7 @@ class ProfilActivity : AppCompatActivity() {
             onBackPressed()
 
 
-        return super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item!!)
     }
 
     private fun userItemClicked(userItem : HashMap<String,String>,isProfil:Boolean) {
@@ -187,8 +181,6 @@ class ProfilActivity : AppCompatActivity() {
                     ProfilActivity::class.java)
                 intent.putExtra("id",userItem["userId"])
                 startActivity(intent)
-            }else{
-
             }
         }else{
             Toast.makeText(this,getString(R.string.no_connexion),Toast.LENGTH_SHORT).show()

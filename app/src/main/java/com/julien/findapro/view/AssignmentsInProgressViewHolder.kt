@@ -3,10 +3,9 @@ package com.julien.findapro.view
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
-import com.julien.findapro.Utils.CircleTransform
+import com.julien.findapro.utils.CircleTransform
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_assignments_in_progress_item.view.*
-import kotlinx.android.synthetic.main.fragment_assignments_list_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -44,8 +43,8 @@ class AssignmentsInProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(
         Picasso.get().load(assignment["photo"].toString()).transform(CircleTransform()).into(itemView.fragment_assignments_in_progress_item_photo_imageview)
 
 
-        var date:String?
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+        val date:String?
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
 
         date = if (assignment["dateEnd"] == null){
             val dateCreatedTimestamp =assignment["dateCreated"] as Timestamp

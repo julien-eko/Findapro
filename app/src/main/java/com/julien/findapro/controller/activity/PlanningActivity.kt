@@ -14,13 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Internet
+import com.julien.findapro.utils.Internet
 import com.julien.findapro.view.PlanningAdapter
-import com.julien.findapro.view.UserListAdapater
-import kotlinx.android.synthetic.main.activity_notification_list.*
 import kotlinx.android.synthetic.main.activity_planning.*
-import kotlinx.android.synthetic.main.fragment_assignments_list.*
-import kotlinx.android.synthetic.main.fragment_users_list.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -44,9 +40,9 @@ class PlanningActivity : AppCompatActivity() {
             GlobalScope.launch {
                 delay(2000)
                 if (planningList.isEmpty()) {
-                    this@PlanningActivity.runOnUiThread(java.lang.Runnable {
+                    this@PlanningActivity.runOnUiThread {
                         activity_planning_list_no_item.visibility = View.VISIBLE
-                    })
+                    }
 
                 }
             }
@@ -65,8 +61,6 @@ class PlanningActivity : AppCompatActivity() {
         val otherUserId: String =
             if (sharedPreferences.getBoolean("isPro", false)) "userId" else "proUserId"
         val myUserId: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "proUserId" else "userId"
-        val userType: String =
             if (sharedPreferences.getBoolean("isPro", false)) "proUserId" else "userId"
 
         db.collection("assignments")
@@ -98,14 +92,14 @@ class PlanningActivity : AppCompatActivity() {
                                     val controller = AnimationUtils.loadLayoutAnimation(this,R.anim.layout_animation_fall_down)
                                     recycler_view_planning_activity.layoutAnimation = controller
                                     recycler_view_planning_activity.adapter = PlanningAdapter(
-                                        planningList,
+                                        planningList
 
-                                        { planningItem: HashMap<String, Any?>, button: String ->
-                                            planningItemClicked(
-                                                planningItem,
-                                                button
-                                            )
-                                        })
+                                    ) { planningItem: HashMap<String, Any?>, button: String ->
+                                        planningItemClicked(
+                                            planningItem,
+                                            button
+                                        )
+                                    }
                                     recycler_view_planning_activity.scheduleLayoutAnimation()
                                 }
 
@@ -140,7 +134,7 @@ class PlanningActivity : AppCompatActivity() {
         actionBar?.title = "Planning"
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         onBackPressed()
         return super.onOptionsItemSelected(item)
     }
@@ -174,10 +168,10 @@ class PlanningActivity : AppCompatActivity() {
                 "map" -> {
                     //open google map with position's user
                     val intent = Intent(
-                        android.content.Intent.ACTION_VIEW,
+                        Intent.ACTION_VIEW,
                         Uri.parse("https://www.google.com/maps/search/?api=1&query=${planningItem["latitude"].toString()},${planningItem["longitude"].toString()}")
-                    );
-                    startActivity(intent);
+                    )
+                    startActivity(intent)
                 }
             }
         } else {

@@ -14,28 +14,19 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 import com.julien.findapro.R
-import com.julien.findapro.Utils.Internet
+import com.julien.findapro.utils.Internet
 import com.julien.findapro.controller.activity.AssignmentDetailActivity
-import com.julien.findapro.controller.activity.AssignmentsChoiceActivity
 import com.julien.findapro.controller.activity.ProfilActivity
-import com.julien.findapro.controller.activity.RatingActivity
-import com.julien.findapro.view.AssignmentListAdaptater
 import com.julien.findapro.view.AssignmentsInProgressAdapter
-import kotlinx.android.synthetic.main.activity_assignment_detail.*
 import kotlinx.android.synthetic.main.fragment_assignments_in_progress.*
-import kotlinx.android.synthetic.main.fragment_assignments_list.*
-import kotlinx.android.synthetic.main.fragment_chat_list.*
-import kotlinx.android.synthetic.main.fragment_users_list.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class AssignmentsInProgressFragment : Fragment() {
 
-    val assigmentsList: ArrayList<HashMap<String, Any?>> = ArrayList()
+    private val assigmentsList: ArrayList<HashMap<String, Any?>> = ArrayList()
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
@@ -67,13 +58,12 @@ class AssignmentsInProgressFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_activity_toolbar, menu)
-        super.onCreateOptionsMenu(menu!!, inflater)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_search -> {
-                //Toast.makeText(context,"test",Toast.LENGTH_SHORT).show()
                 val searchAssignmentsInProgressFragment = SearchAssignmentInProgressFragment()
                 val transaction = fragmentManager!!.beginTransaction()
                 searchAssignmentsInProgressFragment.show(transaction, "")
@@ -119,9 +109,8 @@ class AssignmentsInProgressFragment : Fragment() {
                                                 "id" to document.id
                                             )
                                             assigmentsList.add(assignment)
-                                            diplayRecyclerView()
 
-                                            //Toast.makeText(this,"pas noté",Toast.LENGTH_SHORT).show()
+
                                         } else {
                                             //rated
                                             val assignment: HashMap<String, Any?> = hashMapOf(
@@ -134,7 +123,7 @@ class AssignmentsInProgressFragment : Fragment() {
                                                 "id" to document.id
                                             )
                                             assigmentsList.add(assignment)
-                                            diplayRecyclerView()
+
                                         }
 
                                     }
@@ -234,7 +223,7 @@ class AssignmentsInProgressFragment : Fragment() {
                                             assigmentsList.add(assignment)
                                             diplayRecyclerView()
 
-                                            //Toast.makeText(this,"pas noté",Toast.LENGTH_SHORT).show()
+
                                         } else {
                                             //rated
                                             val assignment: HashMap<String, Any?> = hashMapOf(
@@ -317,13 +306,13 @@ class AssignmentsInProgressFragment : Fragment() {
             recycler_view_assignments_in_progress_fragment.layoutAnimation = controller
             recycler_view_assignments_in_progress_fragment.adapter = AssignmentsInProgressAdapter(
                 assigmentsList,
-                context!!,
-                { assignmentItem: HashMap<String, Any?>, isProfil: Boolean ->
-                    assignmentItemClicked(
-                        assignmentItem,
-                        isProfil
-                    )
-                })
+                context!!
+            ) { assignmentItem: HashMap<String, Any?>, isProfil: Boolean ->
+                assignmentItemClicked(
+                    assignmentItem,
+                    isProfil
+                )
+            }
             recycler_view_assignments_in_progress_fragment.scheduleLayoutAnimation()
         }
 
@@ -346,9 +335,9 @@ class AssignmentsInProgressFragment : Fragment() {
                 GlobalScope.launch {
                     delay(2000)
                     if (assigmentsList.isEmpty()) {
-                        activity?.runOnUiThread(java.lang.Runnable {
+                        activity?.runOnUiThread {
                             fragment_assignment_in_progress_list_no_item.visibility = View.VISIBLE
-                        })
+                        }
 
                     }
 
