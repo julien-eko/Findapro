@@ -73,13 +73,13 @@ class AssignmentsListFragment : Fragment() {
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("assignments")
-            .whereEqualTo("proUserId", FirebaseAuth.getInstance().currentUser?.uid!!)
-            .whereEqualTo("status", "pending").get()
+        db.collection(getString(R.string.assignments))
+            .whereEqualTo(getString(R.string.proUserId), FirebaseAuth.getInstance().currentUser?.uid!!)
+            .whereEqualTo(getString(R.string.status), getString(R.string.pending)).get()
             .addOnSuccessListener { documents ->
 
                 for (document in documents) {
-                    db.collection("users").document(document["userId"].toString()).get()
+                    db.collection(getString(R.string.users)).document(document[getString(R.string.userId)].toString()).get()
                         .addOnSuccessListener { data ->
 
                             val assignment = hashMapOf(
@@ -133,11 +133,11 @@ class AssignmentsListFragment : Fragment() {
     private fun searchAssignment(minRating: Double, maxDistance: Float) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("assignments")
-            .whereEqualTo("proUserId", FirebaseAuth.getInstance().currentUser?.uid!!)
-            .whereEqualTo("status", "pending").get()
+        db.collection(getString(R.string.assignments))
+            .whereEqualTo(getString(R.string.proUserId), FirebaseAuth.getInstance().currentUser?.uid!!)
+            .whereEqualTo(getString(R.string.status), getString(R.string.pending)).get()
             .addOnSuccessListener { documents ->
-                db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
+                db.collection(getString(R.string.pro_users)).document(FirebaseAuth.getInstance().currentUser?.uid!!)
                     .get()
                     .addOnSuccessListener { dataProUser ->
 
@@ -147,7 +147,7 @@ class AssignmentsListFragment : Fragment() {
                         for (document in documents) {
 
 
-                            db.collection("users").document(document["userId"].toString()).get()
+                            db.collection(getString(R.string.users)).document(document[getString(R.string.userId)].toString()).get()
                                 .addOnSuccessListener { dataUser ->
 
 
@@ -161,7 +161,7 @@ class AssignmentsListFragment : Fragment() {
                                         myLocation.distanceTo(locationUser)
 
                                     val rating: Double =
-                                        if (dataUser["rating"] == null) -1.0 else dataUser["rating"].toString().toDouble()
+                                        if (dataUser[getString(R.string.rating)] == null) -1.0 else dataUser[getString(R.string.rating)].toString().toDouble()
 
                                     if (distanceInMeters < maxDistance * 1000 && rating > minRating) {
                                         val assignment = hashMapOf(
@@ -227,7 +227,7 @@ class AssignmentsListFragment : Fragment() {
                     context,
                     ProfilActivity::class.java
                 )
-                intent.putExtra("id", assignmentItem["userId"])
+                intent.putExtra(getString(R.string.id), assignmentItem["userId"])
                 startActivity(intent)
             } else {
                 //else open choice activity
@@ -235,7 +235,7 @@ class AssignmentsListFragment : Fragment() {
                     context,
                     AssignmentsChoiceActivity::class.java
                 )
-                intent.putExtra("id", assignmentItem["id"])
+                intent.putExtra(getString(R.string.id), assignmentItem["id"])
                 startActivity(intent)
             }
         } else {
@@ -252,7 +252,7 @@ class AssignmentsListFragment : Fragment() {
                 fragment_assignment_list_cancel_search_button.visibility = View.VISIBLE
                 assigmentsList.clear()
                 val rating: Double =
-                    if (arguments?.getDouble("rating") == null) 0.0 else arguments?.getDouble("rating")!!
+                    if (arguments?.getDouble(getString(R.string.rating)) == null) 0.0 else arguments?.getDouble(getString(R.string.rating))!!
 
                 searchAssignment(rating, arguments?.getFloat("maxDistance")!!)
 

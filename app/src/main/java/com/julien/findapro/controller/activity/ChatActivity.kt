@@ -46,10 +46,10 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
         configureToolbar()
         configureRecyclerView()
-        sharedPreferences = getSharedPreferences("isPro", 0)
+        sharedPreferences = getSharedPreferences(getString(R.string.isPro), 0)
 
-        userType = if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
-        assignmentId = intent.getStringExtra("assignment")!!
+        userType = if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.users) else getString(R.string.pro_users)
+        assignmentId = intent.getStringExtra(getString(R.string.assignment))!!
 
         this.imageViewPreview = activity_chat_image_chosen_preview
 
@@ -88,7 +88,7 @@ class ChatActivity : AppCompatActivity() {
         val chatAdapter = ChatAdapter(
             generateOptionsForAdapter(
                 MessageHelper.getAllMessage(
-                    intent.getStringExtra("assignment") ?: "default value"
+                    intent.getStringExtra(getString(R.string.assignment)) ?: "default value"
                 )
             ), FirebaseAuth.getInstance().currentUser?.uid!!
         )
@@ -185,13 +185,14 @@ class ChatActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     this,
-                    "Aucune image",
+                    getString(R.string.aucune_image),
                     Toast.LENGTH_SHORT
                 ).show()
             }
         }
     }
 
+    //upload image on firebase and send message in database
     private fun uploadPhotoInFirebaseAndSendMessage(message: String) {
         val uuid = UUID.randomUUID().toString()
 
@@ -207,7 +208,7 @@ class ChatActivity : AppCompatActivity() {
                     message,
                     FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),
                     FirebaseAuth.getInstance().currentUser?.uid!!,
-                    intent.getStringExtra("assignment")!!,
+                    intent.getStringExtra(getString(R.string.assignment))!!,
                     it.toString()
                 )
 
@@ -228,7 +229,7 @@ class ChatActivity : AppCompatActivity() {
                     message,
                     FirebaseAuth.getInstance().currentUser?.photoUrl.toString(),
                     FirebaseAuth.getInstance().currentUser?.uid!!,
-                    intent.getStringExtra("assignment")!!,
+                    intent.getStringExtra(getString(R.string.assignment))!!,
                     downloadUri.toString()
                 )
 
@@ -261,7 +262,7 @@ class ChatActivity : AppCompatActivity() {
 
 
             val intent = Intent(this, AssignmentDetailActivity::class.java)
-            intent.putExtra("id", assignmentId)
+            intent.putExtra(getString(R.string.id), assignmentId)
             startActivity(intent)
 
 
@@ -275,11 +276,11 @@ class ChatActivity : AppCompatActivity() {
     //add notification in db
     private fun createNotification(isTextMessage: Boolean, message: String?) {
         val db = FirebaseFirestore.getInstance()
-        val docRef = db.collection("assignments").document(assignmentId)
+        val docRef = db.collection(getString(R.string.assignments)).document(assignmentId)
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    val userId = if (userType == "pro users") "proUserId" else "userId"
+                    val userId = if (userType == getString(R.string.pro_users)) getString(R.string.proUserId) else getString(R.string.userId)
                     if (isTextMessage) {
                         Notification.createNotificationInDb(
                             userType,
@@ -288,7 +289,7 @@ class ChatActivity : AppCompatActivity() {
                             assignmentId,
                             getString(R.string.new_message_notification_title),
                             message,
-                            "new message"
+                            getString(R.string.new_message)
                         )
                     } else {
                         Notification.createNotificationInDb(
@@ -298,7 +299,7 @@ class ChatActivity : AppCompatActivity() {
                             assignmentId,
                             getString(R.string.new_image_message_notif_title),
                             getString(R.string.new_image_notif_text),
-                            "new image"
+                            getString(R.string.new_image)
                         )
                     }
 

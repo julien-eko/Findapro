@@ -42,8 +42,8 @@ class RatingActivity : AppCompatActivity() {
     //read in db user information and update view
     private fun load() {
         val db = FirebaseFirestore.getInstance()
-        val user = if (intent.getStringExtra("user") == "users") "pro users" else "users"
-        val docRef = db.collection(user).document(intent.getStringExtra("userId")!!)
+        val user = if (intent.getStringExtra(getString(R.string.user)) == getString(R.string.users)) getString(R.string.pro_users) else getString(R.string.users)
+        val docRef = db.collection(user).document(intent.getStringExtra(getString(R.string.userId))!!)
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
@@ -71,11 +71,11 @@ class RatingActivity : AppCompatActivity() {
             FirebaseAuth.getInstance().currentUser?.uid!!,
             activity_rating_rating_bar.rating,
             activity_rating_edit_text.text.toString(),
-            intent.getStringExtra("assignment")
+            intent.getStringExtra(getString(R.string.assignment))
         )
-        val user = if (intent.getStringExtra("user") == "users") "pro users" else "users"
-        db.collection(user).document(intent.getStringExtra("userId")!!)
-            .collection("rating").add(rating)
+        val user = if (intent.getStringExtra(getString(R.string.user)) == getString(R.string.users)) getString(R.string.pro_users) else getString(R.string.users)
+        db.collection(user).document(intent.getStringExtra(getString(R.string.userId))!!)
+            .collection(getString(R.string.rating)).add(rating)
 
         updateRatingUser()
     }
@@ -85,16 +85,16 @@ class RatingActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
 
 
-        val user = if (intent.getStringExtra("user") == "users") "pro users" else "users"
-        db.collection(user).document(intent.getStringExtra("userId")!!).get()
+        val user = if (intent.getStringExtra(getString(R.string.user)) == getString(R.string.users)) getString(R.string.pro_users) else getString(R.string.users)
+        db.collection(user).document(intent.getStringExtra(getString(R.string.userId))!!).get()
             .addOnSuccessListener { document ->
                 var x: Double
                 var y: Double
                 val ratingBar: Double = activity_rating_rating_bar.rating.toDouble()
                 if (document != null) {
-                    if (document["rating"] != null && document["ratingNb"] != null) {
-                        x = document["rating"] as Double
-                        y = document["ratingNb"] as Double
+                    if (document[getString(R.string.rating)] != null && document[getString(R.string.ratingNb)] != null) {
+                        x = document[getString(R.string.rating)] as Double
+                        y = document[getString(R.string.ratingNb)] as Double
 
                         x = calculateRate(x, y, ratingBar)
                         y += 1.toDouble()
@@ -103,10 +103,10 @@ class RatingActivity : AppCompatActivity() {
                         y = 1.toDouble()
                     }
                     val rate = hashMapOf(
-                        "rating" to x,
-                        "ratingNb" to y
+                        getString(R.string.rating) to x,
+                        getString(R.string.ratingNb) to y
                     )
-                    db.collection(user).document(intent.getStringExtra("userId")!!)
+                    db.collection(user).document(intent.getStringExtra(getString(R.string.userId))!!)
                         .update(rate as Map<String, Any>)
                         .addOnSuccessListener {
                             Log.d("update rating", "DocumentSnapshot successfully updated!")

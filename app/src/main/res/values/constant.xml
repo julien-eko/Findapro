@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="assignments">assignments</string>
+    <string name="isPro">isPro</string>
+    <string name="id">id</string>
+    <string name="users">users</string>
+    <string name="pro_users">pro users</string>
+    <string name="inProgress">inProgress</string>
+    <string name="cancel">cancel</string>
+    <string name="refuse">refuse</string>
+    <string name="pending">pending</string>
+    <string name="finish">finish</string>
+    <string name="rating">rating</string>
+    <string name="assignmentsId">assignmentsId</string>
+    <string name="userId">userId</string>
+    <string name="user">user</string>
+    <string name="assignment">assignment</string>
+    <string name="add_date_assignment">add date assignment</string>
+    <string name="status">status</string>
+    <string name="date_end">dateEnd</string>
+    <string name="dateAssignment">dateAssignment</string>
+    <string name="chat">chat</string>
+    <string name="dateCreated">dateCreated</string>
+    <string name="full_name">full name</string>
+    <string name="ratingNb">ratingNb</string>
+    <string name="proId">proId</string>
+    <string name="proUserId">proUserId</string>
+    <string name="job">job</string>
+    <string name="token">token</string>
+    <string name="maxDistance">maxDistance</string>
+    <string name="notificationC">notification</string>
+
+
+
+
+
+
+
+
+
+
+</resources>

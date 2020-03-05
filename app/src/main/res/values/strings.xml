@@ -84,10 +84,10 @@
     <string name="cancel_assignment_button">Annuler la mission</string>
     <string name="reply_assignment_button">Répondre à la mission</string>
     <string name="finish_mission">Terminer la mission</string>
-    <string name="job">Spécialité :</string>
+    <string name="job1">Spécialité :</string>
     <string name="describe_your_assignment">Veuillez détailler votre demande pour le professionnel ci-dessus. Vous recevrez une réponse dans les plus brefs délais.</string>
     <string name="describe_here">Composer votre demande ici</string>
-    <string name="cancel">Annuler</string>
+    <string name="cancel_mission">Annuler</string>
     <string name="send_assignment_button">Envoyer la demande</string>
     <string name="name">Nom :</string>
     <string name="adress">Adresse :</string>
@@ -99,7 +99,7 @@
     <string name="sign_in_button">Connexion</string>
     <string name="user_type">Type d\'utilisateur :</string>
     <string name="job_choice">Profession :</string>
-    <string name="full_name">Nom et prénom</string>
+    <string name="fullname">Nom et prénom</string>
     <string name="phone_number">Numéro de téléphone</string>
     <string name="adress_information_form">Adresse</string>
     <string name="city_information_form">Ville</string>
@@ -112,7 +112,7 @@
     <string name="cancel_filter_button">Annuler le filtre</string>
     <string name="no_assignment">Aucune Mission</string>
     <string name="no_chat">Aucune conversation</string>
-    <string name="status">Status</string>
+    <string name="Status">Status</string>
     <string name="job_search">Profession recherchée:</string>
     <string name="max_distance">Distance max :</string>
     <string name="min_rate">Note minimal :</string>
@@ -120,9 +120,9 @@
     <string name="cancer_filter_button">Annuler le filtre</string>
     <string name="no_pro_found">Aucun Pro trouvé</string>
     <string name="no_rate">AUCUN AVIS</string>
-    <string name="assignment">Missions</string>
+    <string name="assignment1">Missions</string>
     <string name="my_assignments">Mes missions</string>
-    <string name="chat">Chat</string>
+    <string name="Chat">Chat</string>
     <string name="notification">Notification</string>
     <string name="planning">Planning</string>
     <string name="personel_information">Information personnelle</string>
@@ -130,5 +130,11 @@
     <string name="activity_profil_no_item">Aucun avis</string>
     <string name="information_form_toolbar_title">Formulaire d\'information</string>
     <string name="imposible_already_request">Impossible déjà une demande en attente avec ce pro</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="aucune_image">Aucune image</string>
+    <string name="new_message">new message</string>
+    <string name="new_image">new image</string>
+    <string name="Planning">Planning</string>
 
 </resources>

@@ -41,7 +41,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assignment_detail)
-        assignmentId = intent.getStringExtra("id") ?: "default value"
+        assignmentId = intent.getStringExtra(getString(R.string.id)) ?: "default value"
 
         configureToolbar()
 
@@ -52,9 +52,9 @@ class AssignmentDetailActivity : AppCompatActivity() {
             Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
-        sharedPreferences = getSharedPreferences("isPro", 0)
+        sharedPreferences = getSharedPreferences(getString(R.string.isPro), 0)
 
-        userType = if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
+        userType = if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.users) else getString(R.string.pro_users)
 
 
         //button add date in db
@@ -92,7 +92,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
         activity_assignment_detail_photo_imageview.setOnClickListener {
             if (Internet.isInternetAvailable(this)) {
                 val id = if (sharedPreferences.getBoolean(
-                        "isPro",
+                        getString(R.string.isPro),
                         false
                     )
                 ) assignment?.userId else assignment?.proUserId
@@ -100,7 +100,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                     this,
                     ProfilActivity::class.java
                 )
-                intent.putExtra("id", id)
+                intent.putExtra(getString(R.string.id), id)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
@@ -124,20 +124,20 @@ class AssignmentDetailActivity : AppCompatActivity() {
     //read assignment in db
     private fun loadAssignment() {
         val db = FirebaseFirestore.getInstance()
-        val docRef = db.collection("assignments").document(intent.getStringExtra("id")!!)
+        val docRef = db.collection(getString(R.string.assignment)).document(intent.getStringExtra(getString(R.string.id))!!)
         docRef.get().addOnSuccessListener { documentSnapshot ->
             assignment = documentSnapshot.toObject(Assignment::class.java)
 
             activity_assignment_detail_describe_text_view.text = assignment?.describe
 
-            displayDataUser(sharedPreferences.getBoolean("isPro", false))
+            displayDataUser(sharedPreferences.getBoolean(getString(R.string.isPro), false))
 
             when (assignment?.status) {
-                "inProgress" -> inProgressAssignment()
-                "cancel" -> cancel()
-                "refuse" -> refuseAssignment()
-                "pending" -> pendingAssignment()
-                "finish" -> finishAssignment()
+                getString(R.string.inProgress) -> inProgressAssignment()
+                getString(R.string.cancel) -> cancel()
+                getString(R.string.refuse) -> refuseAssignment()
+                getString(R.string.pending) -> pendingAssignment()
+                getString(R.string.finish) -> finishAssignment()
             }
         }
 
@@ -149,7 +149,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
 
         if (isPro) {
-            val docRef = db.collection("users").document(assignment?.userId.toString())
+            val docRef = db.collection(getString(R.string.users)).document(assignment?.userId.toString())
             docRef.get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
@@ -172,7 +172,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                     Log.d("load user data", "get failed with ", exception)
                 }
         } else {
-            val docRef = db.collection("pro users").document(assignment?.proUserId.toString())
+            val docRef = db.collection(getString(R.string.pro_users)).document(assignment?.proUserId.toString())
             docRef.get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
@@ -201,14 +201,14 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
     }
 
-
+    // button for open AssignmentChoiceActivity
     private fun pendingAssignment() {
         activity_assignment_detail_created_date_textview.text =
             convertDate(assignment?.dateCreated, false)
         activity_assignment_detail_more_information_linearlayout.visibility = View.VISIBLE
 
 
-        if (sharedPreferences.getBoolean("isPro", false)) {
+        if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) {
             activity_assignment_detail_more_information_textview.text =
                 getString(R.string.pending_assignment)
             activity_assignment_detail_accept_assignment_button.visibility = View.VISIBLE
@@ -218,7 +218,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                     this,
                     AssignmentsChoiceActivity::class.java
                 )
-                intent.putExtra("id", assignmentId)
+                intent.putExtra(getString(R.string.id), assignmentId)
                 startActivity(intent)
             }
         } else {
@@ -229,10 +229,11 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
     }
 
+    //Show button for finish or cancel assignment and add option for create new date assignment
     private fun inProgressAssignment() {
         activity_assignment_detail_intervention_date_linearlayout.visibility = View.VISIBLE
 
-        if (sharedPreferences.getBoolean("isPro", false)) {
+        if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) {
             activity_assignment_detail_direction_button.visibility = View.VISIBLE
         }
 
@@ -243,7 +244,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
 
         if (assignment?.dateAssignment == null) {
-            if (sharedPreferences.getBoolean("isPro", false)) {
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) {
                 activity_assignment_detail_intervention_date_textview.visibility = View.GONE
                 activity_assignment_detail_intervention_date_button.visibility = View.VISIBLE
                 activity_assignment_detail_intervention_date_button.setBackgroundResource(R.drawable.baseline_add_circle_black_24)
@@ -256,7 +257,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
             }
         } else {
             activity_assignment_detail_intervention_date_textview.visibility = View.VISIBLE
-            if (sharedPreferences.getBoolean("isPro", false)) {
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) {
                 activity_assignment_detail_intervention_date_button.visibility = View.VISIBLE
                 activity_assignment_detail_intervention_date_button.setBackgroundResource(R.drawable.baseline_edit_black_24)
 
@@ -276,13 +277,14 @@ class AssignmentDetailActivity : AppCompatActivity() {
         activity_assignment_detail_finish_assignment_button.visibility = View.VISIBLE
     }
 
+    //refuse assignment view
     private fun refuseAssignment() {
         activity_assignment_detail_created_date_textview.text =
             convertDate(assignment?.dateCreated, false)
 
         activity_assignment_detail_more_information_linearlayout.visibility = View.VISIBLE
 
-        if (sharedPreferences.getBoolean("isPro", false)) {
+        if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) {
             activity_assignment_detail_more_information_textview.text =
                 getString(R.string.pro_refuse_assignment)
         } else {
@@ -292,6 +294,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
     }
 
+    // if assignment not rated show message at user
     private fun finishAssignment() {
         activity_assignment_detail_cancel_assignment_button.visibility = View.GONE
         activity_assignment_detail_finish_assignment_button.visibility = View.GONE
@@ -319,25 +322,25 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
         val db = FirebaseFirestore.getInstance()
         val user =
-            if (sharedPreferences.getBoolean("isPro", false)) {
-                "pro users"
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) {
+                getString(R.string.pro_users)
             } else {
-                "users"
+                getString(R.string.users)
             }
         val userId =
-            if (user == "pro users") {
+            if (user == getString(R.string.pro_users)) {
                 assignment?.userId
             } else {
                 assignment?.proUserId
             }
         val userInv =
-            if (user == "pro users") {
-                "users"
+            if (user == getString(R.string.pro_users)) {
+                getString(R.string.users)
             } else {
-                "pro users"
+                getString(R.string.pro_users)
             }
-        db.collection(userInv).document(userId.toString()).collection("rating")
-            .whereEqualTo("assignmentsId", assignmentId)
+        db.collection(userInv).document(userId.toString()).collection(getString(R.string.rating))
+            .whereEqualTo(getString(R.string.assignmentsId), assignmentId)
             .get()
             .addOnSuccessListener { documents ->
                 if (documents.size() == 0) {
@@ -351,9 +354,9 @@ class AssignmentDetailActivity : AppCompatActivity() {
                             this,
                             RatingActivity::class.java
                         )
-                        intent.putExtra("user", user)
-                        intent.putExtra("userId", userId)
-                        intent.putExtra("assignment", assignmentId)
+                        intent.putExtra(getString(R.string.user), user)
+                        intent.putExtra(getString(R.string.userId), userId)
+                        intent.putExtra(getString(R.string.assignment), assignmentId)
                         startActivity(intent)
                     }
                 } else {
@@ -382,7 +385,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val date = dateFormat.format(assignment?.dateEnd!!).toString()
-        if (sharedPreferences.getBoolean("isPro", false)) {
+        if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) {
             activity_assignment_detail_more_information_textview.text = "Mission annulé le $date"
         } else {
             activity_assignment_detail_more_information_textview.text = "Mission annulé le $date"
@@ -417,12 +420,12 @@ class AssignmentDetailActivity : AppCompatActivity() {
                 pickedDateTime.set(year, month, day, hour, minute)
 
                 val db = FirebaseFirestore.getInstance()
-                db.collection("assignments").document(assignmentId)
-                    .update("dateAssignment", pickedDateTime.time)
+                db.collection(getString(R.string.assignments)).document(assignmentId)
+                    .update(getString(R.string.dateAssignment), pickedDateTime.time)
                     .addOnSuccessListener {
                         Log.d("update date", "DocumentSnapshot successfully updated!")
                         val idReceiver = if (sharedPreferences.getBoolean(
-                                "isPro",
+                                getString(R.string.isPro),
                                 false
                             )
                         ) assignment?.userId else assignment?.proUserId
@@ -433,7 +436,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                             assignmentId,
                             getString(R.string.new_date_title_notif),
                             getString(R.string.new_date_text_notif),
-                            "add date assignment"
+                            getString(R.string.add_date_assignment)
                         )
                         loadAssignment()
                     }
@@ -454,14 +457,14 @@ class AssignmentDetailActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.cancel_assignment))
         builder.setMessage(getString(R.string.cancel_assignment_question))
-        builder.setPositiveButton("Oui") { _, _ ->
+        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
             val db = FirebaseFirestore.getInstance()
-            db.collection("assignments").document(assignmentId)
-                .update("status", "cancel")
+            db.collection(getString(R.string.assignments)).document(assignmentId)
+                .update(getString(R.string.status), getString(R.string.cancel))
                 .addOnSuccessListener {
                     Log.d("update status", "DocumentSnapshot successfully updated!")
                     val idReceiver = if (sharedPreferences.getBoolean(
-                            "isPro",
+                            getString(R.string.isPro),
                             false
                         )
                     ) assignment?.userId else assignment?.proUserId
@@ -477,8 +480,8 @@ class AssignmentDetailActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener { e -> Log.w("update status", "Error updating document", e) }
 
-            db.collection("assignments").document(assignmentId)
-                .update("dateEnd", FieldValue.serverTimestamp())
+            db.collection(getString(R.string.assignments)).document(assignmentId)
+                .update(getString(R.string.date_end), FieldValue.serverTimestamp())
                 .addOnSuccessListener {
                     Log.d("update date", "DocumentSnapshot successfully updated!")
                     loadAssignment()
@@ -486,7 +489,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                 .addOnFailureListener { e -> Log.w("update date", "Error updating document", e) }
         }
 
-        builder.setNegativeButton("Non") { _, _ ->
+        builder.setNegativeButton(getString(R.string.no)) { _, _ ->
 
         }
 
@@ -506,20 +509,22 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
     }
 
+
+    //request confirmtion finish the assignment
     private fun finishAssignmentDialog() {
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.finish_assignment))
         builder.setMessage(getString(R.string.finish_missio_question))
 
-        builder.setPositiveButton("Oui") { _, _ ->
+        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
             val db = FirebaseFirestore.getInstance()
-            db.collection("assignments").document(assignmentId)
-                .update("status", "finish")
+            db.collection(getString(R.string.assignments)).document(assignmentId)
+                .update(getString(R.string.status), getString(R.string.finish))
                 .addOnSuccessListener {
                     Log.d("update status", "DocumentSnapshot successfully updated!")
                     val idReceiver = if (sharedPreferences.getBoolean(
-                            "isPro",
+                            getString(R.string.isPro),
                             false
                         )
                     ) assignment?.userId else assignment?.proUserId
@@ -535,8 +540,8 @@ class AssignmentDetailActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener { e -> Log.w("update status", "Error updating document", e) }
 
-            db.collection("assignments").document(assignmentId)
-                .update("dateEnd", FieldValue.serverTimestamp())
+            db.collection(getString(R.string.assignments)).document(assignmentId)
+                .update(getString(R.string.date_end), FieldValue.serverTimestamp())
                 .addOnSuccessListener {
                     Log.d("update date", "DocumentSnapshot successfully updated!")
                     loadAssignment()
@@ -544,7 +549,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                 .addOnFailureListener { e -> Log.w("update date", "Error updating document", e) }
         }
 
-        builder.setNegativeButton("Non") { _, _ ->
+        builder.setNegativeButton(getString(R.string.no)) { _, _ ->
 
         }
 
@@ -581,14 +586,14 @@ class AssignmentDetailActivity : AppCompatActivity() {
 
         if (itemid == R.id.action_open_chat) {
             when (assignment?.status) {
-                "pending" -> {
+                getString(R.string.pending) -> {
                     Toast.makeText(
                         this,
                         getString(R.string.chat_restrict_pending),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                "refuse" -> {
+                getString(R.string.refuse) -> {
                     Toast.makeText(
                         this,
                         getString(R.string.chat_restrict_refuse),
@@ -597,7 +602,7 @@ class AssignmentDetailActivity : AppCompatActivity() {
                 }
                 else -> {
                     val intent = Intent(this, ChatActivity::class.java)
-                    intent.putExtra("assignment", assignmentId)
+                    intent.putExtra(getString(R.string.assignment), assignmentId)
                     startActivity(intent)
                 }
             }

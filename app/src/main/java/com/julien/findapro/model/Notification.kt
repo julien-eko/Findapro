@@ -1,8 +1,10 @@
 package com.julien.findapro.model
 
+import android.content.res.Resources
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ServerTimestamp
+import com.julien.findapro.R
 import java.util.*
 
 class Notification(
@@ -42,10 +44,10 @@ class Notification(
                                 titleNotification,
                                 textNotification,
                                 cause,
-                                document["token"].toString()
+                                document[Resources.getSystem().getString(R.string.token)].toString()
                             )
 
-                        db.collection(userType).document(idUserRecieve).collection("notification")
+                        db.collection(userType).document(idUserRecieve).collection(Resources.getSystem().getString(R.string.notificationC))
                             .document().set(notification)
                     } else {
                         Log.d("Notification", "No such document")

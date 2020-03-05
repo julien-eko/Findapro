@@ -157,9 +157,9 @@ class InformationForm : AppCompatActivity() {
 
         if (spinner_status.selectedItemPosition == 1) {
 
-            val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
+            val sharedPref: SharedPreferences = getSharedPreferences(getString(R.string.isPro), 0)
             val editor = sharedPref.edit()
-            editor.putBoolean("isPro", true)
+            editor.putBoolean(getString(R.string.isPro), true)
             editor.apply()
 
 
@@ -180,7 +180,7 @@ class InformationForm : AppCompatActivity() {
 
             )
 
-            db.collection("pro users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
+            db.collection(getString(R.string.pro_users)).document(FirebaseAuth.getInstance().currentUser?.uid!!)
                 .set(user)
                 .addOnSuccessListener {
                     Log.d("addDB", "DocumentSnapshot added ")
@@ -190,9 +190,9 @@ class InformationForm : AppCompatActivity() {
                 }
         } else {
 
-            val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
+            val sharedPref: SharedPreferences = getSharedPreferences(getString(R.string.isPro), 0)
             val editor = sharedPref.edit()
-            editor.putBoolean("isPro", false)
+            editor.putBoolean(getString(R.string.isPro), false)
             editor.apply()
 
             val user = hashMapOf(
@@ -211,7 +211,7 @@ class InformationForm : AppCompatActivity() {
 
             )
 
-            db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
+            db.collection(getString(R.string.users)).document(FirebaseAuth.getInstance().currentUser?.uid!!)
                 .set(user)
                 .addOnSuccessListener {
                     Log.d("addDB", "DocumentSnapshot added ")
@@ -231,7 +231,7 @@ class InformationForm : AppCompatActivity() {
     private fun loadDatabase() {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
+        db.collection(getString(R.string.users)).document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
             .addOnSuccessListener { document ->
                 if (document.data != null) {
                     information_form_full_name.setText(document["full name"].toString())
@@ -241,7 +241,7 @@ class InformationForm : AppCompatActivity() {
                     information_form_country.setText(document["country"].toString())
                     information_form_adress.setText(document["adress"].toString())
                 } else {
-                    db.collection("pro users")
+                    db.collection(getString(R.string.pro_users))
                         .document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
                         .addOnSuccessListener { documentPro ->
                             if (document.data != null) {
@@ -269,7 +269,7 @@ class InformationForm : AppCompatActivity() {
     private fun editDatabase() {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
+        db.collection(getString(R.string.users)).document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
             .addOnSuccessListener { document ->
                 if (document.data != null) {
                     val user = hashMapOf(
@@ -289,7 +289,7 @@ class InformationForm : AppCompatActivity() {
 
                     )
 
-                    db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!)
+                    db.collection(getString(R.string.users)).document(FirebaseAuth.getInstance().currentUser?.uid!!)
                         .set(user)
                         .addOnSuccessListener {
                             finish()
@@ -299,7 +299,7 @@ class InformationForm : AppCompatActivity() {
                             Log.w("addDB", "Error adding document", e)
                         }
                 } else {
-                    db.collection("pro users")
+                    db.collection(getString(R.string.pro_users))
                         .document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
                         .addOnSuccessListener {
                             if (document.data != null) {
@@ -320,7 +320,7 @@ class InformationForm : AppCompatActivity() {
 
                                 )
 
-                                db.collection("pro users")
+                                db.collection(getString(R.string.pro_users))
                                     .document(FirebaseAuth.getInstance().currentUser?.uid!!)
                                     .set(user)
                                     .addOnSuccessListener {

@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), Communicator,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sharedPreferences = getSharedPreferences("isPro", 0)
+        sharedPreferences = getSharedPreferences(getString(R.string.isPro), 0)
 
         if (FirebaseAuth.getInstance().currentUser == null) {
             val intent = Intent(
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), Communicator,
             supportFragmentManager.inTransaction {
 
 
-                if (sharedPreferences.getBoolean("isPro", false)) {
+                if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) {
                     replace(
                         R.id.main_activity_frame_layout,
                         AssignmentsListFragment()
@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity(), Communicator,
             supportFragmentManager.inTransaction {
 
 
-                if (sharedPreferences.getBoolean("isPro", false)) {
+                if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) {
                     //Toast.makeText(baseContext,"pro",Toast.LENGTH_SHORT).show()
                     replace(
                         R.id.main_activity_frame_layout,
@@ -194,10 +194,10 @@ class MainActivity : AppCompatActivity(), Communicator,
             }
         }
         if (item == R.id.action_planning) {
-            val user: String = if (sharedPreferences.getBoolean("isPro", false)) {
-                "proUserId"
+            val user: String = if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) {
+                getString(R.string.proUserId)
             } else {
-                "userId"
+                getString(R.string.userId)
             }
             supportFragmentManager.inTransaction {
                 replace(
@@ -209,10 +209,10 @@ class MainActivity : AppCompatActivity(), Communicator,
 
         }
         if (item == R.id.action_message) {
-            val user: String = if (sharedPreferences.getBoolean("isPro", false)) {
-                "proUserId"
+            val user: String = if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) {
+                getString(R.string.proUserId)
             } else {
-                "userId"
+                getString(R.string.userId)
             }
             supportFragmentManager.inTransaction {
                 replace(
@@ -237,9 +237,9 @@ class MainActivity : AppCompatActivity(), Communicator,
     ///////////////////////////////
     override fun passDataUserList(job: String, maxDistance: Float, rating: Double) {
         val bundle = Bundle()
-        bundle.putString("job", job)
-        bundle.putFloat("maxDistance", maxDistance)
-        bundle.putDouble("rating", rating)
+        bundle.putString(getString(R.string.job), job)
+        bundle.putFloat(getString(R.string.maxDistance), maxDistance)
+        bundle.putDouble(getString(R.string.rating), rating)
 
         val transaction = this.supportFragmentManager.beginTransaction()
         val userListFragment = UserListFragment()
@@ -253,8 +253,8 @@ class MainActivity : AppCompatActivity(), Communicator,
 
     override fun passDataAssignmentList(maxDistance: Float, rating: Double) {
         val bundle = Bundle()
-        bundle.putFloat("maxDistance", maxDistance)
-        bundle.putDouble("rating", rating)
+        bundle.putFloat(getString(R.string.maxDistance), maxDistance)
+        bundle.putDouble(getString(R.string.rating), rating)
 
         val transaction = this.supportFragmentManager.beginTransaction()
         val assignmentListFragment = AssignmentsListFragment()
@@ -268,7 +268,7 @@ class MainActivity : AppCompatActivity(), Communicator,
 
     override fun passDataAssignmentInProgressList(status: String) {
         val bundle = Bundle()
-        bundle.putString("status", status)
+        bundle.putString(getString(R.string.status), status)
 
         val transaction = this.supportFragmentManager.beginTransaction()
         val assignmentInProgressFragment = AssignmentsInProgressFragment()

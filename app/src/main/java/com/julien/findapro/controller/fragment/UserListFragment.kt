@@ -80,7 +80,7 @@ class UserListFragment : Fragment() {
                     context,
                     ProfilActivity::class.java
                 )
-                intent.putExtra("id", userItem["uid"])
+                intent.putExtra(getString(R.string.id), userItem["uid"])
                 startActivity(intent)
             } else {
                 //open assignment activity
@@ -102,9 +102,9 @@ class UserListFragment : Fragment() {
     private fun nearUserList() {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
+        db.collection(getString(R.string.users)).document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
             .addOnSuccessListener { resullt ->
-                db.collection("pro users").limit(20).get()
+                db.collection(getString(R.string.pro_users)).limit(20).get()
                     .addOnSuccessListener { documents ->
                         val myLocation = Location("")
                         myLocation.latitude = resullt["latitude"].toString().toDouble()
@@ -169,10 +169,10 @@ class UserListFragment : Fragment() {
     private fun searchUserList(radiusInMetters: Float, job: String, minRating: Double) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
+        db.collection(getString(R.string.users)).document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
             .addOnSuccessListener { resullt ->
-                val userRef = db.collection("pro users")
-                userRef.whereEqualTo("job", job).whereGreaterThan("rating", minRating).get()
+                val userRef = db.collection(getString(R.string.pro_users))
+                userRef.whereEqualTo(getString(R.string.job), job).whereGreaterThan(getString(R.string.rating), minRating).get()
                     .addOnSuccessListener { documents ->
                         val myLocation = Location("")
                         myLocation.latitude = resullt["latitude"].toString().toDouble()
@@ -237,10 +237,10 @@ class UserListFragment : Fragment() {
                 fragment_user_list_cancel_search_button.visibility = View.VISIBLE
                 userList.clear()
                 val rating: Double =
-                    if (arguments?.getDouble("rating") == null) 0.0 else arguments?.getDouble("rating")!!
+                    if (arguments?.getDouble(getString(R.string.rating)) == null) 0.0 else arguments?.getDouble(getString(R.string.rating))!!
                 searchUserList(
-                    arguments?.getFloat("maxDistance")!!,
-                    arguments?.getString("job")!!,
+                    arguments?.getFloat(getString(R.string.maxDistance))!!,
+                    arguments?.getString(getString(R.string.job))!!,
                     rating
                 )
             } else {

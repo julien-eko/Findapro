@@ -31,7 +31,7 @@ class ProfilActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profil)
 
-        userId = intent.getStringExtra("id") ?: "default value"
+        userId = intent.getStringExtra(getString(R.string.id)) ?: "default value"
 
         configureToolbar()
 
@@ -59,10 +59,10 @@ class ProfilActivity : AppCompatActivity() {
     private fun displayInformation() {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("pro users").document(userId).get()
+        db.collection(getString(R.string.pro_users)).document(userId).get()
             .addOnSuccessListener { document ->
                 if (document.data != null) {
-                    typeUser = "pro users"
+                    typeUser = getString(R.string.pro_users)
                     Picasso.get().load(document["photo"].toString()).transform(CircleTransform())
                         .into(activity_profil_photo_imageview)
                     activity_profil_name_textview.text = document["full name"].toString()
@@ -70,20 +70,20 @@ class ProfilActivity : AppCompatActivity() {
                     activity_profil_job_textview.text = document["job"].toString()
                     activity_profil_city_textview.text = document["city"].toString()
 
-                    if (document["rating"] != null) {
-                        activity_profil_ratingbar.rating = document["rating"].toString().toFloat()
+                    if (document[getString(R.string.rating)] != null) {
+                        activity_profil_ratingbar.rating = document[getString(R.string.rating)].toString().toFloat()
                         activity_profil_nb_rate_textview.text =
-                            document["ratingNb"].toString() + " avis"
+                            document[getString(R.string.ratingNb)].toString() + " avis"
                     } else {
                         activity_profil_ratingbar_linearlayout.visibility = View.GONE
                     }
 
-                    load("users", typeUser)
+                    load(getString(R.string.users), typeUser)
                 } else {
-                    db.collection("users").document(userId).get()
+                    db.collection(getString(R.string.users)).document(userId).get()
                         .addOnSuccessListener { documentUser ->
                             if (documentUser.data != null) {
-                                typeUser = "users"
+                                typeUser = getString(R.string.users)
                                 Picasso.get().load(documentUser["photo"].toString())
                                     .transform(CircleTransform())
                                     .into(activity_profil_photo_imageview)
@@ -92,15 +92,15 @@ class ProfilActivity : AppCompatActivity() {
                                 activity_profil_city_textview.text = documentUser["city"].toString()
 
 
-                                if (documentUser["rating"] != null) {
+                                if (documentUser[getString(R.string.rating)] != null) {
                                     activity_profil_ratingbar.rating =
-                                        documentUser["rating"].toString().toFloat()
+                                        documentUser[getString(R.string.rating)].toString().toFloat()
                                     activity_profil_nb_rate_textview.text =
-                                        documentUser["ratingNb"].toString() + " avis"
+                                        documentUser[getString(R.string.ratingNb)].toString() + " avis"
                                 } else {
                                     activity_profil_ratingbar_linearlayout.visibility = View.GONE
                                 }
-                                load("pro users", typeUser)
+                                load(getString(R.string.pro_users), typeUser)
                             }
                         }
                         .addOnFailureListener { exception ->
@@ -119,7 +119,7 @@ class ProfilActivity : AppCompatActivity() {
     private fun load(userRater: String, userType: String) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection(userType).document(userId).collection("rating").get()
+        db.collection(userType).document(userId).collection(getString(R.string.rating)).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     db.collection(userRater).document(document["raterId"].toString()).get()
@@ -198,7 +198,7 @@ class ProfilActivity : AppCompatActivity() {
                     this,
                     ProfilActivity::class.java
                 )
-                intent.putExtra("id", userItem["userId"])
+                intent.putExtra(getString(R.string.id), userItem["userId"])
                 startActivity(intent)
             }
         } else {

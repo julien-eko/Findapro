@@ -40,7 +40,7 @@ class AssignmentsInProgressFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sharedPreferences = activity!!.getSharedPreferences("isPro", 0)
+        sharedPreferences = activity!!.getSharedPreferences(getString(R.string.isPro), 0)
 
         //search button
         fragment_assignment_inprogress_list_cancel_search_button.setOnClickListener {
@@ -79,22 +79,22 @@ class AssignmentsInProgressFragment : Fragment() {
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
         val user: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.users)else getString(R.string.pro_users)
         val userId: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "userId" else "proUserId"
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.userId) else getString(R.string.proUserId)
         val userType: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "proUserId" else "userId"
-        db.collection("assignments")
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.proUserId) else getString(R.string.userId)
+        db.collection(getString(R.string.assignments))
             .whereEqualTo(userType, FirebaseAuth.getInstance().currentUser?.uid!!).get()
             .addOnSuccessListener { documents ->
 
                 for (document in documents) {
                     db.collection(user).document(document[userId].toString()).get()
                         .addOnSuccessListener { data ->
-                            if (document["status"].toString() == "finish") {
+                            if (document[getString(R.string.status)].toString() == getString(R.string.finish)) {
                                 db.collection(user).document(document[userId].toString())
-                                    .collection("rating")
-                                    .whereEqualTo("assignmentsId", document.id)
+                                    .collection(getString(R.string.rating))
+                                    .whereEqualTo(getString(R.string.assignmentsId), document.id)
                                     .get()
                                     .addOnSuccessListener { documents ->
                                         if (documents.size() == 0) {
@@ -166,19 +166,19 @@ class AssignmentsInProgressFragment : Fragment() {
 
         val statusAssignment: Any = when (status) {
             "Fini" -> {
-                "finish"
+                getString(R.string.finish)
             }
             "En cours" -> {
-                "inProgress"
+                getString(R.string.inProgress)
             }
             "Annuler" -> {
-                "cancel"
+                getString(R.string.cancel)
             }
             "En attente" -> {
-                "pending"
+                getString(R.string.pending)
             }
             "Refuser" -> {
-                "refuse"
+                getString(R.string.refuse)
             }
             else -> {
                 true
@@ -188,24 +188,24 @@ class AssignmentsInProgressFragment : Fragment() {
 
         val db = FirebaseFirestore.getInstance()
         val user: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.users) else getString(R.string.pro_users)
         val userId: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "userId" else "proUserId"
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.userId) else getString(R.string.proUserId)
         val userType: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "proUserId" else "userId"
-        db.collection("assignments")
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.proUserId) else getString(R.string.userId)
+        db.collection(getString(R.string.assignments))
             .whereEqualTo(userType, FirebaseAuth.getInstance().currentUser?.uid!!)
-            .whereEqualTo("status", statusAssignment).get()
+            .whereEqualTo(getString(R.string.status), statusAssignment).get()
             .addOnSuccessListener { documents ->
 
                 for (document in documents) {
                     db.collection(user).document(document[userId].toString()).get()
                         .addOnSuccessListener { data ->
 
-                            if (document["status"].toString() == "finish") {
+                            if (document[getString(R.string.status)].toString() == getString(R.string.finish)) {
                                 db.collection(user).document(document[userId].toString())
-                                    .collection("rating")
-                                    .whereEqualTo("assignmentsId", document.id)
+                                    .collection(getString(R.string.rating))
+                                    .whereEqualTo(getString(R.string.assignmentsId), document.id)
                                     .get()
                                     .addOnSuccessListener { documents ->
                                         if (documents.size() == 0) {
@@ -283,12 +283,12 @@ class AssignmentsInProgressFragment : Fragment() {
                     context,
                     ProfilActivity::class.java
                 )
-                intent.putExtra("id", assignmentItem["idUser"].toString())
+                intent.putExtra(getString(R.string.id), assignmentItem["idUser"].toString())
                 startActivity(intent)
             } else {
                 //oppen detail activity
                 val intent = Intent(context, AssignmentDetailActivity::class.java)
-                intent.putExtra("id", assignmentItem["id"].toString())
+                intent.putExtra(getString(R.string.id), assignmentItem["id"].toString())
                 startActivity(intent)
             }
         } else {
@@ -327,7 +327,7 @@ class AssignmentsInProgressFragment : Fragment() {
             if (arguments != null) {
                 fragment_assignment_inprogress_list_cancel_search_button.visibility = View.VISIBLE
                 assigmentsList.clear()
-                searchByStatus(arguments?.getString("status")!!)
+                searchByStatus(arguments?.getString(getString(R.string.status))!!)
 
             } else {
                 fragment_assignment_inprogress_list_cancel_search_button.visibility = View.GONE

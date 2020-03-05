@@ -33,8 +33,8 @@ class NotificationListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_notification_list)
         configureToolbar()
 
-        sharedPreferences = getSharedPreferences("isPro", 0)
-        userType = if (sharedPreferences.getBoolean("isPro", false)) "pro users" else "users"
+        sharedPreferences = getSharedPreferences(getString(R.string.isPro), 0)
+        userType = if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.pro_users) else getString(R.string.users)
 
         if (Internet.isInternetAvailable(this)) {
             loadRecyclerView()
@@ -49,7 +49,7 @@ class NotificationListActivity : AppCompatActivity() {
                 }
             }
         } else {
-            Toast.makeText(this, "Pas de connexion internet", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_SHORT).show()
         }
 
 
@@ -59,7 +59,7 @@ class NotificationListActivity : AppCompatActivity() {
     private fun loadRecyclerView() {
         val db = FirebaseFirestore.getInstance()
         db.collection(userType).document(FirebaseAuth.getInstance().currentUser?.uid!!)
-            .collection("notification").orderBy("dateCreated", Query.Direction.DESCENDING)
+            .collection(getString(R.string.notificationC)).orderBy(getString(R.string.dateCreated), Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
@@ -111,13 +111,13 @@ class NotificationListActivity : AppCompatActivity() {
 
         if (isProfil) {
             val intent = Intent(this, ProfilActivity::class.java)
-            intent.putExtra("id", notificationItem.otherUserId)
+            intent.putExtra(getString(R.string.id), notificationItem.otherUserId)
             startActivity(intent)
         } else {
             when (notificationItem.cause) {
                 "new message" -> {
                     val intent = Intent(this, ChatActivity::class.java)
-                    intent.putExtra("assignment", notificationItem.assignmentId)
+                    intent.putExtra(getString(R.string.assignment), notificationItem.assignmentId)
                     startActivity(intent)
                 }
                 "new assignment created" -> {
@@ -125,12 +125,12 @@ class NotificationListActivity : AppCompatActivity() {
                         this,
                         AssignmentsChoiceActivity::class.java
                     )
-                    intent.putExtra("id", notificationItem.assignmentId)
+                    intent.putExtra(getString(R.string.id), notificationItem.assignmentId)
                     startActivity(intent)
                 }
                 else -> {
                     val intent = Intent(this, AssignmentDetailActivity::class.java)
-                    intent.putExtra("id", notificationItem.assignmentId)
+                    intent.putExtra(getString(R.string.id), notificationItem.assignmentId)
                     startActivity(intent)
                 }
             }

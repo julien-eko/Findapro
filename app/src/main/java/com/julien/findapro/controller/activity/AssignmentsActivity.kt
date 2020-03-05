@@ -54,18 +54,18 @@ class AssignmentsActivity : AppCompatActivity() {
     //load user info in db and update view
     private fun loadDb() {
         val db = FirebaseFirestore.getInstance()
-        db.collection("pro users").document(intent.getStringExtra("proId")!!).get()
+        db.collection(getString(R.string.pro_users)).document(intent.getStringExtra(getString(R.string.proId))!!).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     activity_assignements_full_name_text_view.text =
-                        document["full name"].toString()
-                    activity_assignements_job_text_view.text = document["job"].toString()
+                        document[getString(R.string.full_name)].toString()
+                    activity_assignements_job_text_view.text = document[getString(R.string.job)].toString()
 
-                    if (document["rating"] != null) {
+                    if (document[getString(R.string.rating)] != null) {
                         activity_assignment_ratingbar.rating =
-                            document["rating"].toString().toFloat()
+                            document[getString(R.string.rating)].toString().toFloat()
 
-                        val nbRating: String = "(" + document["ratingNb"].toString() + ") : "
+                        val nbRating: String = "(" + document[getString(R.string.ratingNb)].toString() + ") : "
                         activity_assignements_nb_rating_text_view.text = nbRating
                     } else {
                         activity_assignment_ratingbar_linearlayout.visibility = View.GONE
@@ -88,19 +88,19 @@ class AssignmentsActivity : AppCompatActivity() {
             null,
             null,
             FirebaseAuth.getInstance().currentUser?.uid!!,
-            intent.getStringExtra("proId"),
-            "pending",
+            intent.getStringExtra(getString(R.string.proId)),
+            getString(R.string.pending),
             activity_assignments_describe_edit_text.text.toString(),
             null
         )
 
         val uuid = UUID.randomUUID()
-        db.collection("assignments").document(uuid.toString()).set(assignments)
+        db.collection(getString(R.string.assignments)).document(uuid.toString()).set(assignments)
 
             .addOnSuccessListener {
                 Log.d("addDB", "DocumentSnapshot added ")
                 Notification.createNotificationInDb(
-                    "pro users",
+                    getString(R.string.pro_users),
                     assignments.proUserId.toString(),
                     FirebaseAuth.getInstance().currentUser?.uid!!,
                     uuid.toString(),
@@ -116,12 +116,13 @@ class AssignmentsActivity : AppCompatActivity() {
         finish()
     }
 
+    //check if other request allready exist to avoid spam
     private fun checkValidateRequest() {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("assignments").whereEqualTo("status", "pending")
-            .whereEqualTo("proUserId", intent.getStringExtra("proId"))
-            .whereEqualTo("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
+        db.collection(getString(R.string.assignments)).whereEqualTo(getString(R.string.status), getString(R.string.pending))
+            .whereEqualTo(getString(R.string.proUserId), intent.getStringExtra(getString(R.string.proId)))
+            .whereEqualTo(getString(R.string.userId), FirebaseAuth.getInstance().currentUser?.uid!!)
             .get()
             .addOnSuccessListener { documents ->
                 if (documents.size() > 0) {

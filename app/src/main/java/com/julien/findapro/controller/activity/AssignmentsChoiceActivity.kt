@@ -37,18 +37,18 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
         //accept button, update statut in db and create new notification
         assignments_choice_activity_accept_button.setOnClickListener {
             if (Internet.isInternetAvailable(this)) {
-                db.collection("assignments").document(intent.getStringExtra("id")!!)
-                    .update("status", "inProgress")
+                db.collection(getString(R.string.assignments)).document(intent.getStringExtra(getString(R.string.id))!!)
+                    .update(getString(R.string.status), getString(R.string.inProgress))
                     .addOnSuccessListener {
 
-                        db.collection("assignments").document(intent.getStringExtra("id")!!).get()
+                        db.collection(getString(R.string.assignments)).document(intent.getStringExtra(getString(R.string.id))!!).get()
                             .addOnSuccessListener { document ->
                                 if (document.data != null) {
                                     Notification.createNotificationInDb(
-                                        "users",
-                                        document["userId"].toString(),
+                                        getString(R.string.users),
+                                        document[getString(R.string.userId)].toString(),
                                         FirebaseAuth.getInstance().currentUser?.uid!!,
-                                        intent.getStringExtra("id")!!,
+                                        intent.getStringExtra(getString(R.string.id))!!,
                                         getString(R.string.accept_assignment_notification_title),
                                         getString(R.string.acept_assignment_text_notification),
                                         "status update in progress"
@@ -76,8 +76,8 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                     null,
                     null
                 )
-                db.collection("assignments").document(intent.getStringExtra("id")!!)
-                    .collection("chat").add(message)
+                db.collection(getString(R.string.assignments)).document(intent.getStringExtra(getString(R.string.id))!!)
+                    .collection(getString(R.string.chat)).add(message)
 
                 finish()
             } else {
@@ -88,22 +88,22 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
 
         assignments_choice_activity_decline_button.setOnClickListener {
             if (Internet.isInternetAvailable(this)) {
-                db.collection("assignments").document(intent.getStringExtra("id")!!)
-                    .update("status", "refuse")
+                db.collection(getString(R.string.assignments)).document(intent.getStringExtra(getString(R.string.id))!!)
+                    .update(getString(R.string.status), getString(R.string.refuse))
                     .addOnSuccessListener {
                         Log.d(
                             "update status",
                             "DocumentSnapshot successfully updated!"
                         )
 
-                        db.collection("assignments").document(intent.getStringExtra("id")!!).get()
+                        db.collection(getString(R.string.assignments)).document(intent.getStringExtra(getString(R.string.id))!!).get()
                             .addOnSuccessListener { document ->
                                 if (document.data != null) {
                                     Notification.createNotificationInDb(
-                                        "users",
-                                        document["userId"].toString(),
+                                        getString(R.string.users),
+                                        document[getString(R.string.userId)].toString(),
                                         FirebaseAuth.getInstance().currentUser?.uid!!,
-                                        intent.getStringExtra("id")!!,
+                                        intent.getStringExtra(getString(R.string.id))!!,
                                         getString(R.string.assignment_refuse_notification_title),
                                         getString(R.string.assignment_refuse_text_notification),
                                         "status update refuse"
@@ -124,14 +124,14 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
         }
     }
 
-
+    //load date and update view
     private fun loadData(db: FirebaseFirestore) {
-        db.collection("assignments").document(intent.getStringExtra("id")!!).get()
+        db.collection(getString(R.string.assignments)).document(intent.getStringExtra(getString(R.string.id))!!).get()
             .addOnSuccessListener { document ->
                 if (document.data != null) {
                     assignments_choice_activity_describe_textview.text =
                         document["describe"].toString()
-                    db.collection("users").document(document["userId"].toString()).get()
+                    db.collection(getString(R.string.users)).document(document[getString(R.string.userId)].toString()).get()
                         .addOnSuccessListener { document2 ->
                             if (document2.data != null) {
                                 activity_assignements_choice_full_name_text_view.text =
@@ -141,12 +141,12 @@ class AssignmentsChoiceActivity : AppCompatActivity() {
                                 activity_assignements_choice_city_text_view.text =
                                     document2["city"].toString()
 
-                                if (document2["rating"] != null) {
+                                if (document2[getString(R.string.rating)] != null) {
                                     val nbRating: String =
-                                        "(" + document2["ratingNb"].toString() + ") : "
+                                        "(" + document2[getString(R.string.ratingNb)].toString() + ") : "
                                     activity_assignements_choice_nb_rating_text_view.text = nbRating
                                     activity_assignment_choice_ratingbar.rating =
-                                        document2["rating"].toString().toFloat()
+                                        document2[getString(R.string.rating)].toString().toFloat()
                                 } else {
                                     activity_assignment_choice_ratingbar_linearlayout.visibility =
                                         View.GONE

@@ -32,7 +32,7 @@ class PlanningActivity : AppCompatActivity() {
         setContentView(R.layout.activity_planning)
         configureToolbar()
 
-        sharedPreferences = getSharedPreferences("isPro", 0)
+        sharedPreferences = getSharedPreferences(getString(R.string.isPro), 0)
 
         //check internet connexion
         if (Internet.isInternetAvailable(this)) {
@@ -57,23 +57,23 @@ class PlanningActivity : AppCompatActivity() {
     private fun loadPlanning() {
         val db = FirebaseFirestore.getInstance()
         val user: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.users) else getString(R.string.pro_users)
         val otherUserId: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "userId" else "proUserId"
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.userId) else getString(R.string.proUserId)
         val myUserId: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "proUserId" else "userId"
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.proUserId) else getString(R.string.userId)
 
-        db.collection("assignments")
+        db.collection(getString(R.string.assignments))
             .whereEqualTo(myUserId, FirebaseAuth.getInstance().currentUser?.uid!!)
-            .whereEqualTo("status", "inProgress")
-            .orderBy("dateAssignment").get()
+            .whereEqualTo(getString(R.string.status), getString(R.string.inProgress))
+            .orderBy(getString(R.string.dateAssignment)).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
 
                     db.collection(user).document(document[otherUserId].toString()).get()
                         .addOnSuccessListener { documentUser ->
                             if (documentUser != null) {
-                                if (document["dateAssignment"] != null) {
+                                if (document[getString(R.string.dateAssignment)] != null) {
                                     val planning: HashMap<String, Any?> = hashMapOf(
                                         "full name" to documentUser["full name"].toString(),
                                         "photo" to documentUser["photo"].toString(),
@@ -134,7 +134,7 @@ class PlanningActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_white_24)
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title = "Planning"
+        actionBar?.title = getString(R.string.Planning)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -153,7 +153,7 @@ class PlanningActivity : AppCompatActivity() {
                         this,
                         ProfilActivity::class.java
                     )
-                    intent.putExtra("id", planningItem["uid"].toString())
+                    intent.putExtra(getString(R.string.id), planningItem["uid"].toString())
                     startActivity(intent)
                 }
                 "message" -> {

@@ -27,19 +27,26 @@ class Internet {
                 }
             } else {
                 // < 23 5Android M)
-                cm?.run {
-                    cm.activeNetworkInfo?.run {
-                        if (type == ConnectivityManager.TYPE_WIFI) {
-                            result = 2
-                        } else if (type == ConnectivityManager.TYPE_MOBILE) {
-                            result = 1
-                        }
-                    }
-                }
+                result = checkInternetConexionAndroidMOrLess(cm)
+
             }
             return result != 0
         }
 
+        @Suppress("DEPRECATION")
+        fun checkInternetConexionAndroidMOrLess(cm:ConnectivityManager?):Int{
+            var result = 0
+            cm?.run {
+                cm.activeNetworkInfo?.run {
+                    if (type == ConnectivityManager.TYPE_WIFI) {
+                        result = 2
+                    } else if (type == ConnectivityManager.TYPE_MOBILE) {
+                        result = 1
+                    }
+                }
+            }
+            return  result
+        }
     }
 
 

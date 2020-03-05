@@ -47,7 +47,7 @@ class ChatListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        sharedPreferences = activity!!.getSharedPreferences("isPro", 0)
+        sharedPreferences = activity!!.getSharedPreferences(getString(R.string.isPro), 0)
 
 
     }
@@ -56,17 +56,17 @@ class ChatListFragment : Fragment() {
     private fun loadData() {
         val db = FirebaseFirestore.getInstance()
         val user: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "users" else "pro users"
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.users) else getString(R.string.pro_users)
         val userId: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "userId" else "proUserId"
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.userId) else getString(R.string.proUserId)
         val userType: String =
-            if (sharedPreferences.getBoolean("isPro", false)) "proUserId" else "userId"
-        db.collection("assignments")
+            if (sharedPreferences.getBoolean(getString(R.string.isPro), false)) getString(R.string.proUserId) else getString(R.string.userId)
+        db.collection(getString(R.string.assignments))
             .whereEqualTo(userType, FirebaseAuth.getInstance().currentUser?.uid!!)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    db.collection("assignments").document(document.id).collection("chat")
+                    db.collection(getString(R.string.assignments)).document(document.id).collection(getString(R.string.chat))
                         .get()
                         .addOnSuccessListener { chatDocument ->
 
@@ -122,8 +122,8 @@ class ChatListFragment : Fragment() {
         var lastMessage = ""
 
 
-        db.collection("assignments").document(assignmentId).collection("chat")
-            .orderBy("dateCreated", Query.Direction.DESCENDING).limit(1)
+        db.collection(getString(R.string.assignments)).document(assignmentId).collection(getString(R.string.chat))
+            .orderBy(getString(R.string.dateCreated), Query.Direction.DESCENDING).limit(1)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
@@ -213,11 +213,11 @@ class ChatListFragment : Fragment() {
                     context,
                     ProfilActivity::class.java
                 )
-                intent.putExtra("id", chatItem["idUser"].toString())
+                intent.putExtra(getString(R.string.id), chatItem["idUser"].toString())
                 startActivity(intent)
             } else {
                 val intent = Intent(context, ChatActivity::class.java)
-                intent.putExtra("assignment", chatItem["id"].toString())
+                intent.putExtra(getString(R.string.assignment), chatItem["id"].toString())
                 startActivity(intent)
             }
         } else {

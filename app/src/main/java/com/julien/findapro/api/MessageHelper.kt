@@ -1,9 +1,11 @@
 package com.julien.findapro.api
 
+import android.content.res.Resources
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.julien.findapro.R
 import com.julien.findapro.model.Message
 
 class MessageHelper {
@@ -12,8 +14,8 @@ class MessageHelper {
         fun getAllMessage(assignmentsId: String): Query {
             val db = FirebaseFirestore.getInstance()
 
-            return db.collection("assignments").document(assignmentsId).collection("chat")
-                .orderBy("dateCreated")
+            return db.collection(Resources.getSystem().getString(R.string.assignments)).document(assignmentsId).collection(Resources.getSystem().getString(R.string.chat))
+                .orderBy(Resources.getSystem().getString(R.string.dateCreated))
         }
 
         fun createMessageForChat(
@@ -31,7 +33,7 @@ class MessageHelper {
                 null
             )
 
-            return db.collection("assignments").document(assignmentsId).collection("chat")
+            return db.collection(Resources.getSystem().getString(R.string.assignments)).document(assignmentsId).collection(Resources.getSystem().getString(R.string.chat))
                 .add(message)
         }
 
@@ -51,7 +53,7 @@ class MessageHelper {
                 urlImageMessage
             )
 
-            return db.collection("assignments").document(assignmentsId).collection("chat")
+            return db.collection(Resources.getSystem().getString(R.string.assignments)).document(assignmentsId).collection(Resources.getSystem().getString(R.string.chat))
                 .add(message)
         }
     }

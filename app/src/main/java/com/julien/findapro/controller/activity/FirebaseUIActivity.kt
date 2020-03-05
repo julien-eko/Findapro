@@ -66,9 +66,9 @@ class FirebaseUIActivity : AppCompatActivity() {
                         val token = task.result?.token
 
                         //update token in db
-                        db.collection("users")
+                        db.collection(getString(R.string.users))
                             .document(FirebaseAuth.getInstance().currentUser?.uid!!)
-                            .update("token", token)
+                            .update(getString(R.string.token), token)
                             .addOnSuccessListener {
                                 Log.d(
                                     TAG,
@@ -76,9 +76,9 @@ class FirebaseUIActivity : AppCompatActivity() {
                                 )
                             }
                             .addOnFailureListener {
-                                db.collection("pro users")
+                                db.collection(getString(R.string.pro_users))
                                     .document(FirebaseAuth.getInstance().currentUser?.uid!!)
-                                    .update("token", token)
+                                    .update(getString(R.string.token), token)
                                     .addOnSuccessListener {
                                         Log.d(
                                             TAG,
@@ -99,13 +99,13 @@ class FirebaseUIActivity : AppCompatActivity() {
 
 
 
-                db.collection("users").document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
+                db.collection(getString(R.string.users)).document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
                     .addOnSuccessListener { document ->
 
                         if (document.data != null) {
-                            val sharedPref: SharedPreferences = getSharedPreferences("isPro", 0)
+                            val sharedPref: SharedPreferences = getSharedPreferences(getString(R.string.isPro), 0)
                             val editor = sharedPref.edit()
-                            editor.putBoolean("isPro", false)
+                            editor.putBoolean(getString(R.string.isPro), false)
                             editor.apply()
                             val intent = Intent(
                                 this,
@@ -113,14 +113,14 @@ class FirebaseUIActivity : AppCompatActivity() {
                             )
                             startActivity(intent)
                         } else {
-                            db.collection("pro users")
+                            db.collection(getString(R.string.pro_users))
                                 .document(FirebaseAuth.getInstance().currentUser?.uid!!).get()
                                 .addOnSuccessListener { documentPro ->
                                     if (documentPro.data != null) {
                                         val sharedPref: SharedPreferences =
-                                            getSharedPreferences("isPro", 0)
+                                            getSharedPreferences(getString(R.string.isPro), 0)
                                         val editor = sharedPref.edit()
-                                        editor.putBoolean("isPro", true)
+                                        editor.putBoolean(getString(R.string.isPro), true)
                                         editor.apply()
                                         val intent = Intent(
                                             this,
